@@ -14,7 +14,8 @@ $ npm install
 ```
 ## Running APP
 ```sh
-$ npm run start #make sure your mysql server running well
+$ npm run start 
 ```
+> **Note:** make sure your mysql server running well
 
 # Enjoy!
