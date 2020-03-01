@@ -1,0 +1,15 @@
+{
+  "name": "server",
+  "version": "0.0.1",
+  "scripts": {
+    "server-install": "cd Server && npm i",
+    "client-install": "cd Client && npm i",
+    "server": "cd Server && npm start",
+    "client": "cd Client && npm start",
+    "install": "concurrently \"npm run server-install\" \"npm run client-install\" ",
+    "start": "concurrently \"npm run server\" \"npm run client\" "
+  },
+  "devDependencies": {
+    "concurrently": "^5.1.0"
+  }
+}
