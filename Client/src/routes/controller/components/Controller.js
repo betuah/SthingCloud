@@ -5,6 +5,10 @@ import { Redirect } from "react-router-dom";
 import { withAuth } from 'components/Auth/context/AuthContext';
 
 class Controller extends Component {
+    componentDidMount() {
+        this.props.checkToken();
+    }
+    
     render() {
         if(!this.props.isLoggedIn)
             return <Redirect push to='/user/signin' />

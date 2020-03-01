@@ -8,7 +8,6 @@ import MaterialIcon from 'components/MaterialIcon';
 class Device extends Component {
     componentDidMount() {
         this.props.checkToken();
-        console.log(this.props.isLoggedIn)
     }
 
     render() { 
