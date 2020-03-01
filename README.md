@@ -5,7 +5,7 @@
 ## About Author
 - **Name :** Betuah Anugerah
 - **Email :** betuahanugerah@gmail.com
-- **github :** [MyGithubLibraries](https://github.com/betuah/)
+- **github :** [My Github Libraries](https://github.com/betuah/)
 <hr>
 
 ## Installation
