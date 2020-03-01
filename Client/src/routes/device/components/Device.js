@@ -6,7 +6,12 @@ import Breadcrumb from 'components/Layout/Breadcrumb';
 import MaterialIcon from 'components/MaterialIcon';
 
 class Device extends Component {
-    render() {
+    componentDidMount() {
+        this.props.checkToken();
+        console.log(this.props.isLoggedIn)
+    }
+
+    render() { 
         if(!this.props.isLoggedIn)
             return <Redirect push to='/user/signin' />
             

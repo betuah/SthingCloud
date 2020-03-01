@@ -5,6 +5,10 @@ import Breadcrumb from 'components/Layout/Breadcrumb';
 import MaterialIcon from 'components/MaterialIcon';
 
 class Visualization extends Component {
+    componentDidMount() {
+        this.props.checkToken();
+    }
+
     render() {
         if(!this.props.isLoggedIn)
             return <Redirect push to='/user/signin' />

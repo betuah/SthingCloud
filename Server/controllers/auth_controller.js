@@ -3,6 +3,10 @@ const jwt                   = require('jsonwebtoken');
 const env                   = require('../env');
 const authModel             = require('../models/mysql/crud_model');
 
+exports.tokenVerify = (req, res) => {
+    res.status(202).json({'status': 'Token Verified', code: 202})
+}
+
 exports.signIn = async (req, res) => {
     try {
         const username      = req.query.username ? req.query.username : (req.body.username ? req.body.username : req.params.username);

@@ -23,13 +23,22 @@ export class AuthContextProvider extends Component {
             }
     }
 
+    checkToken = () => {
+        return axiosReq.get("http://localhost:8000/api/tokenverify")
+            .catch(err => {
+                this.setState({ isLoggedIn: false });
+                localStorage.clear()
+                console.log(err)
+            })
+    }
+
     initUser = () => {
         return axiosReq.get("http://localhost:8000/api/profile")
             .then(response => {
                 this.setState({ person: response.data });
             }).catch(err => {
+                this.setState({ isLoggedIn: false });
                 localStorage.clear()
-                this.props.history.push('/user/signin');
             })
     }
 
@@ -77,6 +86,7 @@ export class AuthContextProvider extends Component {
                         login: this.login,
                         logout: this.logout,
                         initUser: this.initUser,
+                        checkToken: this.checkToken,
                         ...this.state
                     }}>
                     {this.props.children}

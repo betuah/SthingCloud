@@ -29,7 +29,7 @@ class AppHeader extends React.Component {
     this.setState({ anchorEl: null });
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.initUser();
   }
 
