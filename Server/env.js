@@ -1,7 +1,6 @@
 require('dotenv').config();
 
 const env = {
-    http_port: process.env.PORT,
     token_secret: process.env.TOKEN_SECRET,
     db_mysql: {
         database: process.env.MYSQL_DB,
