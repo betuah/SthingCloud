@@ -2,12 +2,16 @@
 
 Desc : This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
 
-
-
-=========================================================================================================================================
+<hr>
 
 Git Command note :
 
+<table border="1">
+    <tr>
+        <th>Command</th>
+        <th>Description</th>
+    </tr>
+</table>
 git --version = For looking git version in your computer
 git init = For initialize the git repository
 git status = For tracking your activity in you repository
