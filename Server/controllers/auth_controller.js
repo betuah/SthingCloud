@@ -36,7 +36,7 @@ exports.signIn = async (req, res) => {
 
                         if(isTrueHashed === true) {
                             const secret    = env.token_secret;
-                            const token     = jwt.sign({ _id: `${id}`, _roles: `${role}`}, secret, { expiresIn: '2h' });
+                            const token     = jwt.sign({ id: `${id}`, roles: `${role}`}, secret, { expiresIn: '2h' });
                             const userData  = {
                                 status: result.status,
                                 code: result.code,

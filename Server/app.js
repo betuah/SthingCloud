@@ -11,9 +11,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 /* Dynamic CORS */
-var whitelist = ['http://localhost:8000', 'http://localhost:3000']
+const whitelist = ['http://localhost:8000', 'http://localhost:3000', 'http://localhost:8080']
 
-var options = {
+const options = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1) {
             callback(null, true)

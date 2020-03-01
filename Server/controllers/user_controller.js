@@ -1,4 +1,5 @@
-const userCRUD    = require('../models/mysql/crud_model');
+const userCRUD    = require('../models/mysql/crud_model')
+const transporter = require('../config/mail_config')
 
 exports.index = async (req, res) => {
     try {
@@ -54,3 +55,22 @@ exports.findUsers = async (req, res) => {
         });
     }
 };
+
+exports.sendMail = async (req, res) => {
+    try {
+        const mailOptions = {
+            from: '"SMCP-IOT" <noreply@seamolec.org>',
+            to: 'betuahanugerah@gmail.com',
+            subject: 'Account Activated',
+            html: 'Mantap.. Email udah masuk! <a href="https://www.google.com">Google Link</a>'
+        }
+
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) throw err;
+            console.log('Email sent: ' + info.response)
+            res.send('Email sent: ' + info.response)
+        });
+    } catch (error) {
+        console.log(error)
+    }
+}
