@@ -1,8 +1,11 @@
 const express = require('express'),
     app         = express(),
     cors        = require('cors'),
-    port        = process.env.HTTP_PORT || 8000,
-    bodyParser  = require('body-parser');
+    helmet      = require('helmet'),
+    bodyParser  = require('body-parser'),
+    port        = process.env.HTTP_PORT || 8000
+
+app.use(helmet())
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
