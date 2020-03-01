@@ -1,7 +1,11 @@
 <h1>SEA Cloud Platform (v0.0.1)</h1>
 
-Desc : This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
+> **Desc :** This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
 
+## About Author
+- **Name :** Betuah Anugerah
+- **Email :** betuahanugerah@gmail.com
+- **github :** [MyGithubLibraries] (https://github.com/betuah/)
 <hr>
 
 ## Installation
