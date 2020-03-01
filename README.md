@@ -13,9 +13,10 @@ $ cd Client
 $ npm install
 ```
 ## Running APP
+> **Note:** Firstly make sure your mysql server is running well!
+
 ```sh
 $ npm run start 
 ```
-> **Note:** make sure your mysql server running well
 
 # Enjoy!
