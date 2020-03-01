@@ -18,7 +18,7 @@ const { Header } = Layout;
 class AppHeader extends React.Component {
   state = {
     anchorEl: null,
-    person: JSON.parse(localStorage.getItem('person')) ? JSON.parse(localStorage.getItem('person')) : null,
+    person: JSON.parse(localStorage.getItem('person')) ? JSON.parse(localStorage.getItem('person')) : '',
     badge: 5
   };
 
@@ -89,7 +89,7 @@ class AppHeader extends React.Component {
                   onClick={this.handleClick}
                 >
                   <img src="assets/images-demo/g1-sm.jpg" alt="avatar" className="avatar-img" />
-                  <span className="avatar-text d-none d-md-inline">{this.state.person.name}</span>
+                  <span className="avatar-text d-none d-md-inline">{this.state.person.name ? this.state.person.name : ''}</span>
                 </div>
                 <Menu
                   id="app-header-menu"
@@ -98,7 +98,7 @@ class AppHeader extends React.Component {
                   open={Boolean(anchorEl)}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose} className="d-block d-md-none"> <div>Signed in as <strong>{this.state.person.name}</strong></div> </MenuItem>
+                  <MenuItem onClick={this.handleClose} className="d-block d-md-none"> <div>Signed in as <strong>{this.state.person.name ? this.state.person.name : ''}</strong></div> </MenuItem>
                   <div className="divider divider-solid my-1 d-block d-md-none"></div>
                   <MenuItem disabled> <a href={DEMO.link}><MaterialIcon icon="settings" />Settings</a> </MenuItem>
                   <MenuItem onClick={this.handleClose}> <a href={DEMO.headerLink.about}><MaterialIcon icon="info" />About</a> </MenuItem>
