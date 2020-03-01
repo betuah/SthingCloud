@@ -4,4 +4,17 @@ Desc : This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For th
 
 <hr>
 
-Notes :
+## Installation
+```sh
+$ cd Server
+$ npm install
+$ cd ..
+$ cd Client
+$ npm install
+```
+## Running APP
+```sh
+$ npm run start #make sure your mysql server running well
+```
+
+# Enjoy!
