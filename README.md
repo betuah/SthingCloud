@@ -5,10 +5,14 @@
 ## About Author
 - **Name :** Betuah Anugerah
 - **Email :** betuahanugerah@gmail.com
-- **github :** [My Github Libraries](https://github.com/betuah/)
+- **Github :** [My Github Libraries](https://github.com/betuah/)
 <hr>
 
 ## Installation
+```sh
+$ npm run install
+```
+##### OR
 ```sh
 $ cd Server
 $ npm install
