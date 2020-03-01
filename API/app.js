@@ -1,37 +1,33 @@
 const express = require('express'),
     app         = express(),
-    cors        = require('cors')
-    port        = process.env.PORT || 8000,
-    bodyParser  = require('body-parser');
+    cors        = require('cors'),
+    helmet      = require('helmet'),
+    bodyParser  = require('body-parser'),
+    port        = process.env.HTTP_PORT || 8080
+
+app.use(helmet())
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 /* Dynamic CORS */
-var whitelist = ['http://localhost:8000', 'http://localhost:3000']
-
-var options = {
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback("Not allowed by SEA Cloud Platform API'S");
-            // console.log(callback(new Error("Not allowed by SEA Cloud Platform API'S")));
-        }
+const whitelist = []
+const corsOptionsDelegate = function (req, callback) {
+    let corsOptions;
+    if (whitelist.indexOf(req.header('Origin')) !== -1) {
+      corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+    } else {
+      corsOptions = { origin: false } // disable CORS for this request
     }
-}
-
-app.use(cors(options))
+    callback(null, corsOptions) // callback expects two parameters: error and options
+  }
+  
+app.use(cors(corsOptionsDelegate))
 /* End Dynamic CORS */
 
 /* Start of Routing Import */
-const authRoute     = require('./routes/auth_route');
-const usersRoute    = require('./routes/users_route');
-const deviceRoute   = require('./routes/device_route');
-
-authRoute(app);
-usersRoute(app);
-deviceRoute(app);
+const iotRoute     = require('./routes/iot_route');
+iotRoute(app);
 /* End of Routing Import */
 
 /* MongoDB Connection Check */
@@ -44,4 +40,4 @@ if(conn) {
 }
 /* End MongoDB Connection Check */
 
-console.log('SEAMOLEC Cloud Platform API SERVER running up on port : ' + port);
+console.log('SEAMOLEC Cloud Platform IOT API running up on port : ' + port);

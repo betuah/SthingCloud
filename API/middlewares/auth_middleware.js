@@ -1,35 +1,27 @@
 const jwt       = require('jsonwebtoken');
 const env       = require('../env');
-const userModel = require('../models/mysql/crud_model');
 const secret    = env.token_secret;
 
 const authMiddleware = async (req, res, next) => {
     try {
-        res.setHeader( 'X-Powered-By', 'SEA Cloud Platform' );
+        res.setHeader( 'X-Powered-By', 'SCP' );
 
         const token     = req.header('Authorization').replace('Bearer ','');
         const decoded   = jwt.verify(token, secret);
 
-        const data = {
-            table: 'tb_users',
-            column: 'id_users',
-            values: decoded._id
+        if(decoded) {
+            req.token       = token;
+            req.idUser      = decoded.idUser;
+            req.idDevice    = decoded.idDevice;
+
+            next();
+        } else {
+            res.status(400).json({ status: 'Error', code: 400, msg: "Invalid Token Request."})
         }
-
-        userModel.findOne(data, (err, result) => {
-            if(err) {
-                res.status(401).send({ error: "You're not authenticated!"});
-                console.log(err);
-            } else {
-                req.token   = token;
-                req.id_user = decoded._id;
-                req.role    = decoded._roles;
-
-                next();
-            }
-        });
+        
     } catch (error) {
-        res.status(400).json({ status: 'Error', code: 400, msg: "Invalid Token request."})
+        console.log(error.message)
+        res.status(406).json({ status: 'Error', code: 406, msg: 'Not Acceptable'})
     }
 }
 

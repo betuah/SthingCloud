@@ -1,19 +1,13 @@
+require('dotenv').config();
+
 const env = {
-    http_port: 8000,
-    token_secret: 'H3r0es%@!B3tu*hG@nt&nG',
-    db_mysql: {
-        database: 'db_cloud_platform',
-        username: 'root',
-        password: '',
-        host: '127.0.0.1',
-        port: '3306'
-    },
+    token_secret: process.env.TOKEN_SECRET,
     db_mongoDB: {
-        database: 'db_cloud_platform',
-        username: 'betuah',
-        password: 'H3r0es!@#',
-        host: '127.0.0.1',
-        port: '27017'
+        database: process.env.MONGO_DB,
+        username: process.env.MONGO_USERNAME,
+        password: process.env.MONGO_PASSWORD,
+        host: process.env.MONGO_HOST,
+        port: process.env.MONGO_PORT
     }    
 };
    
