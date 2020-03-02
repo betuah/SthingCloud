@@ -11,18 +11,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 /* Dynamic CORS */
-const whitelist = []
-const corsOptionsDelegate = function (req, callback) {
-    let corsOptions;
-    if (whitelist.indexOf(req.header('Origin')) !== -1) {
-      corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-    } else {
-      corsOptions = { origin: false } // disable CORS for this request
+const whitelist = ['http://localhost:8000','http://localhost:3000']
+const corsOptions = {
+    origin: (origin, callback) => {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            // callback('Origin are Not allowed!')
+            callback(null, true)
+        }
     }
-    callback(null, corsOptions) // callback expects two parameters: error and options
-  }
+}
   
-app.use(cors(corsOptionsDelegate))
+app.use(cors(corsOptions))
 /* End Dynamic CORS */
 
 /* Start of Routing Import */
