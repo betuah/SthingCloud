@@ -8,7 +8,8 @@ const mongoConn = mongoose.connect(`mongodb://${env.db_mongoDB.host}:${env.db_mo
     pass: env.db_mongoDB.password,
     useNewUrlParser: true,
     useUnifiedTopology: true, 
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify: false
 }).then(() => {
     console.log("MongoDB is Connected!")
     return true

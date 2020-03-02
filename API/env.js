@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const env = {
+    http_port: process.env.HTTP_PORT, 
     token_secret: process.env.TOKEN_SECRET,
     db_mongoDB: {
         database: process.env.MONGO_DB,

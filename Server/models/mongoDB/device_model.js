@@ -1,7 +1,27 @@
 const mongoose  = require('mongoose');
 const Schema    = mongoose.Schema;
 
-const deviceSchema = new Schema({
+const DataSchema = new Schema({
+    idData: {
+        type: String,
+        trim: true,
+        unique:true
+    },
+    type: {
+        type: String,
+        trim: true,
+    },
+    value: {
+        type: Number,
+        trim: true,
+    },
+    _dataCreatedAt   : {
+        type: Date,
+        default: Date.now
+    },
+})
+
+const deviceDataSchema = new Schema({
     _id         : { 
         type: String, 
         trim: true,
@@ -26,27 +46,15 @@ const deviceSchema = new Schema({
         type: String, 
         trim: true,
         required: true 
-    }, 
-    lastConn    : { 
-        type: Date, 
-        trim: true,
-        required: false 
-    }, 
+    },
     state       : { 
         type: Number, 
         trim: true,
         required: false 
     }, 
-    _createdAt   : {
-        type: Date,
-        default: Date.now
-    },
-    _updatedAt   : {
-        type: Date,
-        default: Date.now
-    }
-});
+    data        : [DataSchema]
+}, { timestamps: true });
 
-const Device = mongoose.model('Device', deviceSchema);
+const DeviceData = mongoose.model('device_data', deviceDataSchema);
 
-module.exports = Device;
+module.exports = DeviceData;

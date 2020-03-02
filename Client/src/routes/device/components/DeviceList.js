@@ -1,4 +1,5 @@
 import React from 'react';
+import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
 import notif from 'components/NotificationPopUp/notif';
 import classNames from 'classnames';
@@ -126,11 +127,11 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes, updateData, resetSelected, searchState, handleSearch } = props;
+  const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, url } = props;
 
   const handleDelete = e => {
     axios
-      .delete('http://localhost:8000/api/device', { data: { id: props.selectedData } })
+      .delete(`${url}/api/device`, { data: { id: props.selectedData } })
       .then(res => {
         const cb = res.data
         notif('success', 'Success', `Successfully  deleted ${cb.deletedCount} data.`)
@@ -169,7 +170,6 @@ let EnhancedTableToolbar = props => {
                 <div className="search-box-icon">                  
                     <MaterialIcon icon="search" style={{color: '#00BCD4' }}/>                    
                 </div>
-                {console.log(searchState)}
                 <input onChange={searchData} type="text" name="search" value={searchState} placeholder="Search device ..." />
                 <span className="input-bar"></span>                
             </div>            
@@ -257,7 +257,7 @@ class EnhancedTable extends React.Component {
   updateData = () => {
     const handleData = this.handleData;
 
-    axios.get('http://localhost:8000/api/device')
+    axios.get(`${this.props.url}/api/device`)
     .then((res) => {
         handleData(res.data)
     })
@@ -333,7 +333,9 @@ class EnhancedTable extends React.Component {
           updateData={this.updateData} 
           resetSelected={this.resetSelected} 
           searchState={this.state.searchValue} 
-          handleSearch={this.handleSearch}/>
+          handleSearch={this.handleSearch}
+          url={this.props.url}
+        />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
             <EnhancedTableHead
@@ -352,15 +354,6 @@ class EnhancedTable extends React.Component {
                   return val.device.match(this.state.searchValue.toLowerCase())})
                 .map(n => {
                   const isSelected = this.isSelected(n._id);
-                  {/* const object1 = {
-                    a: 'somestring',
-                    b: 42,
-                    c: false
-                  };
-
-                  const as = Object.values(n);
-
-                  console.log(as); */}
                   return (
                     <TableRow
                       hover
@@ -377,7 +370,7 @@ class EnhancedTable extends React.Component {
                       <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.device}</TableCell>
                       <TableCell width="20%" style={{ maxWidth: '20px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.desc}</TableCell>
                       <TableCell width="40%" style={{ maxWidth: '40px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.token}</TableCell>
-                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.lastConn}</TableCell>
+                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.updatedAt}</TableCell>
                       <TableCell width="5%" style={{ whiteSpace: 'normal', wordWrap: 'break-word'}}><span className="ui-highlight" style={n.state === 0 ? {backgroundColor: '#F44336'} : {backgroundColor: '#2196F3'}}>{n.state === 0 ? 'Disconected' : 'Connected'}</span></TableCell>
                     </TableRow>
                   );
@@ -416,10 +409,10 @@ EnhancedTable.propTypes = {
 const EnhancedTable1 = withStyles(styles)(EnhancedTable);
 
 
-const Section = () => (
+const Section = (props) => (
   <article className="article">
-    <EnhancedTable1 />
+    <EnhancedTable1 {...props}/>
   </article>
 )
 
-export default Section;
+export default withAuth(Section);

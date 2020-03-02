@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import axios from "axios"
 
-const axiosReq = axios.create()
-const AuthContext = React.createContext()
+const url           = `${process.env.REACT_APP_SERVER_DOMAIN ? process.env.REACT_APP_SERVER_DOMAIN :'http://localhost:8000'}` 
+const axiosReq      = axios.create()
+const AuthContext   = React.createContext()
 
 //konfigurasi untuk axios
 axiosReq.interceptors.request.use((config)=>{
@@ -19,12 +20,13 @@ export class AuthContextProvider extends Component {
             this.state = {
                 person: JSON.parse(localStorage.getItem('person')) || "",
                 token: localStorage.getItem('token') || "",
-                isLoggedIn: (localStorage.getItem('token') === null) ? false : true
+                isLoggedIn: (localStorage.getItem('token') === null) ? false : true,
+                url: url
             }
     }
 
     checkToken = () => {
-        return axiosReq.get("http://localhost:8000/api/tokenverify")
+        return axiosReq.get(`${url}/api/tokenverify`)
             .catch(err => {
                 this.setState({ isLoggedIn: false });
                 localStorage.clear()
@@ -33,7 +35,7 @@ export class AuthContextProvider extends Component {
     }
 
     initUser = () => {
-        return axiosReq.get("http://localhost:8000/api/profile")
+        return axiosReq.get(`${url}/api/profile`)
             .then(response => {
                 this.setState({ person: response.data });
             }).catch(err => {
@@ -44,7 +46,7 @@ export class AuthContextProvider extends Component {
 
     //login
     login = (credentials) => {
-        return axios.post("http://localhost:8000/api/signin", credentials)
+        return axios.post(`${url}/api/signin`, credentials)
             .then(response => {
                 const { token, data } =  response.data
                 const person = JSON.stringify(data);
@@ -64,9 +66,11 @@ export class AuthContextProvider extends Component {
             .catch(error => {
                 if(error.response) {
                     const res = error.response.data;
-                    const resMsg = { status: 'Error', code: res.code === '406' ? res.code : 400, msg: res.msg }             
+                    const resMsg = { status: 'Error', code: res.code === '406' ? res.code : 400, msg: res.msg }  
+                    // console.log(error)           
                     return resMsg
-                } else {               
+                } else {              
+                    // console.log('error yang 500') 
                     const resMsg = { status: 'Error', code: 500, msg: 'Internal Server Error'}         
                     return resMsg
                 }
@@ -87,6 +91,7 @@ export class AuthContextProvider extends Component {
                         logout: this.logout,
                         initUser: this.initUser,
                         checkToken: this.checkToken,
+                        url: url,
                         ...this.state
                     }}>
                     {this.props.children}

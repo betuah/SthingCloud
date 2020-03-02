@@ -1,4 +1,5 @@
 import React from 'react';
+import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
 import { Modal } from 'antd';
 import notif from 'components/NotificationPopUp/notif';
@@ -115,9 +116,9 @@ class AddDevice extends React.Component {
     }
 
     handleOk = () => {
-        const { updateData } = this.props;
+        const { updateData, url } = this.props;
         
-        axios.post("http://localhost:8000/api/device", this.state.data)
+        axios.post(`${url}/api/device`, this.state.data)
         .then(res => {
             updateData()
             this.clearState()
@@ -160,4 +161,4 @@ class AddDevice extends React.Component {
     }
 }
 
-export default AddDevice;
+export default withAuth(AddDevice);

@@ -16,7 +16,7 @@ activationRoute(app);
 /* End bypass */
 
 /* Dynamic CORS */
-const whitelist = ['http://localhost:8000', 'http://localhost:3000', 'http://localhost:8080']
+const whitelist = ['http://localhost:8000', 'http://localhost:3000', 'http://localhost:8080', 'http://114.4.109.110:8000', 'http://114.4.109.110:3000']
 
 const options = {
     origin: function (origin, callback) {

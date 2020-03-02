@@ -1,11 +1,11 @@
-const Device    = require('../models/mongoDB/device_model');
-const uuid      = require('shortid');
-const jwt       = require('jsonwebtoken');
-const env       = require('../env');
+const DeviceData    = require('../models/mongoDB/device_model')
+const uuid          = require('shortid')
+const jwt           = require('jsonwebtoken')
+const env           = require('../env')
 
 exports.index = async (req, res) => {
     try {
-        Device.find({ _idUsers: req.id_user }).then((data) => {
+        DeviceData.find({ _idUsers: req.id_user }).then((data) => {
             res.status(200).json(data)
         }).catch((err) => {
             res.status(500).json({ status: "Error", code: "500", msg: "Internal Server Error"})
@@ -40,7 +40,7 @@ exports.create = async (req, res) => {
                             "state"     : 0	                        
                         }
 
-        Device.create(dataBody).then((data) => {
+        DeviceData.create(dataBody).then((data) => {
             res.status(201).json({ status: "Success", code: 201, msg: "Success insert data.", data: data});
         }).catch((err) => {
             res.status(400).json({ status: 'Error', code: err.code ? err.code : 400, msg: err.code === 11000 ? 'Duplicate Device Name!' : 'Failed Saving Data. Please fill all required fields!' })
@@ -53,7 +53,7 @@ exports.create = async (req, res) => {
 
 exports.findOne = async (req, res) => {
     try {
-        Device.findById({ _id: req.params.id, _idUsers: req.id_user}).then((data) => {
+        DeviceData.findById({ _id: req.params.id, _idUsers: req.id_user}).then((data) => {
             if(data) {
                 res.status(202).json(data);
             } else {
@@ -71,7 +71,7 @@ exports.findOne = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        Device.deleteMany({ _id: req.body.id })
+        DeviceData.deleteMany({ _id: req.body.id })
         .then(data => {
             res.json(data)
         })

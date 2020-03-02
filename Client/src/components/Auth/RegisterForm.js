@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { withAuth } from '../Auth/context/AuthContext';
 import axios from 'axios';
 import notif from '../NotificationPopUp/notif';
 
@@ -29,14 +30,14 @@ class RegisterForm extends Component {
         const email     = t.email.value.trim();
         // const agreement = t.agree.checked; // For get value use t.agree.value
 
-        axios.post('http://localhost:8000/api/signup', {
+        axios.post(`${this.props.url}/api/signup`, {
             name: name,
             username: username,
             email: email,
             password: pass
         })
         .then(function (response) {
-            // const res   = response.data;
+            
             notif('sucess', 'Success', 'Your account has been created! Please check your email to activated your account!')
             props.history.push('/user/signin')
         })
@@ -157,4 +158,4 @@ class RegisterForm extends Component {
   }
 }
 
-export default RegisterForm;
+export default withAuth(RegisterForm);

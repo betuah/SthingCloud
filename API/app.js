@@ -3,7 +3,8 @@ const express = require('express'),
     cors        = require('cors'),
     helmet      = require('helmet'),
     bodyParser  = require('body-parser'),
-    port        = process.env.HTTP_PORT || 8080
+    env         = require('./env')
+    port        = env.http_port || 8080
 
 app.use(helmet())
 
