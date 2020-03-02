@@ -1,5 +1,7 @@
-const userCRUD    = require('../models/mysql/crud_model')
-const transporter = require('../config/mail_config')
+const userCRUD  = require('../models/mysql/crud_model')
+const jwt       = require('jsonwebtoken')
+const env       = require('../env')
+const secret    = env.token_secret
 
 exports.index = async (req, res) => {
     try {
@@ -56,21 +58,24 @@ exports.findUsers = async (req, res) => {
     }
 };
 
-exports.sendMail = async (req, res) => {
+exports.activation = async (req, res) => {
     try {
-        const mailOptions = {
-            from: '"SMCP-IOT" <noreply@seamolec.org>',
-            to: 'betuahanugerah@gmail.com',
-            subject: 'Account Activated',
-            html: 'Mantap.. Email udah masuk! <a href="https://www.google.com">Google Link</a>'
+        const decoded   = jwt.verify(req.params.token, secret);
+
+        const data = {
+            table: "tb_users",
+            set: "status=1",
+            condition: `WHERE id_users="${decoded.id}"`
         }
 
-        transporter.sendMail(mailOptions, (err, info) => {
-            if (err) throw err;
-            console.log('Email sent: ' + info.response)
-            res.send('Email sent: ' + info.response)
-        });
+        userCRUD.update(data, (err, result) => {
+            if(err) {
+                res.status(500).send('Internal Server Error')
+            } else {
+                res.status(200).send(`<p>Your account is activate! <b><a href="${env.client_domain}">Click Here to Sign In</a></b></p>`)
+            }
+        })
     } catch (error) {
-        console.log(error)
+        res.status(406).json({ status: 'Error', code: 406, msg: "Invalid Token request."})
     }
 }

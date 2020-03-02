@@ -32,8 +32,10 @@ class LoginForm extends React.Component {
         }
 
         const res = await props.login(data);
-        
-        if (res.code >= 400) {
+
+        if (res.code === '406') {
+            notif('warning', 'Warning' , res.msg)
+        } else if (res.code === 400) {
             notif('error', res.status , res.msg)
         }
     }

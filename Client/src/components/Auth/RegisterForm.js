@@ -37,7 +37,7 @@ class RegisterForm extends Component {
         })
         .then(function (response) {
             // const res   = response.data;
-            notif('sucess', 'Success', 'Your account has been created!')
+            notif('sucess', 'Success', 'Your account has been created! Please check your email to activated your account!')
             props.history.push('/user/signin')
         })
         .catch(function (error) {

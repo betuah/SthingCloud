@@ -117,24 +117,33 @@ exports.findCondition = (data, result) => {
 
             if(rows.length > 0) {
                 status  = "Success!";
-                code    = 201;
+                code    = 200;
                 msg     = "Data found!" ;
                 data    = rows[0];
+
+                const success = {
+                    status: status,
+                    code: code,
+                    msg: msg,
+                    data: data
+                }
+    
+                result(null, success);
             } else {
                 status  = "Error!";
                 code    = 404;
                 msg     = "Data not found!" ;
                 data    = null;
-            }
 
-            const success = {
-                status: status,
-                code: code,
-                msg: msg,
-                data: data
-            }
-
-            result(null, success);
+                const err = {
+                    status: status,
+                    code: code,
+                    msg: msg,
+                    data: data
+                }
+    
+                result(err, null);
+            }            
         }
     });
 };
@@ -168,3 +177,32 @@ exports.insert = (data, result) => {
         }
     });
 };
+
+exports.update = (data, result) => {
+    /*
+        const data = {
+            table: "Table name",
+            set: "Set column and value",
+            condition: "Where conditions"
+        }
+    */
+
+    connection.query(`UPDATE ${data.table} SET ${data.set} ${data.condition}`, (error, rows, fields) => {
+        if(error){
+            const err = {
+                status: error.code,
+                code: "500",
+                msg: error.sqlMessage
+            }
+            console.log(error);
+            result(err, null);
+        } else{
+            const success = {
+                status: 'Updated!',
+                code: "200",
+                msg: 'Success update data!'
+            }
+            result(null, success);
+        }
+    })
+}

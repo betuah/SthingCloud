@@ -10,6 +10,11 @@ app.use(helmet())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+/* Bypass CORS for Route */
+const activationRoute     = require('./routes/activation_route');
+activationRoute(app);
+/* End bypass */
+
 /* Dynamic CORS */
 const whitelist = ['http://localhost:8000', 'http://localhost:3000', 'http://localhost:8080']
 

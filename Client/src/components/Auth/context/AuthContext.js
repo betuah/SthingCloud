@@ -64,7 +64,7 @@ export class AuthContextProvider extends Component {
             .catch(error => {
                 if(error.response) {
                     const res = error.response.data;
-                    const resMsg = { status: 'Error', code: 400, msg: res.msg }             
+                    const resMsg = { status: 'Error', code: res.code === '406' ? res.code : 400, msg: res.msg }             
                     return resMsg
                 } else {               
                     const resMsg = { status: 'Error', code: 500, msg: 'Internal Server Error'}         

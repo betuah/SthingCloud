@@ -1,7 +1,10 @@
-const bcrypt                = require('bcryptjs');
-const jwt                   = require('jsonwebtoken');
-const env                   = require('../env');
-const authModel             = require('../models/mysql/crud_model');
+const bcrypt                = require('bcryptjs')
+const jwt                   = require('jsonwebtoken')
+const env                   = require('../env')
+const authModel             = require('../models/mysql/crud_model')
+const transporter           = require('../config/mail_config')
+
+const secret                = env.token_secret;
 
 exports.tokenVerify = (req, res) => {
     res.status(202).json({'status': 'Token Verified', code: 202})
@@ -28,33 +31,42 @@ exports.signIn = async (req, res) => {
                     }
                     res.status(500).json(error);
                 } else {
-                    if (result.data) {                        
-                        const id            = result.data.id_users;
-                        const role          = result.data.id_roles;
-                        const existPassword = result.data.password;
-                        const isTrueHashed  = await bcrypt.compare(password, existPassword);
+                    if (result.data) { 
+                        console.log(result.data.status)
+                        if (result.data.status == '1') {                   
+                            const id            = result.data.id_users;
+                            const role          = result.data.id_roles;
+                            const existPassword = result.data.password;
+                            const isTrueHashed  = await bcrypt.compare(password, existPassword);
 
-                        if(isTrueHashed === true) {
-                            const secret    = env.token_secret;
-                            const token     = jwt.sign({ id: `${id}`, roles: `${role}`}, secret, { expiresIn: '2h' });
-                            const userData  = {
-                                status: result.status,
-                                code: result.code,
-                                token: token,
-                                data: {
-                                    id: result.data.id_users,
-                                    name: result.data.name,
-                                    email: result.data.email
+                            if(isTrueHashed === true) {
+                                const token     = jwt.sign({ id: `${id}`, roles: `${role}`}, secret, { expiresIn: '2h' });
+                                const userData  = {
+                                    status: result.status,
+                                    code: result.code,
+                                    token: token,
+                                    data: {
+                                        id: result.data.id_users,
+                                        name: result.data.name,
+                                        email: result.data.email
+                                    }
                                 }
+                                res.status(200).json(userData);
+                            } else {
+                                const err = {
+                                    status: "Error",
+                                    code: "400",
+                                    msg: "Invalid Username or password!"
+                                }
+                                res.status(400).json(err);
                             }
-                            res.status(200).json(userData);
                         } else {
                             const err = {
                                 status: "Error",
-                                code: "400",
-                                msg: "Invalid Username or password!"
+                                code: "406",
+                                msg: "Your account is not active. Please check your email and click activation link!"
                             }
-                            res.status(400).json(err);
+                            res.status(406).json(err);
                         }
                     } else {
                         const err = {
@@ -99,14 +111,13 @@ exports.signIn = async (req, res) => {
 
 exports.signUp = async (req, res) => {
     try {
-        // const id                = uuid.generate();
         const id                = req.body.username; // User username as ID
         const name              = req.body.name;
         const email             = req.body.email;
         const password          = req.body.password;
         const passwordHashed    = await bcrypt.hash(password, 8);
 
-        const val = `"${id}","${name}","${email}","${passwordHashed}","2"`;
+        const val = `"${id}","${name}","${email}","${passwordHashed}","2", "0"`;
 
         const check_data = {
             table: 'tb_users',
@@ -114,24 +125,38 @@ exports.signUp = async (req, res) => {
         }
 
         authModel.findCondition(check_data, async (err, result) => {
-            if(err) {
+            if(!err) {
                 const error = {
                     status: "Error",
                     code: "400",
-                    msg: "Username or email already exist!"
+                    msg: "Username or Email already exist!"
                 }
                 res.status(400).json(error);
             } else {
                 const data = {
                     table: 'tb_users',
-                    column: 'id_users, name, email, password, id_roles',
+                    column: 'id_users, name, email, password, id_roles, status',
                     values: val
                 }
         
                 authModel.insert(data, (err, result) => {
                     if(err) {
                         res.status(500).json(err);
-                    } else {            
+                    } else {
+                        const token     = jwt.sign({ id: `${id}`}, secret, { expiresIn: '7d' });
+                        const mailOptions = {
+                            from: '"SCP-IOT" <noreply@seamolec.org>',
+                            to: `${email}`,
+                            subject: 'Account Activation',
+                            html: `Welcome to SEAMOLEC IoT Cloud Platform. For activation your account click <a href="${env.server_domain}/activated/${token}">Activated</a>`
+                        }
+                
+                        transporter.sendMail(mailOptions, (err, info) => {
+                            if (err) {
+                                console.log(err)
+                            }
+                        });
+
                         res.status(200).json(result);                      
                     }
                 });

@@ -8,7 +8,5 @@ module.exports = (app) => {
 
     app.route('/api/users/:id')
         .get(authMiddleware, user.findUsers);
-
-    app.route('/api/sendmail')
-        .get(user.sendMail)
+        
 };
