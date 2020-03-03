@@ -20,6 +20,8 @@ $ cd ..
 $ cd Client
 $ npm install
 ```
+<hr>
+
 ## Environment Setup
 > Create .env file in every subfolder like API, Client, and Server
 
@@ -62,6 +64,7 @@ MONGO_PASSWORD=YOUR_MONGODB_PASSWORD
 MONGO_HOST=YOUR_MONGODB_HOST
 MONGO_PORT=YOUR_MONGODB_PORT
 ```
+<hr>
 
 ## Running APP
 > **Note:** Firstly make sure your mysql server is running well!
@@ -69,5 +72,8 @@ MONGO_PORT=YOUR_MONGODB_PORT
 ```sh
 $ npm run start 
 ```
+<hr>
 
 # Enjoy!
+
+<hr>
