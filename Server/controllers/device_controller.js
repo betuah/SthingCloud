@@ -36,13 +36,15 @@ exports.create = async (req, res) => {
                             _idUsers    : req.id_user,
                             ...body,
                             token       : token,
+                            data        : [],
                             "lastConn"  : null,
                             "state"     : 0	                        
                         }
-
+                        
         DeviceData.create(dataBody).then((data) => {
             res.status(201).json({ status: "Success", code: 201, msg: "Success insert data.", data: data});
         }).catch((err) => {
+            console.log(err)
             res.status(400).json({ status: 'Error', code: err.code ? err.code : 400, msg: err.code === 11000 ? 'Duplicate Device Name!' : 'Failed Saving Data. Please fill all required fields!' })
         })
     } catch (error) {

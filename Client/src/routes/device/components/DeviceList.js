@@ -3,6 +3,8 @@ import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
 import notif from 'components/NotificationPopUp/notif';
 import Moment from 'react-moment';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -154,6 +156,10 @@ let EnhancedTableToolbar = props => {
     handleSearch(text)
   }
 
+  const handleCopy = e => {
+    
+  }
+
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -179,7 +185,20 @@ let EnhancedTableToolbar = props => {
       </div>
       <div className={classes.spacer} />
       <div className="col-md-6">
-        {numSelected > 0 ? (
+        {numSelected == 1 ? (
+          <div className="text-right">
+            <Tooltip title="Copy Token">
+              <IconButton aria-label="Copy" onClick={handleCopy}>
+                <FileCopyIcon style={{color: '#FF9800'}} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete">
+              <IconButton aria-label="Delete" onClick={handleDelete}>
+                <DeleteIcon style={{color: '#F44336'}} />
+              </IconButton>
+            </Tooltip>            
+          </div>
+        ) : ( numSelected > 1 ? (
           <div className="text-right">
             <Tooltip title="Delete">
               <IconButton aria-label="Delete" onClick={handleDelete}>
@@ -191,7 +210,7 @@ let EnhancedTableToolbar = props => {
           <div className="text-right">         
             <AddDevice updateData={updateData} />
           </div>
-        )}
+        ))}
       </div>
     </Toolbar>
   );
@@ -225,6 +244,7 @@ class EnhancedTable extends React.Component {
       order: 'asc',
       orderBy: 'device',
       searchValue: '',
+      clipboardValue: '',
       selected: [],
       data: [
         // createData()
@@ -307,7 +327,7 @@ class EnhancedTable extends React.Component {
         selected.slice(selectedIndex + 1),
       );
     }
-
+    console.log(selected)
     this.setState({ selected: newSelected });
   };
 
@@ -369,10 +389,10 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox" width="5%">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b>{n.device}</b></TableCell>
+                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#2196F3'}}>{n.device}</b></TableCell>
                       <TableCell width="20%" style={{ maxWidth: '20px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.desc}</TableCell>
                       <TableCell width="40%" style={{ maxWidth: '40px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.token}</TableCell>
-                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b><Moment local format="D MMM YYYY (hh:MM A)">{n.updatedAt}</Moment></b></TableCell>
+                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#4CAF50'}}><Moment local format="D MMM YYYY (hh:MM A)">{n.updatedAt}</Moment></b></TableCell>
                       <TableCell width="5%" style={{ whiteSpace: 'normal', wordWrap: 'break-word'}}><span className="ui-highlight" style={n.state === 0 ? {backgroundColor: '#F44336'} : {backgroundColor: '#2196F3'}}>{n.state === 0 ? 'Disconected' : 'Connected'}</span></TableCell>
                     </TableRow>
                   );

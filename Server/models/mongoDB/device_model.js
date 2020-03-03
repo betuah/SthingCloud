@@ -2,11 +2,6 @@ const mongoose  = require('mongoose');
 const Schema    = mongoose.Schema;
 
 const DataSchema = new Schema({
-    idData: {
-        type: String,
-        trim: true,
-        unique:true
-    },
     type: {
         type: String,
         trim: true,
