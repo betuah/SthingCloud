@@ -130,7 +130,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, url } = props;
+  const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, url, tokenState } = props;
 
   const handleDelete = e => {
     axios
@@ -157,7 +157,7 @@ let EnhancedTableToolbar = props => {
   }
 
   const handleCopy = e => {
-    
+    notif('success', 'Token Copied', `Your token has been copied!`)
   }
 
   return (
@@ -185,13 +185,16 @@ let EnhancedTableToolbar = props => {
       </div>
       <div className={classes.spacer} />
       <div className="col-md-6">
-        {numSelected == 1 ? (
-          <div className="text-right">
+        {numSelected === 1 ? (
+          <div className="text-right">            
             <Tooltip title="Copy Token">
-              <IconButton aria-label="Copy" onClick={handleCopy}>
-                <FileCopyIcon style={{color: '#FF9800'}} />
-              </IconButton>
+              <CopyToClipboard text={tokenState}>
+                <IconButton aria-label="Copy" onClick={handleCopy}>
+                  <FileCopyIcon style={{color: '#FF9800'}} />
+                </IconButton>
+              </CopyToClipboard>
             </Tooltip>
+            
             <Tooltip title="Delete">
               <IconButton aria-label="Delete" onClick={handleDelete}>
                 <DeleteIcon style={{color: '#F44336'}} />
@@ -244,7 +247,7 @@ class EnhancedTable extends React.Component {
       order: 'asc',
       orderBy: 'device',
       searchValue: '',
-      clipboardValue: '',
+      tokenSelected: '',
       selected: [],
       data: [
         // createData()
@@ -311,24 +314,30 @@ class EnhancedTable extends React.Component {
   };
 
   handleClick = (event, id) => {
-    const { selected } = this.state;
+    const { selected, data } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
+    let dataToken = '';
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, id);
+      dataToken = newSelected.length === 1 ? data.filter(data => data._id === newSelected[0] && data) : ''
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
+      dataToken = newSelected.length === 1 ? data.filter(data => data._id === newSelected[0] && data) : ''
     } else if (selectedIndex === selected.length - 1) {
       newSelected = newSelected.concat(selected.slice(0, -1));
+      dataToken = newSelected.length === 1 ? data.filter(data => data._id === newSelected[0] && data) : ''
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1),
       );
+      dataToken = newSelected.length === 1 ? data.filter(data => data._id === newSelected[0] && data) : ''
     }
-    console.log(selected)
-    this.setState({ selected: newSelected });
+
+    const token = dataToken ? dataToken[0].token : '';
+    this.setState({ selected: newSelected, tokenSelected: token });
   };
 
   handleChangePage = (event, page) => {
@@ -339,7 +348,7 @@ class EnhancedTable extends React.Component {
     this.setState({ rowsPerPage: event.target.value });
   };
 
-  isSelected = id => this.state.selected.indexOf(id) !== -1;
+  isSelected      = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
     const { classes } = this.props;
@@ -354,6 +363,7 @@ class EnhancedTable extends React.Component {
           updateData={this.updateData} 
           resetSelected={this.resetSelected} 
           searchState={this.state.searchValue} 
+          tokenState={this.state.tokenSelected}
           handleSearch={this.handleSearch}
           url={this.props.url}
         />
@@ -374,7 +384,7 @@ class EnhancedTable extends React.Component {
                 .filter(val => {
                   return val.device.match(this.state.searchValue.toLowerCase())})
                 .map(n => {
-                  const isSelected = this.isSelected(n._id);           
+                  const isSelected      = this.isSelected(n._id);
 
                   return (
                     <TableRow
