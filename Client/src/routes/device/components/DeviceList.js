@@ -2,6 +2,7 @@ import React from 'react';
 import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
 import notif from 'components/NotificationPopUp/notif';
+import Moment from 'react-moment';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -353,7 +354,8 @@ class EnhancedTable extends React.Component {
                 .filter(val => {
                   return val.device.match(this.state.searchValue.toLowerCase())})
                 .map(n => {
-                  const isSelected = this.isSelected(n._id);
+                  const isSelected = this.isSelected(n._id);           
+
                   return (
                     <TableRow
                       hover
@@ -367,10 +369,10 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox" width="5%">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.device}</TableCell>
+                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b>{n.device}</b></TableCell>
                       <TableCell width="20%" style={{ maxWidth: '20px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.desc}</TableCell>
                       <TableCell width="40%" style={{ maxWidth: '40px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.token}</TableCell>
-                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.updatedAt}</TableCell>
+                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b><Moment local format="D MMM YYYY (hh:MM A)">{n.updatedAt}</Moment></b></TableCell>
                       <TableCell width="5%" style={{ whiteSpace: 'normal', wordWrap: 'break-word'}}><span className="ui-highlight" style={n.state === 0 ? {backgroundColor: '#F44336'} : {backgroundColor: '#2196F3'}}>{n.state === 0 ? 'Disconected' : 'Connected'}</span></TableCell>
                     </TableRow>
                   );
