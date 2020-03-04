@@ -1,0 +1,20 @@
+{
+  "name": "socketio",
+  "version": "0.0.1",
+  "description": "This is for handle realtime apps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "Betuah Anugerah",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.21.3",
+    "moment": "^2.24.0",
+    "mongoose": "^5.9.3",
+    "socket.io": "^2.3.0"
+  }
+}
