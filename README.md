@@ -12,6 +12,7 @@
 - Add Real Time device status
 - Add Copy token button
 - Fix device module (Device Menu)
+- Fix Flooding to device API
 
 ## Installation
 ```sh
