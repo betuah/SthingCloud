@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from "axios"
 
 const url           = `${process.env.REACT_APP_SERVER_DOMAIN ? process.env.REACT_APP_SERVER_DOMAIN :'http://localhost:8000'}` 
+const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}` 
 const axiosReq      = axios.create()
 const AuthContext   = React.createContext()
 
@@ -21,7 +22,8 @@ export class AuthContextProvider extends Component {
                 person: JSON.parse(localStorage.getItem('person')) || "",
                 token: localStorage.getItem('token') || "",
                 isLoggedIn: (localStorage.getItem('token') === null) ? false : true,
-                url: url
+                url: url,
+                socket_url: socket_url
             }
     }
 
@@ -37,7 +39,8 @@ export class AuthContextProvider extends Component {
     initUser = () => {
         return axiosReq.get(`${url}/api/profile`)
             .then(response => {
-                this.setState({ person: response.data });
+                const res = response.data
+                this.setState({ person: res.data });
             }).catch(err => {
                 this.setState({ isLoggedIn: false });
                 localStorage.clear()
@@ -91,7 +94,6 @@ export class AuthContextProvider extends Component {
                         logout: this.logout,
                         initUser: this.initUser,
                         checkToken: this.checkToken,
-                        url: url,
                         ...this.state
                     }}>
                     {this.props.children}

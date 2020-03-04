@@ -1,6 +1,7 @@
 import React from 'react';
 import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
+import socketOpen from 'socket.io-client';
 import notif from 'components/NotificationPopUp/notif';
 import Moment from 'react-moment';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -25,6 +26,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddDevice from './AddDevice';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import MaterialIcon from 'components/MaterialIcon';
+
+let socket = socketOpen(`${`${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}`}`)
 
 axios.interceptors.request.use((config)=>{
   const token = localStorage.getItem('token')
@@ -157,7 +160,7 @@ let EnhancedTableToolbar = props => {
   }
 
   const handleCopy = e => {
-    notif('success', 'Token Copied', `Your token has been copied!`)
+    notif('success', 'Copied!', `Your token has been copied!`)
   }
 
   return (
@@ -248,6 +251,7 @@ class EnhancedTable extends React.Component {
       orderBy: 'device',
       searchValue: '',
       tokenSelected: '',
+      statusChange: 0,
       selected: [],
       data: [
         // createData()
@@ -291,6 +295,19 @@ class EnhancedTable extends React.Component {
   }
 
   componentDidMount() { 
+    this.updateData()
+
+    const id = this.props.person.id_users
+
+    socket.emit('join_room', id )  
+
+    socket.on('event', data => {
+      this.setState({ statusChange: 1 })
+      data.statusChange === 1 ? notif('info', 'Device Connected!', `Your new device connected!`) : notif('error', 'Device Disconnected!', `Their is your device disconnected!`)
+    });    
+  }
+
+  componentDidUpdate() {
     this.updateData()
   }
 

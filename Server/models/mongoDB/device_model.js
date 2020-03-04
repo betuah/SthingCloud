@@ -1,6 +1,21 @@
 const mongoose  = require('mongoose');
 const Schema    = mongoose.Schema;
 
+const ActionSchema = new Schema({
+    type: {
+        type: String,
+        trim: true,
+    },
+    value: {
+        type: Number,
+        trim: true,
+    },
+    _dataCreatedAt   : {
+        type: Date,
+        default: Date.now
+    },
+})
+
 const DataSchema = new Schema({
     type: {
         type: String,
@@ -47,7 +62,8 @@ const deviceDataSchema = new Schema({
         trim: true,
         required: false 
     }, 
-    data        : [DataSchema]
+    data        : [DataSchema],
+    action      : [ActionSchema]
 }, { timestamps: true });
 
 const DeviceData = mongoose.model('device_data', deviceDataSchema);
