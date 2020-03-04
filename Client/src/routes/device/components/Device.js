@@ -4,30 +4,14 @@ import { withAuth } from 'components/Auth/context/AuthContext';
 import DeviceList from './DeviceList';
 import Breadcrumb from 'components/Layout/Breadcrumb';
 import MaterialIcon from 'components/MaterialIcon';
-// import socketOpen from 'socket.io-client';
 
 class Device extends Component {
     state = {
         deviceState: {}
     }
 
-    componentDidMount() {
-        // let socket = socketOpen('http://localhost:4001')
-        this.props.checkToken();
-        // const id = this.props.person.id_users
-        // // console.log(id)
-        // socket.emit('join_room', id )  
-
-        // socket.on('event', function(data) {
-        //     console.log(data)
-        // });    
-    }
-
-    handleSocket = () => {
-
-        // socket.on('receive_broadcast', function(data) {
-        //     console.log(data)
-        // });
+    componentDidMount() {        
+        this.props.checkToken();        
     }
 
     render() { 

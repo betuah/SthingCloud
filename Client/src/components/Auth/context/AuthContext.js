@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from "axios"
+import socketOpen from 'socket.io-client';
 
 const url           = `${process.env.REACT_APP_SERVER_DOMAIN ? process.env.REACT_APP_SERVER_DOMAIN :'http://localhost:8000'}` 
 const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}` 
@@ -13,6 +14,7 @@ axiosReq.interceptors.request.use((config)=>{
     return config
 })
 
+let socket = socketOpen(`${`${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}`}`)
 
 export class AuthContextProvider extends Component {
 
@@ -38,8 +40,11 @@ export class AuthContextProvider extends Component {
 
     initUser = () => {
         return axiosReq.get(`${url}/api/profile`)
-            .then(response => {
+            .then(response => {               
                 const res = response.data
+
+                socket.emit('join_room', res.data.id_users )  
+              
                 this.setState({ person: res.data });
             }).catch(err => {
                 this.setState({ isLoggedIn: false });
@@ -94,6 +99,7 @@ export class AuthContextProvider extends Component {
                         logout: this.logout,
                         initUser: this.initUser,
                         checkToken: this.checkToken,
+                        socket: socket,
                         ...this.state
                     }}>
                     {this.props.children}

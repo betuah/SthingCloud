@@ -10,6 +10,7 @@ import Notifications from 'routes/layout/routes/header/components/Notifications'
 import MaterialIcon from 'components/MaterialIcon';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import notif from 'components/NotificationPopUp/notif';
 
 import { withAuth } from '../../Auth/context/AuthContext'
 
@@ -30,7 +31,12 @@ class AppHeader extends React.Component {
   };
 
   componentDidMount() {
-    this.props.initUser();
+    const { initUser, socket } = this.props
+    initUser();
+
+    socket.on('event', data => {
+      data.statusChange === 1 ? notif('info', 'Device Connected!', `Your new device connected!`) : notif('error', 'Device Disconnected!', `Their is your device disconnected!`)
+    });
   }
 
   onToggleCollapsedNav = () => {
