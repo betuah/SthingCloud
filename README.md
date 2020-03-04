@@ -29,10 +29,6 @@ $ npm install
 
 ## Environment Setup
 > Create .env file in every subfolder like API, Client, Socket and Server
-### Folder Structure
-``` bash
-tree
-```
 
 #### Server .env file
 ```sh
