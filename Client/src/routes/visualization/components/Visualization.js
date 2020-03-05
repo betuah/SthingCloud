@@ -3,6 +3,7 @@ import { Redirect } from "react-router-dom";
 import { withAuth } from 'components/Auth/context/AuthContext';
 import Breadcrumb from 'components/Layout/Breadcrumb';
 import MaterialIcon from 'components/MaterialIcon';
+import GraphList from './GraphList'
 
 class Visualization extends Component {
     componentDidMount() {
@@ -24,7 +25,7 @@ class Visualization extends Component {
                             <Breadcrumb />
                         </div>
                         <div className="col-md-12">
-                            
+                            <GraphList {...this.props} />
                         </div>
                     </div>                                       
                 </div>
