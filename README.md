@@ -8,11 +8,13 @@
 - **Github :** [My Github Libraries](https://github.com/betuah/)
 <hr>
 
-## Release feature (v0.1.3)
+## Release feature (v0.2.1)
 - Add Real Time device status
 - Add Copy token button
 - Fix device module (Device Menu)
 - Fix Flooding to device API
+- Change dashboard menu
+- Add Graph menu
 
 ## Installation
 ```sh
