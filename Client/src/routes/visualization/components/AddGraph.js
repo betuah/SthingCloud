@@ -26,8 +26,8 @@ const Content = (props) => {
                                 <MaterialIcon icon="insert_chart" style={{color: '#00BCD4'}} />
                             </div>
                             <TextField                                   
-                                id="graphName"
-                                name="name"
+                                id="graph"
+                                name="graph_name"
                                 label="Graph Name"
                                 type="text"
                                 fullWidth
@@ -35,7 +35,7 @@ const Content = (props) => {
                                 onChange={props.onChange}
                                 required
                                 placeholder="Name of Graph"
-                                value={props.dataValue.device}
+                                value={props.dataValue.graph_name}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -71,14 +71,14 @@ const Content = (props) => {
     )
 }
 
-class AddDevice extends React.Component {
+class AddGraph extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
             visible: false,
             data: {
-                device: '',
+                graph_name: '',
                 desc: ''
             }
         }
@@ -109,7 +109,7 @@ class AddDevice extends React.Component {
         this.setState({ 
             visible: false,
             data: {
-                device: '',
+                graph_name: '',
                 desc: ''
             }
         });
@@ -118,7 +118,7 @@ class AddDevice extends React.Component {
     handleOk = () => {
         const { updateData, url } = this.props;
         
-        axios.post(`${url}/api/device`, this.state.data)
+        axios.post(`${url}/api/graph`, this.state.data)
         .then(res => {
             updateData()
             this.clearState()
@@ -161,4 +161,4 @@ class AddDevice extends React.Component {
     }
 }
 
-export default withAuth(AddDevice);
+export default withAuth(AddGraph);

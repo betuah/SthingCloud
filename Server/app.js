@@ -36,10 +36,12 @@ app.use(cors(options))
 const authRoute     = require('./routes/auth_route');
 const usersRoute    = require('./routes/users_route');
 const deviceRoute   = require('./routes/device_route');
+const graphRoute    = require('./routes/graph_route');
 
 authRoute(app);
 usersRoute(app);
 deviceRoute(app);
+graphRoute(app);
 /* End of Routing Import */
 
 /* MongoDB Connection Check */

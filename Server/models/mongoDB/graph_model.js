@@ -34,7 +34,7 @@ const graphDataSchema = new Schema({
         trim: true,
         required: true 
     }, 
-    _idUsers    : { 
+    userId      : { 
         type: String, 
         trim: true,
         required: true 
@@ -49,8 +49,17 @@ const graphDataSchema = new Schema({
         trim: true,
         required: true 
     },
-    graph_widget    : WidgetSchema],
-    action          : [ActionSchema]
+    share       : {
+        type: Number, 
+        trim: true,
+        required: true 
+    },
+    graph_default : {
+        type: Number, 
+        trim: true
+    },
+    graph_widget    : [WidgetSchema],
+    action          : [DataSchema]
 }, { timestamps: true });
 
 const GraphData = mongoose.model('graph_data', graphDataSchema);

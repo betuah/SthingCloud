@@ -136,7 +136,7 @@ let EnhancedTableToolbar = props => {
 
   const handleDelete = e => {
     axios
-      .delete(`${url}/api/device`, { data: { id: props.selectedData } })
+      .delete(`${url}/api/graph`, { data: { id: props.selectedData } })
       .then(res => {
         const cb = res.data
         notif('success', 'Success', `Successfully  deleted ${cb.deletedCount} data.`)
@@ -289,7 +289,7 @@ class EnhancedTable extends React.Component {
 
   updateData = () => {
     const handleData = this.handleData;
-    axios.get(`${this.props.url}/api/device`)
+    axios.get(`${this.props.url}/api/graph`)
     .then((res) => {
         handleData(res.data)
     })
@@ -300,11 +300,6 @@ class EnhancedTable extends React.Component {
 
   componentDidMount() { 
     this.updateData()
-    const { socket } = this.props
-
-    socket.on('event', data => {
-      this.updateData()      
-    });    
   }
 
   handleRequestSort = (event, property) => {
@@ -395,7 +390,7 @@ class EnhancedTable extends React.Component {
                 .sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .filter(val => {
-                  return val.device.match(this.state.searchValue.toLowerCase())})
+                  return val.graph.match(this.state.searchValue.toLowerCase())})
                 .map(n => {
                   const isSelected = this.isSelected(n._id);
 
@@ -412,9 +407,9 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox" width="5%">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.device}</TableCell>
-                      <TableCell width="25%" style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word'}}><Tooltip title={`Click to access ${n.desc} graph`}><Link className="link-animated-hover link-hover-v3" to={"#/"}>{<b style={{color: '#FF9800'}}>{n.desc}</b>}</Link></Tooltip></TableCell>
-                      <TableCell width="60%" style={{ maxWidth: '80px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.token}</TableCell>
+                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n._id}</TableCell>
+                      <TableCell width="25%" style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word'}}><Tooltip title={`Click to access ${n.desc} graph`}><Link className="link-animated-hover link-hover-v3" to={"#/"}>{<b style={{color: '#FF9800'}}>{n.graph}</b>}</Link></Tooltip></TableCell>
+                      <TableCell width="60%" style={{ maxWidth: '80px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.desc}</TableCell>
                     </TableRow>
                   );
                 })}

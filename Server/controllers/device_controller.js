@@ -31,15 +31,15 @@ exports.create = async (req, res) => {
         const secret    = env.token_secret;
         const token     = jwt.sign({ id: `${id}`, idUser: `${req.id_user}`, idDevice: `${id}`}, secret);
         const body      = req.body
-        const dataBody       = { 
-                            _id         : id,
-                            _idUsers    : req.id_user,
-                            ...body,
-                            token       : token,
-                            data        : [],
-                            "lastConn"  : null,
-                            "state"     : 0	                        
-                        }
+        const dataBody  = { 
+            _id         : id,
+            _idUsers    : req.id_user,
+            ...body,
+            token       : token,
+            data        : [],
+            "lastConn"  : null,
+            "state"     : 0	                        
+        }
                         
         DeviceData.create(dataBody).then((data) => {
             res.status(201).json({ status: "Success", code: 201, msg: "Success insert data.", data: data});

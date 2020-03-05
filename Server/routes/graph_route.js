@@ -14,9 +14,6 @@ module.exports = (app) => {
 
     app.route('/api/graph')
         .delete(authMiddleware, graph.delete);
-    
-    app.route('/api/graph/:id')
-        .get(authMiddleware, graph.findOne);
         
     app.route('/api/graph/widget')
         .post(authMiddleware, graph.widget_create);

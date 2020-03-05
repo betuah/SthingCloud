@@ -16,7 +16,7 @@ const authMiddleware = async (req, res, next) => {
         next();
 
     } catch (error) {
-        res.status(406).json({ status: 'Error', code: 406, msg: "Invalid Token request."})
+        res.status(406).json({ status: 'Not Acceptable', code: 406, msg: "Invalid Token request."})
     }
 }
 
