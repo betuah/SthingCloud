@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
 import notif from 'components/NotificationPopUp/notif';
-import {CopyToClipboard} from 'react-copy-to-clipboard';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
-import InsertChartIcon from '@material-ui/icons/InsertChart';
+import BeenhereIcon from '@material-ui/icons/Beenhere';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import AddGraph from './AddGraph';
@@ -14,7 +13,6 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 import MaterialIcon from 'components/MaterialIcon';
 import { withStyles } from '@material-ui/core/styles';
 import { 
-    Chip,
     TableBody, 
     TableCell, 
     TableHead, 
@@ -132,11 +130,11 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, url, tokenState } = props;
+  const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, server_url } = props;
 
   const handleDelete = e => {
     axios
-      .delete(`${url}/api/graph`, { data: { id: props.selectedData } })
+      .delete(`${server_url}/api/graph`, { data: { id: props.selectedData } })
       .then(res => {
         const cb = res.data
         notif('success', 'Success', `Successfully  deleted ${cb.deletedCount} data.`)
@@ -158,8 +156,25 @@ let EnhancedTableToolbar = props => {
     handleSearch(text)
   }
 
-  const handleCopy = e => {
-    notif('success', 'Copied!', `Your token has been copied!`)
+  const handleGraphDefault = e => {
+    axios
+      .put(`${server_url}/api/graph/default/${props.selectedData}`)
+      .then(res => {
+        notif('success', 'Success', `Success change default graph.`)
+        resetSelected()
+        updateData()
+      })
+      .catch(err => {
+        if(err.code === 500) {
+          notif('error', err.status, err.msg)
+        } else {
+          notif('error', 'Error', 'Failed change default graph.')
+        }        
+      })
+  }
+
+  const handleEdit = e => {
+    
   }
 
   return (
@@ -189,19 +204,15 @@ let EnhancedTableToolbar = props => {
       <div className="col-md-6">
         {numSelected === 1 ? (
           <div className="text-right">
-            <Tooltip title="Set Default Graph">
-              <CopyToClipboard text={tokenState}>
-                <IconButton aria-label="Copy" onClick={handleCopy}>
-                  <InsertChartIcon style={{color: '#4CAF50'}} />
-                </IconButton>
-              </CopyToClipboard>
+            <Tooltip title="Set Default Graph">              
+              <IconButton aria-label="Copy" onClick={handleGraphDefault}>
+                <BeenhereIcon style={{color: '#4CAF50'}} />
+              </IconButton>              
             </Tooltip>
-            <Tooltip title="Edit">
-              <CopyToClipboard text={tokenState}>
-                <IconButton aria-label="Copy" onClick={handleCopy}>
+            <Tooltip title="Edit">              
+                <IconButton aria-label="Copy" onClick={handleEdit}>
                   <EditIcon style={{color: '#FF9800'}} />
-                </IconButton>
-              </CopyToClipboard>
+                </IconButton>              
             </Tooltip>
             
             <Tooltip title="Delete">
@@ -256,7 +267,6 @@ class EnhancedTable extends React.Component {
       order: 'asc',
       orderBy: 'name',
       searchValue: '',
-      tokenSelected: '',
       selected: [],
       data: [
         // createData()
@@ -289,7 +299,7 @@ class EnhancedTable extends React.Component {
 
   updateData = () => {
     const handleData = this.handleData;
-    axios.get(`${this.props.url}/api/graph`)
+    axios.get(`${this.props.server_url}/api/graph`)
     .then((res) => {
         handleData(res.data)
     })
@@ -371,9 +381,8 @@ class EnhancedTable extends React.Component {
           updateData={this.updateData} 
           resetSelected={this.resetSelected} 
           searchState={this.state.searchValue} 
-          tokenState={this.state.tokenSelected}
           handleSearch={this.handleSearch}
-          url={this.props.url}
+          server_url={this.props.server_url}
         />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
@@ -408,7 +417,14 @@ class EnhancedTable extends React.Component {
                         <Checkbox checked={isSelected} />
                       </TableCell>
                       <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n._id}</TableCell>
-                      <TableCell width="25%" style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word'}}><Tooltip title={`Click to access ${n.desc} graph`}><Link className="link-animated-hover link-hover-v3" to={"#/"}>{<b style={{color: '#FF9800'}}>{n.graph}</b>}</Link></Tooltip></TableCell>
+                      <TableCell width="25%" style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word'}}>
+                        <Tooltip title={`Click to access graph`}>
+                          <Link className="link-animated-hover link-hover-v3" to={`/app/visualization/graph#${n._id}`}>{<b style={{color: '#FF9800'}}>
+                            {n.graph}</b>}
+                          </Link>                          
+                        </Tooltip>&nbsp;&nbsp;&nbsp;
+                        {n.graph_default === 1 && <small><span className="ui-highlight" style={{backgroundColor: '#2196F3'}}>Default Graph</span></small>}                        
+                      </TableCell>
                       <TableCell width="60%" style={{ maxWidth: '80px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.desc}</TableCell>
                     </TableRow>
                   );

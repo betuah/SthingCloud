@@ -14,6 +14,24 @@ exports.index = async (req, res) => {
     }
 };
 
+exports.findOne = async (req, res) => {
+    try {
+        graphModel.findOne({ _id: req.params.id }).then((data) => {
+            if(data) {
+                res.status(202).json(data);
+            } else {
+                res.status(404).json({ status: 'Error', code: 404, msg: 'Graph Not Found!'})
+            }            
+        }).catch((err) => {
+            console.log(err)
+            res.status(400).json({ status: 'Error', code: 500, msg: 'Internal Server Error' })
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Internal Server Error')
+    }
+}
+
 exports.create = async (req, res) => {
     try {
         const id        = uuid.generate()
@@ -74,6 +92,8 @@ exports.edit = async (req, res) => {
             share   : share
         }
 
+        // res.send(dataBody)
+
         graphModel.findByIdAndUpdate({ _id: req.params.id }, 
             { 
                 $set: { 
@@ -87,6 +107,62 @@ exports.edit = async (req, res) => {
                 res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed update data graph!'})
                 console.log(err)
             })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
+    }
+}
+
+exports.defaultGraph = async (req, res) => {
+
+    const setDefault = (data, err) => {
+        return graphModel.findByIdAndUpdate({ _id: data.id }, 
+            { 
+                $set: { 
+                    graph_default: data.status
+                }
+            })
+            .then(data => {
+                err(false)
+            })
+            .catch(err => {
+                console.log(err)
+                err(true)
+            }) 
+    }
+
+    try {
+        graphModel.findOne({ graph_default: 1})
+            .then((data) => {
+                if(data) { 
+                    setDefault({ id: data._id, status: 2}, err => {
+                        if(!err) {
+                            setDefault({ id: req.params.id, status: 1 }, err => {
+                                if(!err) {
+                                    res.status(200).json({ status: 'Success', code: 200, 'msg': 'Success change default graph!'})
+                                } else {
+                                    res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed change default graphasd!'})
+                                }
+                            })
+                        } else {
+                            res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed change default graphxc!'})
+                        }
+                    })
+                } else { 
+                    console.log(data)
+                    setDefault({ id: req.params.id, status: 1 }, err => {
+                        if(!err) {
+                            res.status(200).json({ status: 'Success', code: 200, 'msg': 'Success change default graph!'})
+                        } else {
+                            res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed change default graph!'})
+                        }
+                    })
+                }         
+        }).catch((err) => {
+            console.log(err)
+            res.status(400).json({ status: 'Error', code: 500, msg: 'Internal Server Error' })
+        })
+        
     } catch (error) {
         console.log(error)
         res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})

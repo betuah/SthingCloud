@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from "axios"
 import socketOpen from 'socket.io-client';
 
-const url           = `${process.env.REACT_APP_SERVER_DOMAIN ? process.env.REACT_APP_SERVER_DOMAIN :'http://localhost:8000'}` 
+const server_url    = `${process.env.REACT_APP_SERVER_DOMAIN ? process.env.REACT_APP_SERVER_DOMAIN :'http://localhost:8000'}` 
 const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}` 
 const axiosReq      = axios.create()
 const AuthContext   = React.createContext()
@@ -24,13 +24,13 @@ export class AuthContextProvider extends Component {
                 person: JSON.parse(localStorage.getItem('person')) || "",
                 token: localStorage.getItem('token') || "",
                 isLoggedIn: (localStorage.getItem('token') === null) ? false : true,
-                url: url,
+                server_url: server_url,
                 socket_url: socket_url
             }
     }
 
     checkToken = () => {
-        return axiosReq.get(`${url}/api/tokenverify`)
+        return axiosReq.get(`${server_url}/api/tokenverify`)
             .catch(err => {
                 this.setState({ isLoggedIn: false });
                 localStorage.clear()
@@ -39,7 +39,7 @@ export class AuthContextProvider extends Component {
     }
 
     initUser = () => {
-        return axiosReq.get(`${url}/api/profile`)
+        return axiosReq.get(`${server_url}/api/profile`)
             .then(response => {               
                 const res = response.data
 
@@ -54,7 +54,7 @@ export class AuthContextProvider extends Component {
 
     //login
     login = (credentials) => {
-        return axios.post(`${url}/api/signin`, credentials)
+        return axios.post(`${server_url}/api/signin`, credentials)
             .then(response => {
                 const { token, data } =  response.data
                 const person = JSON.stringify(data);
@@ -100,6 +100,7 @@ export class AuthContextProvider extends Component {
                         initUser: this.initUser,
                         checkToken: this.checkToken,
                         socket: socket,
+                        axios: axiosReq,
                         ...this.state
                     }}>
                     {this.props.children}

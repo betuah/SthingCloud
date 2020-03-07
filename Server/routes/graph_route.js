@@ -6,11 +6,17 @@ module.exports = (app) => {
     app.route('/api/graph')
         .get(authMiddleware, graph.index);
 
+    app.route('/api/graph/:id')
+        .get(authMiddleware, graph.findOne);
+
     app.route('/api/graph')
         .post(authMiddleware, graph.create);
     
     app.route('/api/graph/:id')
         .put(authMiddleware, graph.edit);
+    
+    app.route('/api/graph/default/:id')
+        .put(authMiddleware, graph.defaultGraph);
 
     app.route('/api/graph')
         .delete(authMiddleware, graph.delete);

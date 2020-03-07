@@ -116,9 +116,9 @@ class AddDevice extends React.Component {
     }
 
     handleOk = () => {
-        const { updateData, url } = this.props;
+        const { updateData, server_url } = this.props;
         
-        axios.post(`${url}/api/device`, this.state.data)
+        axios.post(`${server_url}/api/device`, this.state.data)
         .then(res => {
             updateData()
             this.clearState()

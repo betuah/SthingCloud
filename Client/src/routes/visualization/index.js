@@ -1,3 +1,3 @@
-import Visualization from './components/Visualization';
+import Visualization from './components/Main';
 
 export default Visualization;

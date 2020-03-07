@@ -131,11 +131,11 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, url, tokenState } = props;
+  const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, server_url, tokenState } = props;
 
   const handleDelete = e => {
     axios
-      .delete(`${url}/api/device`, { data: { id: props.selectedData } })
+      .delete(`${server_url}/api/device`, { data: { id: props.selectedData } })
       .then(res => {
         const cb = res.data
         notif('success', 'Success', `Successfully  deleted ${cb.deletedCount} data.`)
@@ -281,7 +281,7 @@ class EnhancedTable extends React.Component {
 
   updateData = () => {
     const handleData = this.handleData;
-    axios.get(`${this.props.url}/api/device`)
+    axios.get(`${this.props.server_url}/api/device`)
     .then((res) => {
         handleData(res.data)
     })
@@ -370,7 +370,7 @@ class EnhancedTable extends React.Component {
           searchState={this.state.searchValue} 
           tokenState={this.state.tokenSelected}
           handleSearch={this.handleSearch}
-          url={this.props.url}
+          server_url={this.props.server_url}
         />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">

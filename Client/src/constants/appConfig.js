@@ -3,7 +3,7 @@ const year = date.getFullYear();
 
 const APPCONFIG = {
   brand: 'SEAMOLEC Cloud Platform',
-  logoBrand: 'SMLC - Cloud',
+  logoBrand: 'SmartThing',
   year,
   AutoCloseMobileNav: true,           // true, false. Automatically close sidenav on route change (Mobile only)
   customizer: false,                   // Boolean: true, false. Customizer will be removed completely when set to false

@@ -1,23 +1,15 @@
-import React from 'react';
+import React, { Fragment, Component } from 'react'
+import notif from 'components/NotificationPopUp/notif'
+import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import axios from 'axios';
-import { Modal } from 'antd';
-import notif from 'components/NotificationPopUp/notif';
-import MaterialIcon from 'components/MaterialIcon';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import { TextField, Button, IconButton, Tooltip } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core'
+import {  Modal } from 'antd'
 
-axios.interceptors.request.use((config)=>{
-    const token = localStorage.getItem('token')
-    config.headers.Authorization = `Bearer ${token}`
-    return config
-})
-
-const Content = (props) => {
+const Content = props => {
     return (
-        <div>            
+        <Fragment>
             <div className="col-md-12 mx-auto">
-                <h4 style={{color: '#FF9800'}} className="text-center">Add New <b>Graph</b></h4>
+                <h4 style={{color: '#FF9800'}} className="text-center">Update <b>Graph</b></h4>
                 <div className="divider divider-dotted"></div>             
                 <form className="form-v1">
                     <div className="form-group">
@@ -67,32 +59,23 @@ const Content = (props) => {
                 </form>                  
             </div>
             <div className="divider divider-dotted"></div>
-        </div>
+        </Fragment>
     )
 }
 
-class AddGraph extends React.Component {
+class ModalEditContent extends Component {
     constructor(props) {
         super(props)
-
+        console.log(props)
         this.state = {
-            visible: false,
             data: {
-                graph_name: '',
-                desc: ''
+                graph_name: props.data.graph,
+                desc: props.data.desc,
+                share_status: ''
             }
         }
 
-        this.showModal      = this.showModal.bind(this)
-        this.handleOk       = this.handleOk.bind(this)
-        this.handleChange   = this.handleChange.bind(this)
-        this.clearState     = this.clearState.bind(this)
-    }    
-
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
+        this.clearState = this.clearState.bind(this)
     }
 
     handleChange = (e) => {
@@ -105,24 +88,14 @@ class AddGraph extends React.Component {
         })
     }
 
-    clearState = () => {
-        this.setState({ 
-            visible: false,
-            data: {
-                graph_name: '',
-                desc: ''
-            }
-        });
-    }
-
     handleOk = () => {
-        const { updateData, server_url } = this.props;
+        const { updateData, server_url, axios, data } = this.props;
         
-        axios.post(`${server_url}/api/graph`, this.state.data)
+        axios.put(`${server_url}/api/graph/${data._id}`, this.state.data)
         .then(res => {
             updateData()
             this.clearState()
-            notif('success', res.data.status , 'Success saving data!')          
+            notif('success', res.data.status , 'Success updating data!')          
         })
         .catch(err => {
             if(err.response) {
@@ -135,17 +108,24 @@ class AddGraph extends React.Component {
         });         
     }
 
+    clearState() {
+        const { closeEditModal, updateData, data } = this.props
+        closeEditModal()
+        updateData(data._id)
+        this.setState({ 
+            visible: false,
+            data: {
+                graph_name: data.graph,
+                desc: data.desc
+            }
+        });        
+    }
+
     render() {
-        const { visible } = this.state;
         return (
-            <div>
-                <Tooltip title="Add New Graph">
-                    <IconButton aria-label="Add New Graph" onClick={this.showModal}>
-                        <AddCircleOutlineIcon color="primary" />
-                    </IconButton>
-                </Tooltip>
+            <Fragment>
                 <Modal
-                    visible={visible}
+                    visible={this.props.ModalEdit}
                     onOk={this.handleOk}
                     onCancel={this.clearState}
                     closable={false}
@@ -155,10 +135,10 @@ class AddGraph extends React.Component {
                     ]}
                 >
                     <Content onChange={this.handleChange} dataValue={this.state.data} />
-                </Modal>
-            </div>
-        );
+                </Modal> 
+            </Fragment>
+        )
     }
 }
 
-export default withAuth(AddGraph);
+export default withAuth(ModalEditContent)
