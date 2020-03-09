@@ -4,6 +4,7 @@ import socketOpen from 'socket.io-client';
 
 const server_url    = `${process.env.REACT_APP_SERVER_DOMAIN ? process.env.REACT_APP_SERVER_DOMAIN :'http://localhost:8000'}` 
 const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}` 
+const client_url    = `${process.env.REACT_APP_CLIENT_DOMAIN ? process.env.REACT_APP_CLIENT_DOMAIN :'http://localhost:3000'}` 
 const axiosReq      = axios.create()
 const AuthContext   = React.createContext()
 
@@ -25,7 +26,8 @@ export class AuthContextProvider extends Component {
                 token: localStorage.getItem('token') || "",
                 isLoggedIn: (localStorage.getItem('token') === null) ? false : true,
                 server_url: server_url,
-                socket_url: socket_url
+                socket_url: socket_url,
+                client_url: client_url
             }
     }
 

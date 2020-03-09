@@ -34,7 +34,7 @@ class Main extends Component {
                             <Breadcrumb />
                         </div>
                         <Switch>
-                            <Route path={`${match.url}/graph`}>
+                            <Route exact path={`${match.url}/graph`}>
                                 <div className="col-md-12 p-lg-3 p-3">
                                     <Graph {...this.props} />
                                 </div>
@@ -44,7 +44,7 @@ class Main extends Component {
                                     <GraphList {...this.props} />
                                 </div>
                             </Route>
-                        </Switch>               
+                        </Switch>
                     </div>                                       
                 </div>
             </div>

@@ -4,7 +4,7 @@ import LoadingComponent from 'components/Loading';
 import MaterialIcon from 'components/MaterialIcon'
 import { Link } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { IconButton, Tooltip, Button } from '@material-ui/core'
+import { IconButton, Tooltip, LinearProgress } from '@material-ui/core'
 
 
 let ModalEdit = loadable({
@@ -20,29 +20,30 @@ class Graph extends Component {
             ModalWidget: false,
             ModalEdit: false,
             data: '',
-            input: ''
+            input: '',
+            err_data: 0
         }
         
         this.updateData     = this.updateData.bind(this)
         this.showEditModal  = this.showEditModal.bind(this)
         this.closeEditModal = this.closeEditModal.bind(this)
-    }    
+    }
 
-    updateData(id) {        
+    updateData(id) {
         const { axios, server_url }  = this.props
         axios.get(`${server_url}/api/graph/${id}`)
         .then((res) => {
             this.setState({ data: {...res.data}})
         })
         .catch((err) => {
-            localStorage.clear()
+            this.setState({ err_data: 1})
         });
     }
 
     componentDidMount() {    
         const { location }  = this.props
         const graphId   = location.hash.replace('#', '')
-        this.updateData(graphId)        
+        this.updateData(graphId)
     }
 
     showEditModal() {
@@ -54,32 +55,37 @@ class Graph extends Component {
     }
 
     render() {
-        const { graph } = this.state.data
+        const { data, err_data } = this.state
+        if ( data === '' && err_data === 0) {
+            return <div><LinearProgress color="primary" /></div>
+        } else if (data === '' && err_data === 1) {
+            return <div>Error fetching data...</div>
+        }
 
         return (
             <Fragment>
-                <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>    
-
-                <div className="box box-default mb-12">
+                <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>   
+                
+                <div className="box box-default mb-12"> 
                     <div className="box-header">
                         <div className="row">
                             <div className="col-md-6">
-                                <h4 style={{color: '#2196F3'}}><b>{graph}</b></h4>
+                                <h4 style={{color: '#2196F3'}}><b>{data.graph}</b></h4>
                             </div>
                             <div className="col-md-6 text-right">
-                                <Tooltip title="Add Widget"> 
+                                <Tooltip title="Add Widget">
                                     <IconButton aria-label="Add Widget">
                                         <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
                                     </IconButton>
                                 </Tooltip>
-                                <Link to="/app/visualization" >                   
-                                    <Tooltip title="Graph List"> 
+                                <Link to="/app/visualization" >
+                                    <Tooltip title="Graph List">
                                         <IconButton aria-label="Graph List">
                                             <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
                                         </IconButton>
                                     </Tooltip>
                                 </Link>
-                                <Tooltip title="Settings"> 
+                                <Tooltip title="Settings">
                                     <IconButton aria-label="Settings" onClick={this.showEditModal}>
                                         <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
                                     </IconButton>

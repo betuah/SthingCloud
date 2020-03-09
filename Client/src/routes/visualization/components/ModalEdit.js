@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react'
 import notif from 'components/NotificationPopUp/notif'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { TextField, Button } from '@material-ui/core'
+import { TextField, Button, Switch, FormControlLabel } from '@material-ui/core'
 import {  Modal } from 'antd'
 
 const Content = props => {
@@ -27,7 +27,7 @@ const Content = props => {
                                 onChange={props.onChange}
                                 required
                                 placeholder="Name of Graph"
-                                value={props.dataValue.graph_name}
+                                value={props.data.graph_name}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
@@ -49,10 +49,47 @@ const Content = props => {
                                 required
                                 placeholder="Graph Description"
                                 onChange={props.onChange}
-                                value={props.dataValue.desc}
+                                value={props.data.desc}
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="input-group-v1">
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={props.data.share}
+                                        onChange={props.onSwitch('share')}
+                                        value={props.data.share ? '1' : '0'}
+                                        color="primary"
+                                        name='share'
+                                    />
+                                }
+                                label="Share this graph"
+                            />
+                        </div>
+                    </div>
+                    <div style={props.data.share ? { display: 'block' } : { display: 'none' }} className="form-group">
+                        <div className="input-group-v1">
+                            <div className="input-group-icon">
+                                <MaterialIcon icon="share" style={{color: '#00BCD4'}} />
+                            </div>
+                            <TextField                                    
+                                id="sharedLink"
+                                label="Shared Link"
+                                name="shared_link"
+                                type="text"
+                                fullWidth
+                                placeholder="Shared Graph Link"
+                                value={props.data.share_link ? props.data.share_link : ''}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                                disabled
+                                // readOnly={true}
                             />
                         </div>
                     </div>
@@ -66,16 +103,31 @@ const Content = props => {
 class ModalEditContent extends Component {
     constructor(props) {
         super(props)
-        console.log(props)
+        
         this.state = {
             data: {
-                graph_name: props.data.graph,
-                desc: props.data.desc,
-                share_status: ''
+                graph_name: '',
+                desc: '',
+                share: '',
+                share_link: ''
             }
         }
 
         this.clearState = this.clearState.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSwitch = this.handleSwitch.bind(this)
+    }
+
+    componentDidMount() {
+        const { data, client_url } = this.props
+        this.setState({
+            data: {
+                graph_name: data.graph || '',
+                desc: data.desc || '',
+                share: data.share ? true : false,
+                share_link: `${client_url}/graph/${data.userId}/${data._id}`
+            }
+        })
     }
 
     handleChange = (e) => {
@@ -83,17 +135,25 @@ class ModalEditContent extends Component {
         this.setState({
             data: {
                 ...this.state.data,
-                [name]: value 
+                [name]: value
             }
         })
     }
 
+    handleSwitch = name => e => {
+        this.setState({                 
+            data: {
+                ...this.state.data,
+                [name]: e.target.checked 
+            }                                
+        })
+    }
+
     handleOk = () => {
-        const { updateData, server_url, axios, data } = this.props;
+        const { server_url, axios, data } = this.props;
         
         axios.put(`${server_url}/api/graph/${data._id}`, this.state.data)
         .then(res => {
-            updateData()
             this.clearState()
             notif('success', res.data.status , 'Success updating data!')          
         })
@@ -111,14 +171,7 @@ class ModalEditContent extends Component {
     clearState() {
         const { closeEditModal, updateData, data } = this.props
         closeEditModal()
-        updateData(data._id)
-        this.setState({ 
-            visible: false,
-            data: {
-                graph_name: data.graph,
-                desc: data.desc
-            }
-        });        
+        updateData(data._id)      
     }
 
     render() {
@@ -134,7 +187,7 @@ class ModalEditContent extends Component {
                         <Button key="submit" variant="contained" color="primary" onClick={this.handleOk}> Save </Button>,
                     ]}
                 >
-                    <Content onChange={this.handleChange} dataValue={this.state.data} />
+                    <Content onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
                 </Modal> 
             </Fragment>
         )

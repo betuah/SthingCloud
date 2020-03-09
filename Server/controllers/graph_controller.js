@@ -83,7 +83,7 @@ exports.create = async (req, res) => {
 exports.edit = async (req, res) => {
     const graph     = req.body.graph_name
     const desc      = req.body.desc
-    const share     = req.body.share_status
+    const share     = req.body.share
 
     try {
         const dataBody  = { 
@@ -91,9 +91,7 @@ exports.edit = async (req, res) => {
             desc    : desc,
             share   : share
         }
-
-        // res.send(dataBody)
-
+        
         graphModel.findByIdAndUpdate({ _id: req.params.id }, 
             { 
                 $set: { 
