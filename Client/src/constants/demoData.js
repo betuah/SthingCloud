@@ -1,6 +1,6 @@
 const DEMO = {
   prefix: 'Material ', // note: with space at end
-  link: 'javascript:;', // javascript:;
+  // link: 'javascript:;', // javascript:;
   home: '#/app/dashboard',
   home2: '/app/dashboard',
   productLink: 'https://themeforest.net/item/material-design-react-admin-with-bootstrap/22433215',

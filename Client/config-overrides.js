@@ -1,23 +1,10 @@
-/* config-overrides.js */
+const { override, fixBabelImports, addLessLoader } = require('customize-cra');
 
-const { injectBabelPlugin } = require('react-app-rewired');
-// const rewireProvidePlugin = require('react-app-rewire-provide-plugin');
-const rewireLess = require('react-app-rewire-less');
-
-
-module.exports = function override(config, env) {
-
-  config = injectBabelPlugin(['import', { libraryName: 'antd', style: true }], config);
-
-  // Use `webpack.ProvidePlugin` to add jQuery globally
-  // config = rewireProvidePlugin(config, env, {
-  //   $: "jquery",
-  //   jQuery: "jquery",
-  //   "window.jQuery": "jquery"
-  // })
-
-  // Add LESS support
-  config = rewireLess.withLoaderOptions({
+module.exports = override(
+  fixBabelImports("import", {
+    libraryName: "antd", style: true // change importing css to less
+  }),
+  addLessLoader({
     javascriptEnabled: true,
     modifyVars: { 
       "@primary-color": "#01BCD4", //
@@ -27,8 +14,6 @@ module.exports = function override(config, env) {
       "@menu-dark-bg": '#343a40',
       '@menu-dark-submenu-bg': '#2d3238',
       "@layout-header-background": 'transparent',
-    },
-  })(config, env);
-
-  return config;
-}
+     }
+  })
+);

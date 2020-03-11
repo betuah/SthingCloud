@@ -115,7 +115,7 @@ class AppMenu extends React.Component {
         className="app-menu"
         theme={menuTheme}
         mode="inline"
-        inlineCollapsed={collapsedNav}
+        // inlineCollapsed={collapsedNav}
         {...menuProps}
         onOpenChange={this.onOpenChange}
         onClick={this.onMenuItemClick}

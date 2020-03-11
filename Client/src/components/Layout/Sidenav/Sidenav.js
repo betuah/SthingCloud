@@ -47,7 +47,7 @@ class AppSidenav extends React.Component {
         </div>
 
         <div className="sidenav-footer">
-          <a target="_blank" href={'#/'}>
+          <a rel="_blank" href={'#/'}>
             <MaterialIcon icon="help" className="nav-icon" />
             <span className="nav-text"><span>Help</span> & <span>Support</span></span>
           </a>

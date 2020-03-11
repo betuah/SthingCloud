@@ -54,7 +54,7 @@ class Customizer extends React.Component {
 
           <div className="divider my-4 divider-solid"></div>
           <div className="text-right">
-            <a className="link-animated-hover link-hover-v1" target="_blank" href={DEMO.productLink}>Download it Now <MaterialIcon icon="arrow_forward" /></a>
+            <a className="link-animated-hover link-hover-v1" rel="_blank" href={DEMO.productLink}>Download it Now <MaterialIcon icon="arrow_forward" /></a>
           </div>
         </div>
       </section>

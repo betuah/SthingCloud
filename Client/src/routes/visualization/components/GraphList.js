@@ -42,9 +42,9 @@ function getSorting(order, orderBy) {
 
 const columnData = [
   
-  { id: 'graphId', numeric: false, disablePadding: false, label: 'Graph ID' },
-  { id: 'name', numeric: false, disablePadding: false, label: 'Graph Name' },
-  { id: 'desc', numeric: false, disablePadding: false, label: 'desc' },
+  { id: 'graphId', disablePadding: false, label: 'Graph ID' },
+  { id: 'name', disablePadding: false, label: 'Graph Name' },
+  { id: 'desc', disablePadding: false, label: 'desc' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -69,7 +69,6 @@ class EnhancedTableHead extends React.Component {
             return (
               <TableCell
                 key={column.id}
-                numeric={column.numeric}
                 padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
               >
@@ -106,7 +105,7 @@ EnhancedTableHead.propTypes = {
 
 const toolbarStyles = theme => ({
   root: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing(),
   },
   highlight:
     theme.palette.type === 'light'
@@ -185,7 +184,7 @@ let EnhancedTableToolbar = props => {
     >
       <div className={classes.title}>
         {numSelected > 0 ? (
-          <Typography color="inherit" variant="subheading">
+          <Typography color="inherit" variant={"inherit"}>
             {numSelected} selected
           </Typography>
         ) : (             
@@ -249,7 +248,7 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing() * 3,
   },
   table: {
     minWidth: 1020,

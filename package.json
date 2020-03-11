@@ -10,8 +10,8 @@
     "client": "cd Client && npm start",
     "socket": "cd SocketIO && npm start",
     "api": "cd API && npm start",
-    "install": "concurrently \"npm run server-install\" \"npm run client-install\" \"npm run socket-install\" \"npm run api-install\" ",
-    "start": "concurrently \"npm run server\" \"npm run socket\" \"npm run api\" \"npm run client\" "
+    "app install": "concurrently \"npm run server-install\" \"npm run client-install\" \"npm run socket-install\" \"npm run api-install\" ",
+    "start": "concurrently \"npm run server\" \"npm run socket\" \"npm run api\" "
   },
   "devDependencies": {
     "concurrently": "^5.1.0"
