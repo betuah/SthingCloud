@@ -15,5 +15,8 @@
   },
   "devDependencies": {
     "concurrently": "^5.1.0"
+  },
+  "dependencies": {
+    "core-js": "^3.6.4"
   }
 }

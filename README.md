@@ -8,7 +8,24 @@
 - **Github :** [My Github Libraries](https://github.com/betuah/)
 <hr>
 
-## Release feature (v0.2.1)
+## Version Change Log (v0.2.2)
+- Add widget menu
+- Modify Edit widget menu
+- Upgrade Client package.json
+- - ReactJS (v16.8.6)
+- - ReactJS-DOM (v16.8.6)
+- - @material {core, lab, icon} (v4.9.5)
+- - Antd (v4.0.2)
+- - React-Scripts (v3.4.0)
+- - @material { elevation,typography } (v5.1.0)
+- - react-app-rewired (v2.1.5)
+- - react-hot-loader (v4.12.19)
+- Add new packages
+- - customize-cra (v3.6.4) -dev
+- - @babel/runtime (v7.0.0) -dev
+- - less-loader (v5.0.0) -dev
+
+## Version Change Log (v0.2.1)
 - Add Real Time device status
 - Add Copy token button
 - Fix device module (Device Menu)
@@ -55,8 +72,10 @@ MONGO_PORT=YOUR_MONGODB_PORT
 #### Client .env file
 ```sh
 NODE_PATH=src/
-REACT_APP_CLIENT_DOMAIN=http://YOUR_CLIENT_DOMAIN:3000
-REACT_APP_SERVER_DOMAIN=http://YOUR_SERVER_DOMAIN:8000
+REACT_APP_CLIENT_DOMAIN=http://localhost:3000
+REACT_APP_SERVER_DOMAIN=http://localhost:8000
+REACT_APP_API_DOMAIN=http://localhost:4000
+REACT_APP_SOCKET_DOMAIN=http://localhost:4001
 ```
 
 #### API .env file
