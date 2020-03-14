@@ -12,18 +12,18 @@
 - Add widget menu
 - Modify Edit widget menu
 - Upgrade Client package.json
-- - ReactJS (v16.8.6)
-- - ReactJS-DOM (v16.8.6)
-- - @material {core, lab, icon} (v4.9.5)
-- - Antd (v4.0.2)
-- - React-Scripts (v3.4.0)
-- - @material { elevation,typography } (v5.1.0)
-- - react-app-rewired (v2.1.5)
-- - react-hot-loader (v4.12.19)
+    - ReactJS (v16.8.6)
+    - ReactJS-DOM (v16.8.6)
+    - @material {core, lab, icon} (v4.9.5)
+    - Antd (v4.0.2)
+    - React-Scripts (v3.4.0)
+    - @material { elevation,typography } (v5.1.0)
+    - react-app-rewired (v2.1.5)
+    - react-hot-loader (v4.12.19)
 - Add new packages
-- - customize-cra (v3.6.4) -dev
-- - @babel/runtime (v7.0.0) -dev
-- - less-loader (v5.0.0) -dev
+    - customize-cra (v3.6.4) -dev
+    - @babel/runtime (v7.0.0) -dev
+    - less-loader (v5.0.0) -dev
 
 ## Version Change Log (v0.2.1)
 - Add Real Time device status
