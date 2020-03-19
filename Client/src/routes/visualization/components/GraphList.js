@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import BeenhereIcon from '@material-ui/icons/Beenhere';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import AddGraph from './AddGraph';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import MaterialIcon from 'components/MaterialIcon';
@@ -172,10 +171,6 @@ let EnhancedTableToolbar = props => {
       })
   }
 
-  const handleEdit = e => {
-    
-  }
-
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -208,12 +203,6 @@ let EnhancedTableToolbar = props => {
                 <BeenhereIcon style={{color: '#4CAF50'}} />
               </IconButton>              
             </Tooltip>
-            <Tooltip title="Edit">              
-                <IconButton aria-label="Copy" onClick={handleEdit}>
-                  <EditIcon style={{color: '#FF9800'}} />
-                </IconButton>              
-            </Tooltip>
-            
             <Tooltip title="Delete">
               <IconButton aria-label="Delete" onClick={handleDelete}>
                 <DeleteIcon style={{color: '#F44336'}} />

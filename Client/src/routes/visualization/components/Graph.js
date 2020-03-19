@@ -8,7 +8,12 @@ import { IconButton, Tooltip, LinearProgress } from '@material-ui/core'
 
 
 let ModalEdit = loadable({
-    loader: () => import('./ModalEdit'),
+    loader: () => import('./modals/ModalEdit'),
+    loading: LoadingComponent
+})
+
+let ModalWidget = loadable({
+    loader: () => import('./modals/ModalWidget'),
     loading: LoadingComponent
 })
 
@@ -24,9 +29,11 @@ class Graph extends Component {
             err_data: 0
         }
         
-        this.updateData     = this.updateData.bind(this)
-        this.showEditModal  = this.showEditModal.bind(this)
-        this.closeEditModal = this.closeEditModal.bind(this)
+        this.updateData         = this.updateData.bind(this)
+        this.showEditModal      = this.showEditModal.bind(this)
+        this.closeEditModal     = this.closeEditModal.bind(this)
+        this.showWidgetModal    = this.showWidgetModal.bind(this)
+        this.closeWidgetModal   = this.closeWidgetModal.bind(this)
     }
 
     updateData(id) {
@@ -54,6 +61,14 @@ class Graph extends Component {
         this.setState({ ModalEdit: false })
     }
 
+    showWidgetModal() {
+        this.setState({ ModalWidget: true })
+    }
+
+    closeWidgetModal() {
+        this.setState({ ModalWidget: false })
+    }
+
     render() {
         const { data, err_data } = this.state
         if ( data === '' && err_data === 0) {
@@ -64,7 +79,8 @@ class Graph extends Component {
 
         return (
             <Fragment>
-                <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>   
+                <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>
+                <ModalWidget {...this.state} updateData={this.updateData} closeWidgetModal={this.closeWidgetModal}/>      
                 
                 <div className="box box-default mb-12"> 
                     <div className="box-header">
@@ -74,7 +90,7 @@ class Graph extends Component {
                             </div>
                             <div className="col-md-6 text-right">
                                 <Tooltip title="Add Widget">
-                                    <IconButton aria-label="Add Widget">
+                                    <IconButton aria-label="Add Widget" onClick={this.showWidgetModal}>
                                         <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
                                     </IconButton>
                                 </Tooltip>
