@@ -18,7 +18,7 @@ exports.data = async (req, res) => {
         // const type  = req.body.type ? req.body.type : null
         // const value = req.body.value ? req.body.value : null
 
-        // if (type && value ) {
+        // if (type && value ) { 
         //     const data  = {
         //         type: type,
         //         value: value

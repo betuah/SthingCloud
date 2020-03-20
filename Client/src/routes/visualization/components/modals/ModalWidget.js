@@ -100,7 +100,7 @@ const Content = props => {
                             </FormControl>                            
                         </div>
                     </div>
-                    <div className="form-group" style={props.data.widgetChart === 0 ? { display: 'none' } : { display: 'block' }} className="form-group">
+                    <div className="form-group" style={props.data.widgetChart === 0 ? { display: 'none' } : { display: 'block' }}>
                         <div className="input-group-v1">
                             <div className="input-group-icon">
                                 <MaterialIcon icon="insert_chart" style={{color: '#00BCD4'}} />
@@ -143,8 +143,8 @@ class ModalEditContent extends Component {
             },
             chart: ['Tachometer','Donut Chart','Gauge','Progressbar','Led Indicator','Clean Text'],
             inputResource: [
-                { value: 1, name: 'From Device' }, 
-                // { value: 2, name: 'From Data Bucket' }
+                { value: 'DEVICE', name: 'From Device' }, 
+                // { value: 'BUCKET', name: 'From Data Bucket' }
             ],
             deviceList: [],
             bucketList: []
@@ -163,7 +163,7 @@ class ModalEditContent extends Component {
             }
         })
 
-        if (name === 'resourceType' && value === 1) {
+        if (name === 'resourceType' && value === 'DEVICE') {
             const { server_url, axios } = this.props; 
 
             axios.get(`${server_url}/api/device`)
@@ -172,28 +172,32 @@ class ModalEditContent extends Component {
                     deviceList: [...res.data]
                 })
             })
-
-            console.log('fetch')
         }
     }
 
     handleOk = () => {
-        const { server_url, axios, data } = this.props;
-        
-        // axios.put(`${server_url}/api/graph/${data._id}`, this.state.data)
-        // .then(res => {
-        //     this.clearState()
-        //     notif('success', res.data.status , 'Success updating data!')          
-        // })
-        // .catch(err => {
-        //     if(err.response) {
-        //         const error = err.response.data;       
-        //         notif(error.code === 11000 ? 'error' : 'warning', error.code === 11000 ? 'Error' : 'Warning', error.msg)
-        //     } else {               
-        //         const resMsg = { status: 'Error', code: 500, msg: 'Internal Server Error'}         
-        //         notif('error', resMsg.status, resMsg.msg)
-        //     }
-        // });         
+        const { server_url, axios, data, updateData } = this.props
+        const { widgetTitle, resourceType, resourceId, widgetChart, dataId } = this.state.data 
+    
+        if (widgetTitle === '' || resourceType === 0 || resourceId === 0 || widgetChart === 0 || dataId === '') {
+            notif('warning', 'Warning' , 'Please fill all required fields!')
+        } else {
+            axios.post(`${server_url}/api/graph/widget/${data._id}`, this.state.data)
+            .then(res => {
+                this.clearState()
+                notif('success', res.data.status , 'Success Adding New Widget.')
+                updateData(data._id)
+            })
+            .catch(err => {
+                if(err.response) {
+                    const error = err.response.data;       
+                    notif(error.code === 11000 ? 'error' : 'warning', error.code === 11000 ? 'Error' : 'Warning', error.msg)
+                } else {               
+                    const resMsg = { status: 'Error', code: 500, msg: 'Internal Server Error'}         
+                    notif('error', resMsg.status, resMsg.msg)
+                }
+            });
+        }       
     }
 
     clearState() {

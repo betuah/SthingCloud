@@ -18,7 +18,7 @@ exports.findOne = async (req, res) => {
     try {
         graphModel.findOne({ _id: req.params.id }).then((data) => {
             if(data) {
-                res.status(202).json(data);
+                res.status(200).json(data);
             } else {
                 res.status(404).json({ status: 'Error', code: 404, msg: 'Graph Not Found!'})
             }            
@@ -66,7 +66,7 @@ exports.create = async (req, res) => {
 
             graphModel.create(dataBody)
                 .then(data => {
-                    res.status(200).json({ status: 'Success', code: 200, 'msg': 'Success saving data graph!', data: data})
+                    res.status(201).json({ status: 'Success', code: 200, 'msg': 'Success saving data graph!', data: data})
                 })
                 .catch(err => {
                     console.log(err)
@@ -86,25 +86,47 @@ exports.edit = async (req, res) => {
     const share     = req.body.share
 
     try {
-        const dataBody  = { 
-            graph   : graph, 
-            desc    : desc,
-            share   : share
-        }
-        
-        graphModel.findByIdAndUpdate({ _id: req.params.id }, 
-            { 
-                $set: { 
-                    ...dataBody
+        if(graph.trim() === "" || desc.trim() === "" || graph === null || desc === null || share === null) {
+            res.status(400).json({ 
+                Error: 'BAD REQUEST', 
+                Code: 400, 
+                msg: 'Please fill all required fields!',
+                BODY_DATA_REQUIRED:  {
+                    graph_name: {
+                        type: 'String',
+                        require: true
+                    },
+                    desc: {
+                        type: 'LongText',
+                        require: true
+                    },
+                    share: {
+                        type: 'Number',
+                        require: true
+                    }
                 }
             })
-            .then(data => {
-                res.status(200).json({ status: 'Success', code: 200, 'msg': 'Success update data graph!', data: data})
-            })
-            .catch(err => {
-                res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed update data graph!'})
-                console.log(err)
-            })
+        } else {
+            const dataBody  = { 
+                graph   : graph, 
+                desc    : desc,
+                share   : share
+            }
+            
+            graphModel.findByIdAndUpdate({ _id: req.params.id }, 
+                { 
+                    $set: { 
+                        ...dataBody
+                    }
+                })
+                .then(data => {
+                    res.status(200).json({ status: 'Success', code: 200, 'msg': 'Success update data graph!', data: data})
+                })
+                .catch(err => {
+                    res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed update data graph!'})
+                    console.log(err)
+                })
+        }
     } catch (error) {
         console.log(error)
         res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
@@ -185,9 +207,30 @@ exports.delete = async (req, res) => {
 
 exports.widget_create = async (req, res) => {
     try {
-        
+        const bodyData = {
+            ...req.body,
+            data: []            
+        }
+
+        graphModel.findOneAndUpdate({ _id: req.params.graphId }, { 
+            $addToSet: { graph_widget: {
+                ...bodyData
+            }}
+        })
+        .then((cb) => {
+            if(cb) {
+                res.status(201).json({ status: 'Success', code: 200, msg:`Success add new widget.`})
+            } else {
+                res.status(404).json({ status: 'Error', code: 404, msg: 'Graph not found!'})
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({ status: 'Error', code: 500, msg: 'Internal Server Error!'})
+        });
     } catch (error) {
         console.log(error)
-        res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
+        res.send(error)
+        // res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
     }
 }

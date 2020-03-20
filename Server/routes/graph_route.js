@@ -21,7 +21,7 @@ module.exports = (app) => {
     app.route('/api/graph')
         .delete(authMiddleware, graph.delete);
         
-    app.route('/api/graph/widget')
+    app.route('/api/graph/widget/:graphId')
         .post(authMiddleware, graph.widget_create);
         
 };
