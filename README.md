@@ -1,4 +1,4 @@
-<h1>SEA Cloud Platform (v0.1.3)</h1>
+<h1>SEA Cloud Platform (v0.2.2)</h1>
 
 > **Desc :** This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
 

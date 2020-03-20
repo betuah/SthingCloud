@@ -35,3 +35,7 @@ production/landing-dist
 production/landing-dist-min
 production/documentation/*.html
 production/landing/*.html
+
+package-lock.json
+.package-lock.json
+./package-lock.json
