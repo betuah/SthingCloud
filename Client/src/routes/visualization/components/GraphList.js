@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
 import notif from 'components/NotificationPopUp/notif';
@@ -358,8 +358,17 @@ class EnhancedTable extends React.Component {
 
   render() {
     const { classes } = this.props;
+    let graph_default = null;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+
+    data.forEach(item => {
+      if (item.graph_default === 1)
+      graph_default = item._id
+    });
+
+    if (graph_default && !this.props.location.hash) 
+      return <Redirect push to={`/app/visualization/graph#${graph_default}`} />
 
     return (
       <Paper className={classes.root}>

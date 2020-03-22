@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
-import loadable from 'react-loadable';
-import LoadingComponent from 'components/Loading';
+import loadable from 'react-loadable'
+import LoadingComponent from 'components/Loading'
 import MaterialIcon from 'components/MaterialIcon'
 import { Link } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
@@ -14,6 +14,11 @@ let ModalEdit = loadable({
 
 let ModalWidget = loadable({
     loader: () => import('./modals/ModalWidget'),
+    loading: LoadingComponent
+})
+
+let ChartTemplate = loadable({
+    loader: () => import('./chart_template'),
     loading: LoadingComponent
 })
 
@@ -94,7 +99,7 @@ class Graph extends Component {
                                         <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
                                     </IconButton>
                                 </Tooltip>
-                                <Link to="/app/visualization" >
+                                <Link to="/app/visualization#show" >
                                     <Tooltip title="Graph List">
                                         <IconButton aria-label="Graph List">
                                             <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
@@ -111,9 +116,10 @@ class Graph extends Component {
                     </div>
                     <div className="box-divider"></div>
                     <div className="box-body">
-
+                        
                     </div>
-                </div>   
+                </div>
+                <ChartTemplate widgetData={this.state.data.graph_widget} />
             </Fragment>         
         )
     }

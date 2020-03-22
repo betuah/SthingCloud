@@ -9,13 +9,13 @@ const Content = props => {
     return (
         <div>
             <div className="col-md-12 mx-auto">
-                <h4 style={{color: '#FF9800'}} className="text-center">Add <b>Widget</b></h4>
+                <h4 style={{color: '#00BCD4'}} className="text-center">Add <b>Widget</b></h4>
                 <div className="divider divider-dotted"></div>             
                 <form className="form-v1">
                     <div className="form-group">
                         <div className="input-group-v1">
                             <div className="input-group-icon">
-                                <MaterialIcon icon="insert_chart" style={{color: '#00BCD4'}} />
+                                <MaterialIcon icon="bubble_chart" style={{color: '#00BCD4'}} />
                             </div>
                             <TextField                                   
                                 id="widget"
@@ -95,7 +95,7 @@ const Content = props => {
                                     <MenuItem value={0} disabled>
                                         <em>Select your chart template</em>
                                     </MenuItem>
-                                    {props.chart.map((item, i) => <MenuItem key={i} value={item}>{item}</MenuItem>)}
+                                    {props.chart.map((item, i) => <MenuItem key={i} value={item.code}>{item.value}</MenuItem>)}
                                 </Select>
                             </FormControl>                            
                         </div>
@@ -103,18 +103,18 @@ const Content = props => {
                     <div className="form-group" style={props.data.widgetChart === 0 ? { display: 'none' } : { display: 'block' }}>
                         <div className="input-group-v1">
                             <div className="input-group-icon">
-                                <MaterialIcon icon="insert_chart" style={{color: '#00BCD4'}} />
+                                <MaterialIcon icon="settings_ethernet" style={{color: '#00BCD4'}} />
                             </div>
                             <TextField                                   
                                 id="dataId"
                                 name="dataId"
-                                label="Resource Type name"
+                                label="Data Type name"
                                 type="text"
                                 fullWidth
                                 autoComplete="off"
                                 onChange={props.onChange}
                                 required
-                                placeholder="Input your resource type value name from device or bucket"
+                                placeholder="Your data type name"
                                 value={props.data.dataId}
                                 InputLabelProps={{
                                     shrink: true,
@@ -141,7 +141,14 @@ class ModalEditContent extends Component {
                 widgetChart: 0,
                 dataId: ''
             },
-            chart: ['Tachometer','Donut Chart','Gauge','Progressbar','Led Indicator','Clean Text'],
+            chart: [
+                { code: 'T', value: 'Tachometer' },
+                { code: 'DC', value: 'Donut Chart' },
+                { code: 'G', value: 'Gauge' },
+                { code: 'PB', value: 'Progressbar' },
+                { code: 'LI', value: 'Led Indicator' },
+                { code: 'CL', value: 'Clean Text'}
+            ],
             inputResource: [
                 { value: 'DEVICE', name: 'From Device' }, 
                 // { value: 'BUCKET', name: 'From Data Bucket' }
