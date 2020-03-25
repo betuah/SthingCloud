@@ -29,7 +29,7 @@ exports.create = async (req, res) => {
     try {
         const id        = uuid.generate();
         const secret    = env.token_secret;
-        const token     = jwt.sign({ id: `${id}`, idUser: `${req.id_user}`, idDevice: `${id}`}, secret);
+        const token     = jwt.sign({ id: `${id}`, idUser: `${req.id_user}`, idDevice: `${id}`, deviceName: `${req.body.device}`}, secret);
         const body      = req.body
         const dataBody  = { 
             _id         : id,

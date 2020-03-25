@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import loadable from 'react-loadable'
 import LoadingComponent from 'components/Loading'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { Box } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 
 let Gauge = loadable({
     loader: () => import('./Gauge'),
@@ -11,30 +11,32 @@ let Gauge = loadable({
 
 class Chart_template extends Component {
     componentDidMount() {
-        this.props.checkToken();
+        const { checkToken } = this.props
+        checkToken();
     }
     
     render() {
-        const { widgetData } = this.props
+        const { widgetData, graphId } = this.props
+
         return (
             <div>
-                <Box display="flex" flexWrap="wrap" mt={2}>
-                    {
-                        widgetData.map((e, i) => {
-                            let template = null;
+                <Grid container spacing={2}>
+                {
+                    widgetData.map((e, i) => {
+                        let template = null;
 
-                            switch (e.widgetChart) {
-                                case 'G': template = <Gauge key={i} dataValue={20} {...e} />
-                                break;
-                                case 'T': template = <Gauge key={i} dataValue={86} {...e}/>
-                                break;
-                                default: template = null
-                            }
-                            
-                            return template
-                        })                     
-                    }
-                </Box>
+                        switch (e.widgetChart) {
+                            case 'G': template = <Gauge key={i} {...e} graphId={graphId} />
+                            break;
+                            case 'T': template = <Gauge key={i} {...e} graphId={graphId}/>
+                            break;
+                            default: template = null
+                        }
+                        
+                        return template
+                    })                     
+                }
+                </Grid>
             </div>
         )
     }

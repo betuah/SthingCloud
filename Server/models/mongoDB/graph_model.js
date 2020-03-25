@@ -33,10 +33,6 @@ const WidgetSchema = new Schema({
         type: String,
         trim: true,
     },
-    dataId: {
-        type: String,
-        trim: true,
-    },
     data: [DataSchema]
 })
 

@@ -7,13 +7,35 @@ exports.index = (req, res) => {
 
 exports.data = async (req, res) => {
     try {
-        
-        const data = {
-            idUser : req.idUser,
-            idDevice : req.idDevice
+
+        if(req.body.type && req.body.value) {
+            const data = {
+                idUser : req.idUser,
+                idDevice : req.idDevice,
+                deviceName : req.deviceName,
+                ...req.body
+            }
+    
+            socket.emit('device_connect', data);
+            socket.emit('graph_data', data);
+            res.send('terkirim')
+        } else {
+            res.status(400).json({
+                status: 'Bad Request',
+                code: 400,
+                msgs: "Please fill the data required! Note: Attention to case sensitive!",
+                data: {
+                    type: {
+                        type: 'String',
+                        required: true
+                    },
+                    value: {
+                        type: 'Number',
+                        required: true
+                    }
+                }
+            })
         }
-        socket.emit('device_connect', data);
-        res.send('terkirim')
         
         // const type  = req.body.type ? req.body.type : null
         // const value = req.body.value ? req.body.value : null

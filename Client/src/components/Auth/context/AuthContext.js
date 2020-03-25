@@ -8,7 +8,7 @@ const client_url    = `${process.env.REACT_APP_CLIENT_DOMAIN ? process.env.REACT
 const axiosReq      = axios.create()
 const AuthContext   = React.createContext()
 
-//konfigurasi untuk axios
+//konfigurasi untuk axios 
 axiosReq.interceptors.request.use((config)=>{
     const token = localStorage.getItem('token')
     config.headers.Authorization = `Bearer ${token}`

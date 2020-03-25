@@ -1,20 +1,47 @@
 import React, { Component } from 'react'
 import ReactEcharts from 'echarts-for-react'
-import { Box } from '@material-ui/core'
+import { Box, Grid } from '@material-ui/core'
+import { withAuth } from 'components/Auth/context/AuthContext'
 import 'echarts/theme/macarons'
 
 class Chart extends Component {
-    state = {
-        widgetTitle: '',
-        dataValue: 0
+    constructor(props) {
+        super(props)
+
+        this._isMounted = false;
+
+        this.state = {
+            widgetTitle: '',
+            dataValue: 0
+        }
+    }
+
+    componentWillMount() {
+        this._isMounted = true;
     }
     
     componentDidMount() {
-        const { widgetTitle, dataValue } = this.props
+        const { widgetTitle, resourceId, data, socket } = this.props
         this.setState({
             widgetTitle: widgetTitle,
-            dataValue: dataValue
+            dataValue: data[0].value
         })
+
+        socket.emit('join_room', resourceId )
+
+        socket.on(`${data[0].type}`, resData => {
+            this._isMounted && this.setState({
+                dataValue: resData.value
+            })
+        });
+    }
+
+    componentWillUnmount() {
+        const { server_url, axios, graphId, _id } = this.props
+
+        axios.put(`${server_url}/api/graph/widgetData/${graphId}/${_id}`, { value: this.state.dataValue })
+
+        this._isMounted = false;
     }
 
     render() {
@@ -44,7 +71,7 @@ class Chart extends Component {
                 "radius": 100,
                 "axisLine": {
                     "lineStyle": {
-                        "width": 25,
+                        "width": 35,
                         "color": [[`${this.state.dataValue / 100}`, "#2d99e2"], [1, "#dce3ec"]]
                     }
                 },
@@ -58,16 +85,14 @@ class Chart extends Component {
                     "show": false
                 },
                 "pointer": {
-                    "width": 10,
-                    "length": "70%",
-                    "color": "#2d99e2"
+                    "show": false
                 },
                 "title": {
                     "show": true,
-                    "offsetCenter": [1, "35%"],
+                    "offsetCenter": [0, 0],
                     "textStyle": {
                         "color": "#2d99e2",
-                        "fontSize": 15,
+                        "fontSize": 30,
                         "fontWeight": "bold"
                     }
                 },
@@ -82,19 +107,26 @@ class Chart extends Component {
         };
 
         return (
-            <Box 
-                className="box"
-                boxShadow={2}
-                bgcolor="background.paper"
-                p={2}
-                m={1}
-                style={{ width: '20%' }}
-            >
-                <h5 fontWeight="fontWeightBold">{this.state.widgetTitle}</h5>
-                <ReactEcharts option={gauge.option} theme={"macarons"} style={{height: '170px'}} />
-            </Box>
+            <Grid item xs={12} sm={3}>
+                <Box 
+                    className="box"
+                    boxShadow={2}
+                    bgcolor="background.paper"
+                    p={1}
+                >
+                    <Grid container>
+                        <Grid item xs={12} sm={6} container justify="flex-start">
+                            <b>{this.state.widgetTitle}</b>
+                        </Grid>
+                        <Grid item xs={12} sm={6} container justify="flex-end">
+                            {this.state.widgetTitle}
+                        </Grid>
+                    </Grid>                    
+                    <ReactEcharts option={gauge.option} theme={"macarons"} style={{height: '170px'}} />
+                </Box>
+            </Grid>
         )
     }
 }
 
-export default Chart;
+export default withAuth(Chart);

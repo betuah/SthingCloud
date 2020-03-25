@@ -4,7 +4,7 @@ import LoadingComponent from 'components/Loading'
 import MaterialIcon from 'components/MaterialIcon'
 import { Link } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { IconButton, Tooltip, LinearProgress } from '@material-ui/core'
+import { IconButton, Tooltip, LinearProgress, Grid } from '@material-ui/core'
 
 
 let ModalEdit = loadable({
@@ -75,11 +75,13 @@ class Graph extends Component {
     }
 
     render() {
+        const { location } = this.props
         const { data, err_data } = this.state
+
         if ( data === '' && err_data === 0) {
             return <div><LinearProgress color="primary" /></div>
         } else if (data === '' && err_data === 1) {
-            return <div>Error fetching data...</div>
+            return <div>Error fetching data. Please refresh this pages!</div>
         }
 
         return (
@@ -87,39 +89,33 @@ class Graph extends Component {
                 <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>
                 <ModalWidget {...this.state} updateData={this.updateData} closeWidgetModal={this.closeWidgetModal}/>      
                 
-                <div className="box box-default mb-12"> 
-                    <div className="box-header">
-                        <div className="row">
-                            <div className="col-md-6">
-                                <h4 style={{color: '#2196F3'}}><b>{data.graph}</b></h4>
-                            </div>
-                            <div className="col-md-6 text-right">
-                                <Tooltip title="Add Widget">
-                                    <IconButton aria-label="Add Widget" onClick={this.showWidgetModal}>
-                                        <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
-                                    </IconButton>
-                                </Tooltip>
-                                <Link to="/app/visualization#show" >
-                                    <Tooltip title="Graph List">
-                                        <IconButton aria-label="Graph List">
-                                            <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
-                                        </IconButton>
-                                    </Tooltip>
-                                </Link>
-                                <Tooltip title="Settings">
-                                    <IconButton aria-label="Settings" onClick={this.showEditModal}>
-                                        <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
-                                    </IconButton>
-                                </Tooltip>
-                            </div>
-                        </div>                    
-                    </div>
-                    <div className="box-divider"></div>
-                    <div className="box-body">
-                        
-                    </div>
-                </div>
-                <ChartTemplate widgetData={this.state.data.graph_widget} />
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6} container direction="row" justify="flex-start" alignItems="center">
+                        <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF9800'}}><MaterialIcon icon="bubble_chart" style={{color: '#FFFFFF'}} /> {data.graph}</span></b></h5>
+                    </Grid>
+                    <Grid item xs={12} sm={6} container direction="row" justify="flex-end" alignItems="center">                        
+                        <Tooltip title="Add Widget">
+                            <IconButton aria-label="Add Widget" size="medium" onClick={this.showWidgetModal}>
+                                <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
+                            </IconButton>
+                        </Tooltip>
+                        <Link to="/app/visualization#show" >
+                            <Tooltip title="Graph List">
+                                <IconButton aria-label="Graph List" size="medium">
+                                    <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
+                                </IconButton>
+                            </Tooltip>
+                        </Link>
+                        <Tooltip title="Settings">
+                            <IconButton aria-label="Settings" size="medium" onClick={this.showEditModal}>
+                                <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
+                            </IconButton>
+                        </Tooltip>
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                        <ChartTemplate widgetData={this.state.data.graph_widget} graphId={location.hash.replace('#', '')} />
+                    </Grid>
+                </Grid>              
             </Fragment>         
         )
     }

@@ -207,9 +207,16 @@ exports.delete = async (req, res) => {
 
 exports.widget_create = async (req, res) => {
     try {
+
         const bodyData = {
-            ...req.body,
-            data: []            
+            widgetTitle : req.body.widgetTitle,
+            resourceType : req.body.resourceType,
+            resourceId : req.body.resourceId,
+            widgetChart : req.body.widgetChart,
+            data: [{
+                type: req.body.dataId,
+                value: 0
+            }]            
         }
 
         graphModel.findOneAndUpdate({ _id: req.params.graphId }, { 
@@ -221,7 +228,7 @@ exports.widget_create = async (req, res) => {
             if(cb) {
                 res.status(201).json({ status: 'Success', code: 200, msg:`Success add new widget.`})
             } else {
-                res.status(404).json({ status: 'Error', code: 404, msg: 'Graph not found!'})
+                res.status(404).json({ status: 'Error', code: 404, msg: 'Widget not found!'})
             }
         })
         .catch((err) => {
@@ -230,7 +237,88 @@ exports.widget_create = async (req, res) => {
         });
     } catch (error) {
         console.log(error)
-        res.send(error)
-        // res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
+        res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
+    }
+}
+
+exports.widget_update = async (req, res) => {
+    try {
+
+        const bodyData = {
+            widgetTitle : req.body.widgetTitle,
+            resourceType : req.body.resourceType,
+            resourceId : req.body.resourceId,
+            widgetChart : req.body.widgetChart         
+        }
+
+        graphModel.findOneAndUpdate({ _id: req.params.graphId,  }, { 
+            $set: { graph_widget: {
+                ...bodyData
+            }}
+        })
+        .then((cb) => {
+            if(cb) {
+                res.status(200).json({ status: 'Success', code: 200, msg:`Updating widget is success.`})
+            } else {
+                res.status(404).json({ status: 'Error', code: 404, msg: 'Widget not found!'})
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({ status: 'Error', code: 500, msg: 'Internal Server Error!'})
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
+    }
+}
+
+exports.widgetData_update = async (req, res) => {
+    try {
+
+        graphModel.findOneAndUpdate({ _id: req.params.graphId, 'graph_widget._id': req.params.widgetId }, { 
+            $set: { 
+                'graph_widget.$.data.0.value': req.body.value
+            }
+        })
+        .then((cb) => {
+            if(cb) {
+                res.status(200).json({ status: 'Success', code: 200, msg:`Updating widget is success.`})
+            } else {
+                res.status(404).json({ status: 'Error', code: 404, msg: 'Widget not found!'})
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({ status: 'Error', code: 500, msg: 'Internal Server Error!'})
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
+    }
+}
+
+exports.widget_delete = async (req, res) => {
+    try {
+
+        graphModel.findOneAndUpdate({ _id: req.params.graphId }, {
+            $pull: { graph_widget : { 
+                _id: req.params.widgetId 
+            }}
+        })
+        .then((cb) => {
+            if(cb) {
+                res.status(200).json({ status: 'Success', code: 200, msg:`Deleting widget is success.`})
+            } else {
+                res.status(404).json({ status: 'Error', code: 404, msg: 'Widget not found!'})
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({ status: 'Error', code: 500, msg: 'Internal Server Error!'})
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
     }
 }
