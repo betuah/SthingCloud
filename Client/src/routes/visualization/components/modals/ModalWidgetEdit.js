@@ -9,7 +9,7 @@ const Content = props => {
     return (
         <div>
             <div className="col-md-12 mx-auto">
-                <h4 style={{color: '#00BCD4'}} className="text-center">Add <b>Widget</b></h4>
+                <h4 style={{color: '#00BCD4'}} className="text-center">Edit <b>Widget</b></h4>
                 <div className="divider divider-dotted"></div>             
                 <form className="form-v1">
                     <div className="form-group">
@@ -129,17 +129,20 @@ const Content = props => {
     )
 }
 
-class ModalWidget extends Component {
+class ModalEditWidget extends Component {
     constructor(props) {
         super(props)
         
+        this._isMounted = false;
+
         this.state = {
             data: {
                 widgetTitle: '',
                 resourceType: 0,
                 resourceId: 0,
                 widgetChart: 0,
-                dataId: ''
+                dataId: '',
+                dataValue: ''
             },
             chart: [
                 { code: 'T', value: 'Tachometer' },
@@ -157,8 +160,77 @@ class ModalWidget extends Component {
             bucketList: []
         }
 
-        this.clearState = this.clearState.bind(this)
-        this.handleChange = this.handleChange.bind(this)
+        this.clearState     = this.clearState.bind(this)
+        this.handleChange   = this.handleChange.bind(this)
+        this.updateState    = this.updateState.bind(this)
+    }
+
+    componentWillMount() {
+        this._isMounted = true;
+    }
+
+    componentDidMount() {
+        const data = this.updateState()
+
+        if (data.resourceType === 'DEVICE') {
+            const { server_url, axios } = this.props; 
+
+            axios.get(`${server_url}/api/device`)
+            .then((res) => {                
+                this._isMounted && this.setState({
+                    data: {
+                        ...data
+                    },
+                    deviceList: [...res.data]
+                })
+            })
+        }
+    }
+
+    // componentDidUpdate() {
+    //     const data = this.updateState()
+    //     if (data.resourceType === 'DEVICE') {
+    //         const { server_url, axios } = this.props;             
+
+    //         axios.get(`${server_url}/api/device`)
+    //         .then((res) => {
+    //             const dataUpdate = 
+    //             { 
+    //                 data: {
+    //                     ...data
+    //                 },
+    //                 deviceList: [...res.data]
+    //             }
+
+    //             this._isMounted && this.setState({
+    //                 ...this.state.data,
+    //                 dataUpdate
+    //             })
+    //         })
+    //     }
+    // }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
+
+    updateState() {
+        const { widgetData, widgetId } = this.props
+
+        let data = {}
+
+        widgetData.filter(n => n._id === widgetId).map(n =>             
+            data = {
+                widgetTitle: n.widgetTitle,
+                resourceType: n.resourceType,
+                resourceId: n.resourceId,
+                widgetChart: n.widgetChart,
+                dataId: n.data[0].type,
+                dataValue: n.data[0].value
+            }
+        )
+
+        return data;
     }
 
     handleChange = (e) => {
@@ -183,17 +255,17 @@ class ModalWidget extends Component {
     }
 
     handleOk = () => {
-        const { server_url, axios, data, updateData } = this.props
+        const { server_url, axios, graphId, widgetId } = this.props
         const { widgetTitle, resourceType, resourceId, widgetChart, dataId } = this.state.data 
-    
+
         if (widgetTitle === '' || resourceType === 0 || resourceId === 0 || widgetChart === 0 || dataId === '') {
             notif('warning', 'Warning' , 'Please fill all required fields!')
         } else {
-            axios.post(`${server_url}/api/graph/widget/${data._id}`, this.state.data)
+            axios.put(`${server_url}/api/graph/widget/${graphId}/${widgetId}`, this.state.data)
             .then(res => {
+                
+                notif('success', res.data.status , 'Success Update Widget.')
                 this.clearState()
-                notif('success', res.data.status , 'Success Adding New Widget.')
-                updateData(data._id)
             })
             .catch(err => {
                 if(err.response) {
@@ -208,33 +280,38 @@ class ModalWidget extends Component {
     }
 
     clearState() {
-        const { closeWidgetModal, updateData, data } = this.props
-        closeWidgetModal()
-        updateData(data._id)
-        this.setState({
+        const { closeWidgetModal, updateData } = this.props
+
+        updateData()
+
+        this._isMounted && this.setState({
             data: {
                 widgetTitle: '',
                 resourceType: 0,
                 resourceId: 0,
                 widgetChart: 0,
-                dataId: ''
+                dataId: '',
+                dataValue: ''
             },
             deviceList: [],
             bucketList: []
         })
+
+        closeWidgetModal()
     }
 
     render() {
+
         return (
             <Fragment>
                 <Modal
-                    visible={this.props.ModalWidget}
+                    visible={this.props.ModalEditWidget}
                     onOk={this.handleOk}
                     onCancel={this.clearState}
                     closable={false}
                     footer={[
                         <Button key="back" color="primary" onClick={this.clearState}>Cancel</Button>,
-                        <Button key="submit" variant="contained" color="primary" onClick={this.handleOk}> Save </Button>,
+                        <Button key="submit" variant="contained" color="primary" onClick={this.handleOk}> Update </Button>,
                     ]}
                 >
                     <Content onChange={this.handleChange} {...this.state} />
@@ -244,4 +321,4 @@ class ModalWidget extends Component {
     }
 }
 
-export default withAuth(ModalWidget)
+export default withAuth(ModalEditWidget)

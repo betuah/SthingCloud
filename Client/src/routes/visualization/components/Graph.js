@@ -41,8 +41,10 @@ class Graph extends Component {
         this.closeWidgetModal   = this.closeWidgetModal.bind(this)
     }
 
-    updateData(id) {
-        const { axios, server_url }  = this.props
+    updateData() {
+        const { axios, server_url, location } = this.props
+        const id = location.hash.replace('#', '')
+        
         axios.get(`${server_url}/api/graph/${id}`)
         .then((res) => {
             this.setState({ data: {...res.data}})
@@ -52,10 +54,8 @@ class Graph extends Component {
         });
     }
 
-    componentDidMount() {    
-        const { location }  = this.props
-        const graphId   = location.hash.replace('#', '')
-        this.updateData(graphId)
+    componentDidMount() {        
+        this.updateData()
     }
 
     showEditModal() {
@@ -113,7 +113,7 @@ class Graph extends Component {
                         </Tooltip>
                     </Grid>
                     <Grid item xs={12} sm={12}>
-                        <ChartTemplate widgetData={this.state.data.graph_widget} graphId={location.hash.replace('#', '')} />
+                        <ChartTemplate widgetData={this.state.data.graph_widget} graphId={location.hash.replace('#', '')} updateData={this.updateData} />
                     </Grid>
                 </Grid>              
             </Fragment>         

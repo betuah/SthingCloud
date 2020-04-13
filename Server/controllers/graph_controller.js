@@ -243,12 +243,15 @@ exports.widget_create = async (req, res) => {
 
 exports.widget_update = async (req, res) => {
     try {
-
         const bodyData = {
             widgetTitle : req.body.widgetTitle,
             resourceType : req.body.resourceType,
             resourceId : req.body.resourceId,
-            widgetChart : req.body.widgetChart         
+            widgetChart : req.body.widgetChart,
+            data: [{
+                type: req.body.dataId,
+                value: req.body.dataValue
+            }]
         }
 
         graphModel.findOneAndUpdate({ _id: req.params.graphId,  }, { 
@@ -285,7 +288,7 @@ exports.widgetData_update = async (req, res) => {
             if(cb) {
                 res.status(200).json({ status: 'Success', code: 200, msg:`Updating widget is success.`})
             } else {
-                res.status(404).json({ status: 'Error', code: 404, msg: 'Widget not found!'})
+                res.status(200).json({ status: 'Error', code: 404, msg: 'Widget not found!'})
             }
         })
         .catch((err) => {
@@ -300,8 +303,7 @@ exports.widgetData_update = async (req, res) => {
 
 exports.widget_delete = async (req, res) => {
     try {
-
-        graphModel.findOneAndUpdate({ _id: req.params.graphId }, {
+        graphModel.findOneAndUpdate({ _id: req.params.graphId, 'graph_widget._id': req.params.widgetId }, {
             $pull: { graph_widget : { 
                 _id: req.params.widgetId 
             }}

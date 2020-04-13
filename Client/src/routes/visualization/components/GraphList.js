@@ -158,7 +158,7 @@ let EnhancedTableToolbar = props => {
     axios
       .put(`${server_url}/api/graph/default/${props.selectedData}`)
       .then(res => {
-        notif('success', 'Success', `Success change default graph.`)
+        notif('success', 'Success', `Default graph was changed.`)
         resetSelected()
         updateData()
       })
