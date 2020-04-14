@@ -41,11 +41,11 @@ function getSorting(order, orderBy) {
 
 const columnData = [
   
-  { id: 'device', numeric: false, disablePadding: false, label: 'Device' },
-  { id: 'desc', numeric: false, disablePadding: false, label: 'Description' },
-  { id: 'token', numeric: false, disablePadding: false, label: 'Token' },
-  { id: 'lastConn', numeric: false, disablePadding: false, label: 'Last Connection' },
-  { id: 'state', numeric: false, disablePadding: false, label: 'State' },
+  { id: 'device', disablePadding: false, label: 'Device' },
+  { id: 'desc', disablePadding: false, label: 'Description' },
+  { id: 'token', disablePadding: false, label: 'Token' },
+  { id: 'lastConn', disablePadding: false, label: 'Last Connection' },
+  { id: 'state', disablePadding: false, label: 'State' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -70,7 +70,6 @@ class EnhancedTableHead extends React.Component {
             return (
               <TableCell
                 key={column.id}
-                numeric={column.numeric}
                 padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
               >
@@ -107,7 +106,7 @@ EnhancedTableHead.propTypes = {
 
 const toolbarStyles = theme => ({
   root: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing(),
   },
   highlight:
     theme.palette.type === 'light'
@@ -169,19 +168,19 @@ let EnhancedTableToolbar = props => {
     >
       <div className={classes.title}>
         {numSelected > 0 ? (
-          <Typography color="inherit" variant="subheading">
+          <Typography color="inherit" variant={"inherit"}>
             {numSelected} selected
           </Typography>
-        ) : (             
-          <li className="list-inline-item search-box seach-box-right d-none d-md-inline-block">            
-            <div className="search-box-inner">              
-                <div className="search-box-icon">                  
-                    <MaterialIcon icon="search" style={{color: '#00BCD4' }}/>                    
+        ) : (
+          <li className="list-inline-item search-box search-box-right d-none d-md-inline-block">            
+            <div className="search-box-inner">
+                <div className="search-box-icon">
+                    <MaterialIcon icon="search" style={{color: '#00BCD4' }}/>
                 </div>
                 <input onChange={searchData} type="text" name="search" value={searchState} placeholder="Search device ..." />
-                <span className="input-bar"></span>                
-            </div>            
-          </li>           
+                <span className="input-bar"></span>
+            </div>
+          </li>
         )}
       </div>
       <div className={classes.spacer} />
@@ -230,7 +229,7 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing() * 3,
   },
   table: {
     minWidth: 1020,

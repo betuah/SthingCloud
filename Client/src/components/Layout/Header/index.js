@@ -30,13 +30,21 @@ class AppHeader extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  componentWillMount() {
+    this._isMounted = true;
+  }
+
   componentDidMount() {
     const { initUser, socket } = this.props
     initUser();
 
     socket.on('event', data => {
-      data.statusChange === 1 ? notif('info', 'Device Connected!', `Your new device connected!`) : notif('error', 'Device Disconnected!', `Their is your device disconnected!`)
+      this._isMounted && data.statusChange === 1 ? notif('info', 'New Device Connected!', `${data.device} is connected!`) : notif('error', 'New Device Disconnected!', `${data.device} is disconnected!`)
     });
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   onToggleCollapsedNav = () => {

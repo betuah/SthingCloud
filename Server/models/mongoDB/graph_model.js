@@ -17,11 +17,19 @@ const DataSchema = new Schema({
 })
 
 const WidgetSchema = new Schema({
-    type_widget: {
+    widgetTitle: {
+        type: String,
+        trim: true,
+    },    
+    resourceType: {
         type: String,
         trim: true,
     },
-    deviceId: {
+    resourceId: {
+        type: String,
+        trim: true,
+    },
+    widgetChart: {
         type: String,
         trim: true,
     },

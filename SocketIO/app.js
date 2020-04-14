@@ -23,16 +23,23 @@ const port      = process.env.PORT || 4001 //Port from environment variable or d
 let tmp = []
 
 io.on("connection", socket => {
-    console.log("New Client connected");
+    console.log("New Client connected"); 
 
     // Create Room to each user connected
     socket.on('join_room', room => {
-        console.log(`userID ${room} has joined room!`);
+        console.log(`${room} has joined to room ${room}!`);
         socket.join(room);
         io.sockets.in(room).emit('receive_broadcast', {
             message: `You're joined to ${room} room!`
         });
     });
+
+    socket.on("graph_data", data => {
+        io.sockets.in(data.idUser).emit(`${data.idDevice}-${data.type}`, {
+            value: data.value
+        });
+        // console.log(io.sockets.adapter.rooms)
+    })
 
     // Event to receive data from iot device
     socket.on("device_connect", data => {
@@ -43,7 +50,6 @@ io.on("connection", socket => {
         }
 
         const isIndex = tmp.findIndex(e => e.idDevice && (e.idDevice === data.idDevice)) // Get index of device in array
-
         if(isIndex !== -1) { // If device found in array
             tmp[isIndex].curentTime = curentTime // Will set curent time to existing array
         } else { // Else device not found in array
@@ -65,6 +71,7 @@ io.on("connection", socket => {
             // Tell client that device status was change
             io.sockets.in(data.idUser).emit('event', {
                 statusChange: 1,
+                device: data.deviceName,
                 onlineDevice: getDeviceConn.lenght,
                 error: err
             });     
@@ -94,6 +101,7 @@ io.on("connection", socket => {
                 // Tell client that device status was change
                 io.sockets.in(item.idUser).emit('event', {
                     statusChange: 0,
+                    device: item.deviceName,
                     onlineDevice: getDeviceConn.lenght,
                     error: err
                 });   

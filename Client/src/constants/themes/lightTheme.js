@@ -16,6 +16,9 @@ const theme = createMuiTheme({
       contrastText: '#fff',
     },
     // error: will use the default color
+  },
+  typography: {
+    useNextVariants: true,
   }
 });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
 import notif from 'components/NotificationPopUp/notif';
@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import BeenhereIcon from '@material-ui/icons/Beenhere';
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import AddGraph from './AddGraph';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import MaterialIcon from 'components/MaterialIcon';
@@ -42,9 +41,9 @@ function getSorting(order, orderBy) {
 
 const columnData = [
   
-  { id: 'graphId', numeric: false, disablePadding: false, label: 'Graph ID' },
-  { id: 'name', numeric: false, disablePadding: false, label: 'Graph Name' },
-  { id: 'desc', numeric: false, disablePadding: false, label: 'desc' },
+  { id: 'graphId', disablePadding: false, label: 'Graph ID' },
+  { id: 'name', disablePadding: false, label: 'Graph Name' },
+  { id: 'desc', disablePadding: false, label: 'desc' },
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -69,7 +68,6 @@ class EnhancedTableHead extends React.Component {
             return (
               <TableCell
                 key={column.id}
-                numeric={column.numeric}
                 padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
               >
@@ -106,7 +104,7 @@ EnhancedTableHead.propTypes = {
 
 const toolbarStyles = theme => ({
   root: {
-    paddingRight: theme.spacing.unit,
+    paddingRight: theme.spacing(),
   },
   highlight:
     theme.palette.type === 'light'
@@ -160,7 +158,7 @@ let EnhancedTableToolbar = props => {
     axios
       .put(`${server_url}/api/graph/default/${props.selectedData}`)
       .then(res => {
-        notif('success', 'Success', `Success change default graph.`)
+        notif('success', 'Success', `Default graph was changed.`)
         resetSelected()
         updateData()
       })
@@ -173,10 +171,6 @@ let EnhancedTableToolbar = props => {
       })
   }
 
-  const handleEdit = e => {
-    
-  }
-
   return (
     <Toolbar
       className={classNames(classes.root, {
@@ -185,7 +179,7 @@ let EnhancedTableToolbar = props => {
     >
       <div className={classes.title}>
         {numSelected > 0 ? (
-          <Typography color="inherit" variant="subheading">
+          <Typography color="inherit" variant={"inherit"}>
             {numSelected} selected
           </Typography>
         ) : (             
@@ -209,12 +203,6 @@ let EnhancedTableToolbar = props => {
                 <BeenhereIcon style={{color: '#4CAF50'}} />
               </IconButton>              
             </Tooltip>
-            <Tooltip title="Edit">              
-                <IconButton aria-label="Copy" onClick={handleEdit}>
-                  <EditIcon style={{color: '#FF9800'}} />
-                </IconButton>              
-            </Tooltip>
-            
             <Tooltip title="Delete">
               <IconButton aria-label="Delete" onClick={handleDelete}>
                 <DeleteIcon style={{color: '#F44336'}} />
@@ -249,7 +237,7 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing() * 3,
   },
   table: {
     minWidth: 1020,
@@ -370,8 +358,17 @@ class EnhancedTable extends React.Component {
 
   render() {
     const { classes } = this.props;
+    let graph_default = null;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+
+    data.forEach(item => {
+      if (item.graph_default === 1)
+      graph_default = item._id
+    });
+
+    if (graph_default && !this.props.location.hash) 
+      return <Redirect push to={`/app/visualization/graph#${graph_default}`} />
 
     return (
       <Paper className={classes.root}>

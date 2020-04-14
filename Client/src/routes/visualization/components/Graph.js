@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
-import loadable from 'react-loadable';
-import LoadingComponent from 'components/Loading';
+import loadable from 'react-loadable'
+import LoadingComponent from 'components/Loading'
 import MaterialIcon from 'components/MaterialIcon'
 import { Link } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
@@ -8,7 +8,17 @@ import { IconButton, Tooltip, LinearProgress } from '@material-ui/core'
 
 
 let ModalEdit = loadable({
-    loader: () => import('./ModalEdit'),
+    loader: () => import('./modals/ModalEdit'),
+    loading: LoadingComponent
+})
+
+let ModalWidget = loadable({
+    loader: () => import('./modals/ModalWidget'),
+    loading: LoadingComponent
+})
+
+let ChartTemplate = loadable({
+    loader: () => import('./chart_template'),
     loading: LoadingComponent
 })
 
@@ -24,13 +34,17 @@ class Graph extends Component {
             err_data: 0
         }
         
-        this.updateData     = this.updateData.bind(this)
-        this.showEditModal  = this.showEditModal.bind(this)
-        this.closeEditModal = this.closeEditModal.bind(this)
+        this.updateData         = this.updateData.bind(this)
+        this.showEditModal      = this.showEditModal.bind(this)
+        this.closeEditModal     = this.closeEditModal.bind(this)
+        this.showWidgetModal    = this.showWidgetModal.bind(this)
+        this.closeWidgetModal   = this.closeWidgetModal.bind(this)
     }
 
-    updateData(id) {
-        const { axios, server_url }  = this.props
+    updateData() {
+        const { axios, server_url, location } = this.props
+        const id = location.hash.replace('#', '')
+        
         axios.get(`${server_url}/api/graph/${id}`)
         .then((res) => {
             this.setState({ data: {...res.data}})
@@ -40,10 +54,8 @@ class Graph extends Component {
         });
     }
 
-    componentDidMount() {    
-        const { location }  = this.props
-        const graphId   = location.hash.replace('#', '')
-        this.updateData(graphId)
+    componentDidMount() {        
+        this.updateData()
     }
 
     showEditModal() {
@@ -54,50 +66,58 @@ class Graph extends Component {
         this.setState({ ModalEdit: false })
     }
 
+    showWidgetModal() {
+        this.setState({ ModalWidget: true })
+    }
+
+    closeWidgetModal() {
+        this.setState({ ModalWidget: false })
+    }
+
     render() {
+        const { location } = this.props
         const { data, err_data } = this.state
+
         if ( data === '' && err_data === 0) {
             return <div><LinearProgress color="primary" /></div>
         } else if (data === '' && err_data === 1) {
-            return <div>Error fetching data...</div>
+            return <div>Error fetching data. Please refresh this pages!</div>
         }
 
         return (
             <Fragment>
-                <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>   
+                <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>
+                <ModalWidget {...this.state} updateData={this.updateData} closeWidgetModal={this.closeWidgetModal}/>      
                 
-                <div className="box box-default mb-12"> 
-                    <div className="box-header">
-                        <div className="row">
-                            <div className="col-md-6">
-                                <h4 style={{color: '#2196F3'}}><b>{data.graph}</b></h4>
-                            </div>
-                            <div className="col-md-6 text-right">
-                                <Tooltip title="Add Widget">
-                                    <IconButton aria-label="Add Widget">
-                                        <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
+                <div className="container-fluid mt-4">
+                    <div className="row">
+                        <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start">
+                            <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF9800'}}><MaterialIcon icon="bubble_chart" style={{color: '#FFFFFF'}} /> {data.graph}</span></b></h5>
+                        </div>
+                        <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-end">
+                            <Tooltip title="Add Widget">
+                                <IconButton aria-label="Add Widget" size="medium" onClick={this.showWidgetModal}>
+                                    <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
+                                </IconButton>
+                            </Tooltip>
+                            <Link to="/app/visualization#show" >
+                                <Tooltip title="Graph List">
+                                    <IconButton aria-label="Graph List" size="medium">
+                                        <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
                                     </IconButton>
                                 </Tooltip>
-                                <Link to="/app/visualization" >
-                                    <Tooltip title="Graph List">
-                                        <IconButton aria-label="Graph List">
-                                            <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
-                                        </IconButton>
-                                    </Tooltip>
-                                </Link>
-                                <Tooltip title="Settings">
-                                    <IconButton aria-label="Settings" onClick={this.showEditModal}>
-                                        <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
-                                    </IconButton>
-                                </Tooltip>
-                            </div>
-                        </div>                    
+                            </Link>
+                            <Tooltip title="Settings">
+                                <IconButton aria-label="Settings" size="medium" onClick={this.showEditModal}>
+                                    <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                        <div className="col-xs-12 col-md-12">
+                            <ChartTemplate widgetData={this.state.data.graph_widget} graphId={location.hash.replace('#', '')} updateData={this.updateData} />
+                        </div>
                     </div>
-                    <div className="box-divider"></div>
-                    <div className="box-body">
-
-                    </div>
-                </div>   
+                </div>              
             </Fragment>         
         )
     }

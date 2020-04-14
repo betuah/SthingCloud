@@ -88,8 +88,8 @@ const Content = props => {
                                 InputLabelProps={{
                                     shrink: true,
                                 }}
-                                disabled
-                                // readOnly={true}
+                                // disabled
+                                readOnly={true}
                             />
                         </div>
                     </div>
@@ -171,7 +171,7 @@ class ModalEditContent extends Component {
     clearState() {
         const { closeEditModal, updateData, data } = this.props
         closeEditModal()
-        updateData(data._id)      
+        updateData(data._id)
     }
 
     render() {

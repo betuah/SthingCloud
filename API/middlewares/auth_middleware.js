@@ -13,6 +13,7 @@ const authMiddleware = async (req, res, next) => {
             req.token       = token;
             req.idUser      = decoded.idUser;
             req.idDevice    = decoded.idDevice;
+            req.deviceName  = decoded.deviceName;
 
             next();
         } else {

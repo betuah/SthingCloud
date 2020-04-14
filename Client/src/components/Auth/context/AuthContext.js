@@ -8,7 +8,7 @@ const client_url    = `${process.env.REACT_APP_CLIENT_DOMAIN ? process.env.REACT
 const axiosReq      = axios.create()
 const AuthContext   = React.createContext()
 
-//konfigurasi untuk axios
+//konfigurasi untuk axios 
 axiosReq.interceptors.request.use((config)=>{
     const token = localStorage.getItem('token')
     config.headers.Authorization = `Bearer ${token}`
@@ -29,9 +29,14 @@ export class AuthContextProvider extends Component {
                 socket_url: socket_url,
                 client_url: client_url
             }
+
+            this.checkToken = this.checkToken.bind(this)
+            this.initUser = this.initUser.bind(this)
+            this.login = this.login.bind(this)
+            this.logout = this.logout.bind(this)
     }
 
-    checkToken = () => {
+    checkToken () {
         return axiosReq.get(`${server_url}/api/tokenverify`)
             .catch(err => {
                 this.setState({ isLoggedIn: false });
@@ -40,7 +45,7 @@ export class AuthContextProvider extends Component {
             })
     }
 
-    initUser = () => {
+    initUser () {
         return axiosReq.get(`${server_url}/api/profile`)
             .then(response => {               
                 const res = response.data
@@ -55,7 +60,7 @@ export class AuthContextProvider extends Component {
     }
 
     //login
-    login = (credentials) => {
+    login (credentials) {
         return axios.post(`${server_url}/api/signin`, credentials)
             .then(response => {
                 const { token, data } =  response.data
@@ -88,7 +93,7 @@ export class AuthContextProvider extends Component {
     }
 
     //logout
-    logout = () => {
+    logout () {
         localStorage.removeItem('token')
         localStorage.removeItem('person')
     }
