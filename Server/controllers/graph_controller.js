@@ -254,8 +254,10 @@ exports.widget_update = async (req, res) => {
             }]
         }
 
-        graphModel.findOneAndUpdate({ _id: req.params.graphId,  }, { 
-            $set: { graph_widget: {
+        console.log(req.params.widgetId)
+
+        graphModel.findOneAndUpdate({ _id: req.params.graphId, 'graph_widget._id': req.params.widgetId  }, { 
+            $set: { 'graph_widget.$' : {
                 ...bodyData
             }}
         })

@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import loadable from 'react-loadable'
 import LoadingComponent from 'components/Loading'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { Grid } from '@material-ui/core'
 
 let Gauge = loadable({
     loader: () => import('./Gauge'),
@@ -59,23 +58,23 @@ class Chart_template extends Component {
                     <ModalWidgetEdit {...this.state} graphId={graphId} updateData={updateData} closeWidgetModal={this.closeEditModal} widgetData={widgetData} />
                 }
 
-                <Grid container spacing={2}>
-                {
-                    widgetData.map((e, i) => {
-                        let template = null;
+                <div className="d-flex flex-wrap">
+                    {
+                        widgetData.map((e, i) => {
+                            let template = null;
 
-                        switch (e.widgetChart) {
-                            case 'G': template = <Gauge key={i} {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
-                            break;
-                            case 'T': template = <Gauge key={i} {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
-                            break;
-                            default: template = null
-                        }
-                        
-                        return template
-                    })                     
-                }
-                </Grid>
+                            switch (e.widgetChart) {
+                                case 'G': template = <Gauge key={i} {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                break;
+                                case 'T': template = <Gauge key={i} {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                break;
+                                default: template = null
+                            }
+                            
+                            return template
+                        })                     
+                    }
+                </div>
             </div>
         )
     }

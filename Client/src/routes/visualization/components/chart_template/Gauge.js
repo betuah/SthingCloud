@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactEcharts from 'echarts-for-react'
-import { Box, Grid, Typography, IconButton, Tooltip } from '@material-ui/core'
+import { Box, Typography, IconButton, Tooltip } from '@material-ui/core'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
@@ -145,33 +145,38 @@ class Chart extends Component {
         };
 
         return (
-            <Grid item xs={12} sm={3}>
-                <Box 
-                    className="box"
-                    boxShadow={2}
-                    bgcolor="background.paper"
-                    p={1}
-                >
-                    <Grid container wrap="nowrap" spacing={2}>
-                        <Grid item xs={12} sm={9} container justify="flex-start">
-                            <Typography noWrap>{this.state.widgetTitle}</Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={3} container justify="flex-end">
-                            <Tooltip title="Edit Widget">
-                                <IconButton aria-label="edit" size="small" onClick={this.editWidget}>
-                                    <MaterialIcon icon="edit" style={{color: '#FF9800'}}></MaterialIcon>
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="Delete Widget">                                
-                                <IconButton aria-label="delete" size="small" onClick={this.deleteWidget}>
-                                    <MaterialIcon icon="delete" style={{color: '#F44336'}}></MaterialIcon>
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
-                    </Grid>                    
-                    <ReactEcharts option={gauge.option} theme={"macarons"} style={{height: '170px'}} />
-                </Box>
-            </Grid>
+            <div className="col-xs-12 col-md-3 p-2">
+                <div className="box">
+                    <Box 
+                        className="box"
+                        boxShadow={2}
+                        bgcolor="background.paper"
+                    >
+                        <div className="p-2">
+                            <div className="row">
+                                <div className="col-10 d-flex justify-content-start">
+                                    <Typography noWrap>{this.state.widgetTitle}</Typography>
+                                </div>
+                                <div className="col-2 d-flex justify-content-end">
+                                    <Tooltip title="Edit Widget">
+                                        <IconButton aria-label="edit" size="small" onClick={this.editWidget}>
+                                            <MaterialIcon icon="edit" style={{color: '#FF9800'}}></MaterialIcon>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="Delete Widget">                                
+                                        <IconButton aria-label="delete" size="small" onClick={this.deleteWidget}>
+                                            <MaterialIcon icon="delete" style={{color: '#F44336'}}></MaterialIcon>
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
+                                <div className="col-12">
+                                    <ReactEcharts option={gauge.option} theme={"macarons"} style={{height: '170px'}} />
+                                </div>
+                            </div>
+                        </div>               
+                    </Box>
+                </div>
+            </div>
         )
     }
 }

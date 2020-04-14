@@ -4,7 +4,7 @@ import LoadingComponent from 'components/Loading'
 import MaterialIcon from 'components/MaterialIcon'
 import { Link } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { IconButton, Tooltip, LinearProgress, Grid } from '@material-ui/core'
+import { IconButton, Tooltip, LinearProgress } from '@material-ui/core'
 
 
 let ModalEdit = loadable({
@@ -89,33 +89,35 @@ class Graph extends Component {
                 <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>
                 <ModalWidget {...this.state} updateData={this.updateData} closeWidgetModal={this.closeWidgetModal}/>      
                 
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6} container direction="row" justify="flex-start" alignItems="center">
-                        <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF9800'}}><MaterialIcon icon="bubble_chart" style={{color: '#FFFFFF'}} /> {data.graph}</span></b></h5>
-                    </Grid>
-                    <Grid item xs={12} sm={6} container direction="row" justify="flex-end" alignItems="center">                        
-                        <Tooltip title="Add Widget">
-                            <IconButton aria-label="Add Widget" size="medium" onClick={this.showWidgetModal}>
-                                <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
-                            </IconButton>
-                        </Tooltip>
-                        <Link to="/app/visualization#show" >
-                            <Tooltip title="Graph List">
-                                <IconButton aria-label="Graph List" size="medium">
-                                    <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
+                <div className="container-fluid mt-4">
+                    <div className="row">
+                        <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start">
+                            <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF9800'}}><MaterialIcon icon="bubble_chart" style={{color: '#FFFFFF'}} /> {data.graph}</span></b></h5>
+                        </div>
+                        <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-end">
+                            <Tooltip title="Add Widget">
+                                <IconButton aria-label="Add Widget" size="medium" onClick={this.showWidgetModal}>
+                                    <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
                                 </IconButton>
                             </Tooltip>
-                        </Link>
-                        <Tooltip title="Settings">
-                            <IconButton aria-label="Settings" size="medium" onClick={this.showEditModal}>
-                                <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
-                            </IconButton>
-                        </Tooltip>
-                    </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <ChartTemplate widgetData={this.state.data.graph_widget} graphId={location.hash.replace('#', '')} updateData={this.updateData} />
-                    </Grid>
-                </Grid>              
+                            <Link to="/app/visualization#show" >
+                                <Tooltip title="Graph List">
+                                    <IconButton aria-label="Graph List" size="medium">
+                                        <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
+                                    </IconButton>
+                                </Tooltip>
+                            </Link>
+                            <Tooltip title="Settings">
+                                <IconButton aria-label="Settings" size="medium" onClick={this.showEditModal}>
+                                    <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
+                                </IconButton>
+                            </Tooltip>
+                        </div>
+                        <div className="col-xs-12 col-md-12">
+                            <ChartTemplate widgetData={this.state.data.graph_widget} graphId={location.hash.replace('#', '')} updateData={this.updateData} />
+                        </div>
+                    </div>
+                </div>              
             </Fragment>         
         )
     }

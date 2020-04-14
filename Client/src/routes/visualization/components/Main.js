@@ -5,7 +5,6 @@ import LoadingComponent from 'components/Loading'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import Breadcrumb from 'components/Layout/Breadcrumb'
 import MaterialIcon from 'components/MaterialIcon'
-import { Grid, Container, Box } from '@material-ui/core'
 import GraphList from './GraphList'
 
 let Graph = loadable({
@@ -25,32 +24,30 @@ class Main extends Component {
             return <Redirect push to='/user/signin' />
 
         return (
-            <Box mt={5} mb={5}>
-                <Container maxWidth="lg">
-                    <Grid container spacing={1} >                        
-                        <Switch>
-                            <Route exact path={`${match.url}/graph`}>
-                                <Grid item xs={12} sm={12}>
-                                    <Graph {...this.props} />
-                                </Grid>
-                            </Route>
-                            <Route exact path={`${match.url}`}>                                
-                                <Grid container>
-                                    <Grid item xs={12} sm={6} container justify="flex-start">
-                                        <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF9800'}}><MaterialIcon icon="bar_chart" style={{color: '#FFFFFF'}} />  Visualization   </span></b></h5>
-                                    </Grid>
-                                    <Grid item xs={12} sm={6} container justify="flex-end">
+            <div>
+                <Switch>
+                    <Route exact path={`${match.url}/graph`}>
+                        <Graph {...this.props} />
+                    </Route>
+                    <Route exact path={`${match.url}`}>
+                        <div className="container-fluid mt-4">
+                            <div className="row">
+                                <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start">
+                                    <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF9800'}}><MaterialIcon icon="bar_chart" style={{color: '#FFFFFF'}} />  Visualization   </span></b></h5>
+                                </div>
+                                <div className="col-xs-12 col-md-6 d-flex justify-content-md-end">
+                                    <div className="d-none d-sm-block">
                                         <Breadcrumb />
-                                    </Grid>
-                                    <Grid item xs={12} sm={12}>
-                                        <GraphList {...this.props} />
-                                    </Grid>
-                                </Grid>
-                            </Route>
-                        </Switch>
-                    </Grid>
-                </Container>
-            </Box>
+                                    </div>                                    
+                                </div>
+                                <div className="col-xs-12 col-md-12">
+                                    <GraphList {...this.props} />
+                                </div>
+                            </div>
+                        </div>
+                    </Route>
+                </Switch>
+            </div>
         )
     }
 }
