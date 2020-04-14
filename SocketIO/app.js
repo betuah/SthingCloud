@@ -27,7 +27,7 @@ io.on("connection", socket => {
 
     // Create Room to each user connected
     socket.on('join_room', room => {
-        console.log(`userID ${room} has joined room!`);
+        console.log(`${room} has joined to room ${room}!`);
         socket.join(room);
         io.sockets.in(room).emit('receive_broadcast', {
             message: `You're joined to ${room} room!`
@@ -35,7 +35,7 @@ io.on("connection", socket => {
     });
 
     socket.on("graph_data", data => {
-        io.sockets.in(data.idDevice).emit(`${data.type}`, {
+        io.sockets.in(data.idUser).emit(`${data.idDevice}-${data.type}`, {
             value: data.value
         });
         // console.log(io.sockets.adapter.rooms)

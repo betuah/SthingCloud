@@ -6,7 +6,7 @@ import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
 import 'echarts/theme/macarons'
 
-class Chart extends Component {
+class Tachometer extends Component {
     constructor(props) {
         super(props)
 
@@ -33,7 +33,7 @@ class Chart extends Component {
         })
 
         socket.on(`${resourceId}-${data[0].type}`, resData => {
-            console.log('gauge')
+            console.log('tacho')
             this._isMounted && this.setState({
                 dataValue: resData.value
             })
@@ -85,62 +85,25 @@ class Chart extends Component {
         let gauge = {};
 
         gauge.option = {
-            "toolbox": {
-                "show": false,
-                "feature": {
-                    "mark": {
-                    "show": true
-                    },
-                    "restore": {
-                    "show": true
-                    },
-                    "saveAsImage": {
-                    "show": true
+            tooltip: {
+                formatter: '{a} <br/>{b} : {c}'
+            },
+            toolbox: {
+                show: true,
+            },
+            series: [
+                {
+                    name: `${this.state.widgetTitle}`,
+                    type: 'gauge',
+                    detail: {formatter: '{value}'},
+                    data: [{value: this.state.dataValue, name: 'Value'}],
+                    title: {
+                        textStyle: {
+                                color: '#898989'
+                        }
                     }
                 }
-            },
-            "series": [{
-                "name": "KPI",
-                "type": "gauge",
-                "startAngle": 180,
-                "endAngle": 0,
-                "center": ["50%", "77%"],
-                "radius": 100,
-                "axisLine": {
-                    "lineStyle": {
-                        "width": 35,
-                        "color": [[`${this.state.dataValue / 100}`, "#2d99e2"], [1, "#dce3ec"]]
-                    }
-                },
-                "axisTick": {
-                    "show": false
-                },
-                "axisLabel": {
-                    "show": false
-                },
-                "splitLine": {
-                    "show": false
-                },
-                "pointer": {
-                    "show": false
-                },
-                "title": {
-                    "show": true,
-                    "offsetCenter": [0, 0],
-                    "textStyle": {
-                        "color": "#2d99e2",
-                        "fontSize": 30,
-                        "fontWeight": "bold"
-                    }
-                },
-                "detail": {
-                    "show": false
-                },
-                "data": [{
-                    "value": this.state.dataValue,
-                    "name": `${this.state.dataValue}`
-                }]
-            }]
+            ]
         };
 
         return (
@@ -169,7 +132,7 @@ class Chart extends Component {
                                     </Tooltip>
                                 </div>
                                 <div className="col-12">
-                                    <ReactEcharts option={gauge.option} theme={"macarons"} style={{height: '170px'}} />
+                                    <ReactEcharts option={gauge.option} theme={"macarons"} />
                                 </div>
                             </div>
                         </div>               
@@ -180,4 +143,4 @@ class Chart extends Component {
     }
 }
 
-export default withAuth(Chart);
+export default withAuth(Tachometer);
