@@ -20,15 +20,17 @@ class Device extends Component {
             
         return (
             <div>
-                <div className="container-fluid container-mw-xxl no-breadcrumb">    
+                <div className="container-fluid mt-4">    
                     <div className="row">
-                        <div className="col-md-6 text-left" style={{color: '#2196F3' }}>                            
+                        <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start" style={{color: '#2196F3' }}>                            
                             <h5><b><span className="ui-highlight" style={{backgroundColor: '#2196F3'}}><MaterialIcon icon="developer_board" style={{color: '#FFFFFF'}} />  Devices</span></b></h5>
                         </div>
-                        <div className="col-md-6 text-right" >
-                            <Breadcrumb />
+                        <div className="col-xs-12 col-md-6 d-flex justify-content-md-end">
+                            <div className="d-none d-sm-block">
+                                <Breadcrumb />
+                            </div>
                         </div>
-                        <div className="col-md-12">
+                        <div className="col-xs-12 col-md-12">
                             <DeviceList {...this.props} />
                         </div>
                     </div>                                       
