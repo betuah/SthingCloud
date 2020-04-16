@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactEcharts from 'echarts-for-react'
-import { Box, Typography, IconButton, Tooltip } from '@material-ui/core'
+import { Typography, IconButton, Tooltip } from '@material-ui/core'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
@@ -33,7 +33,6 @@ class Tachometer extends Component {
         })
 
         socket.on(`${resourceId}-${data[0].type}`, resData => {
-            console.log('tacho')
             this._isMounted && this.setState({
                 dataValue: resData.value
             })
@@ -54,7 +53,7 @@ class Tachometer extends Component {
     componentWillUnmount() {
         const { server_url, axios, graphId, _id } = this.props
 
-        axios.put(`${server_url}/api/graph/widgetData/${graphId}/${_id}`, { value: this.state.dataValue })
+        this._isMounted && axios.put(`${server_url}/api/graph/widgetData/${graphId}/${_id}`, { value: this.state.dataValue })
 
         this._isMounted = false;
     }
@@ -108,35 +107,29 @@ class Tachometer extends Component {
 
         return (
             <div className="col-xs-12 col-md-3 p-2">
-                <div className="box">
-                    <Box 
-                        className="box"
-                        boxShadow={2}
-                        bgcolor="background.paper"
-                    >
-                        <div className="p-2">
-                            <div className="row">
-                                <div className="col-10 d-flex justify-content-start">
-                                    <Typography noWrap>{this.state.widgetTitle}</Typography>
-                                </div>
-                                <div className="col-2 d-flex justify-content-end">
-                                    <Tooltip title="Edit Widget">
-                                        <IconButton aria-label="edit" size="small" onClick={this.editWidget}>
-                                            <MaterialIcon icon="edit" style={{color: '#FF9800'}}></MaterialIcon>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title="Delete Widget">                                
-                                        <IconButton aria-label="delete" size="small" onClick={this.deleteWidget}>
-                                            <MaterialIcon icon="delete" style={{color: '#F44336'}}></MaterialIcon>
-                                        </IconButton>
-                                    </Tooltip>
-                                </div>
-                                <div className="col-12">
-                                    <ReactEcharts option={gauge.option} theme={"macarons"} />
-                                </div>
+                <div className="card box">
+                    <div className="p-2">
+                        <div className="row">
+                            <div className="col-10 d-flex justify-content-start">
+                                <Typography noWrap>{this.state.widgetTitle}</Typography>
                             </div>
-                        </div>               
-                    </Box>
+                            <div className="col-2 d-flex justify-content-end">
+                                <Tooltip title="Edit Widget">
+                                    <IconButton aria-label="edit" size="small" onClick={this.editWidget}>
+                                        <MaterialIcon icon="edit" style={{color: '#FF9800'}}></MaterialIcon>
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title="Delete Widget">                                
+                                    <IconButton aria-label="delete" size="small" onClick={this.deleteWidget}>
+                                        <MaterialIcon icon="delete" style={{color: '#F44336'}}></MaterialIcon>
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
+                            <div className="col-12">
+                                <ReactEcharts option={gauge.option} theme={"macarons"} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         )

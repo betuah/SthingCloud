@@ -146,7 +146,7 @@ class ModalEditWidget extends Component {
             },
             chart: [
                 { code: 'T', value: 'Tachometer' },
-                { code: 'DC', value: 'Donut Chart' },
+                { code: 'DC', value: 'Doughnut' },
                 { code: 'G', value: 'Gauge' },
                 { code: 'PB', value: 'Progressbar' },
                 { code: 'LI', value: 'Led Indicator' },

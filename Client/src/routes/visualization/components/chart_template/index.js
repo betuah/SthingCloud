@@ -13,6 +13,11 @@ let Tachometer = loadable({
     loading: LoadingComponent
 })
 
+let Doughnut = loadable({
+    loader: () => import('./Doughnut'),
+    loading: LoadingComponent
+})
+
 let ModalWidgetEdit = loadable({
     loader: () => import('../modals/ModalWidgetEdit'),
     loading: LoadingComponent
@@ -72,6 +77,8 @@ class Chart_template extends Component {
                                 case 'G': template = <Gauge key={i} {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
                                 break;
                                 case 'T': template = <Tachometer key={i} {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                break;
+                                case 'DC': template = <Doughnut key={i} {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
                                 break;
                                 default: template = null
                             }

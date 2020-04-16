@@ -6,7 +6,7 @@ import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
 import 'echarts/theme/macarons'
 
-class Chart extends Component {
+class Doughnut extends Component {
     constructor(props) {
         super(props)
 
@@ -81,65 +81,53 @@ class Chart extends Component {
     }   
 
     render() {
-        let gauge = {};
+        let pie = {};
 
-        gauge.option = {
-            "toolbox": {
-                "show": false,
-                "feature": {
-                    "mark": {
-                    "show": true
-                    },
-                    "restore": {
-                    "show": true
-                    },
-                    "saveAsImage": {
-                    "show": true
-                    }
-                }
+        pie.option = { 
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
             },
-            "series": [{
-                "name": "KPI",
-                "type": "gauge",
-                "startAngle": 180,
-                "endAngle": 0,
-                "center": ["50%", "77%"],
-                "radius": 100,
-                "axisLine": {
-                    "lineStyle": {
-                        "width": 35,
-                        "color": [[`${this.state.dataValue / 100}`, "#2d99e2"], [1, "#dce3ec"]]
-                    }
-                },
-                "axisTick": {
-                    "show": false
-                },
-                "axisLabel": {
-                    "show": false
-                },
-                "splitLine": {
-                    "show": false
-                },
-                "pointer": {
-                    "show": false
-                },
-                "title": {
-                    "show": true,
-                    "offsetCenter": [0, 0],
-                    "textStyle": {
-                        "color": "#2d99e2",
-                        "fontSize": 30,
-                        "fontWeight": "bold"
-                    }
-                },
-                "detail": {
-                    "show": false
-                },
-                "data": [{
-                    "value": this.state.dataValue,
-                    "name": `${this.state.dataValue}`
-                }]
-            }]
+            legend: {
+                orient: 'horizontal',
+                x: 'left',
+                data: ['Value', 'Remaining'],
+                textStyle: {
+                  color: '#898989'
+                }
+              },
+            calculable: true,
+            series: [
+                {
+                    name: this.state.widgetTitle,
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: false
+                            },
+                            labelLine: {
+                                show: false
+                            }
+                        },
+                        emphasis: {
+                            label: {
+                                show: false,
+                                position: 'center',
+                                textStyle: {
+                                    fontSize: '30',
+                                    fontWeight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    data: [
+                        {value: this.state.dataValue > 100 ? 100 : this.state.dataValue, name: 'Value'},
+                        {value: 100 - this.state.dataValue, name: 'Remaining'},
+                    ]
+                }
+            ]
         };
 
         return (
@@ -163,7 +151,7 @@ class Chart extends Component {
                                 </Tooltip>
                             </div>
                             <div className="col-12">
-                                <ReactEcharts option={gauge.option} theme={"macarons"} style={{height: '170px'}} />
+                                <ReactEcharts option={pie.option} theme={"macarons"} style={{height: '250px'}} />
                             </div>
                         </div>
                     </div>
@@ -173,4 +161,4 @@ class Chart extends Component {
     }
 }
 
-export default withAuth(Chart);
+export default withAuth(Doughnut);
