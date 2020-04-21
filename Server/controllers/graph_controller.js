@@ -326,3 +326,30 @@ exports.widget_delete = async (req, res) => {
         res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
     }
 }
+
+exports.graph_layouts = async (req, res) => {
+    try {
+        if (req.body.layouts) {
+            graphModel.findByIdAndUpdate({ _id: req.params.id }, 
+                { 
+                    $set: { 
+                        ...req.body
+                    }
+                })
+                .then(data => {
+                    res.status(200).json({ status: 'Success', code: 200, 'msg': 'Success update data graph!', data: data})
+                })
+                .catch(err => {
+                    res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed update data graph!'})
+                    console.log(err)
+                })
+        }
+        else {
+            console.log(error)
+            res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
+    }
+}

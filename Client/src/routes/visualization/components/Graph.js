@@ -56,6 +56,7 @@ class Graph extends Component {
 
     componentDidMount() {        
         this.updateData()
+        console.log('ini graph')
     }
 
     showEditModal() {
@@ -79,6 +80,7 @@ class Graph extends Component {
         const { data, err_data } = this.state
 
         if ( data === '' && err_data === 0) {
+            console.log('pas mau di load ulang')
             return <div><LinearProgress color="primary" /></div>
         } else if (data === '' && err_data === 1) {
             return <div>Error fetching data. Please refresh this pages!</div>
@@ -114,7 +116,7 @@ class Graph extends Component {
                             </Tooltip>
                         </div>
                         <div className="col-xs-12 col-md-12">
-                            <ChartTemplate widgetData={this.state.data.graph_widget} graphId={location.hash.replace('#', '')} updateData={this.updateData} />
+                            <ChartTemplate layouts={this.state.data.layouts} widgetData={this.state.data.graph_widget} graphId={location.hash.replace('#', '')} updateData={this.updateData} />
                         </div>
                     </div>
                 </div>              

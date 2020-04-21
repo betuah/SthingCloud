@@ -2,6 +2,11 @@ import React, { Component } from 'react'
 import loadable from 'react-loadable'
 import LoadingComponent from 'components/Loading'
 import { withAuth } from 'components/Auth/context/AuthContext'
+import { Responsive, WidthProvider } from "react-grid-layout";
+
+import './style.css'
+
+const ReactGridLayout = WidthProvider(Responsive);
 
 let Gauge = loadable({
     loader: () => import('./Gauge'),
@@ -18,39 +23,77 @@ let Doughnut = loadable({
     loading: LoadingComponent
 })
 
+let ProgressBar = loadable({
+    loader: () => import('./ProgressBar'),
+    loading: LoadingComponent
+})
+
+let CleanText = loadable({
+    loader: () => import('./CleanText'),
+    loading: LoadingComponent
+})
+
 let ModalWidgetEdit = loadable({
     loader: () => import('../modals/ModalWidgetEdit'),
     loading: LoadingComponent
 })
-
 class Chart_template extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
             widgetId: '',
-            ModalEditWidget: false
+            ModalEditWidget: false,
+            layouts: JSON.parse(localStorage.getItem('widgetLayouts')) ? JSON.parse(localStorage.getItem('widgetLayouts')) : {}
         }
 
         this.showEditModal      = this.showEditModal.bind(this)
         this.closeEditModal     = this.closeEditModal.bind(this)
     }
 
+    componentWillMount() {
+        this._isMounted = true;
+    }
+
     componentDidMount() {
-        const { checkToken } = this.props
+        const { checkToken, layouts } = this.props
         checkToken();
+        this._isMounted && this.setState({ layouts });
     }
 
     showEditModal(id) {
-        this.setState({ 
+        this._isMounted && this.setState({ 
             widgetId: id,
             ModalEditWidget: true 
         })
     }
 
-    // shouldComponentUpdate(nextProps, nextState) {
-    //     return this.state.ModalEditWidget !== nextState.ModalEditWidget
-    // }
+    onLayoutChange(layout, layouts) {
+        this._isMounted && this.setState({ layouts });
+    }
+
+    componentWillUnmount() {
+        const { server_url, axios, graphId } = this.props;
+
+        const data = {
+            layouts: {
+                ...this.state.layouts
+            }
+        }
+        
+        this._isMounted && axios.put(`${server_url}/api/graph_layouts/${graphId}`, data)
+        .catch(err => {
+            if(err.response) {
+                const error = err.response.data;       
+                console.log(error.code === 11000 ? 'error' : 'warning', error.code === 11000 ? 'Error' : 'Warning', error.msg)
+            } else {               
+                const resMsg = { status: 'Error', code: 500, msg: 'Internal Server Error'}         
+                console.log('error', resMsg.status, resMsg.msg)
+            }
+        });
+
+        this._isMounted = false;
+    }
 
     closeEditModal() {
         this.setState({ 
@@ -60,7 +103,7 @@ class Chart_template extends Component {
     }
     
     render() {
-        const { widgetData, graphId, updateData } = this.props
+        const { widgetData, graphId, updateData, layouts } = this.props
 
         return (
             <div>
@@ -68,27 +111,69 @@ class Chart_template extends Component {
                     <ModalWidgetEdit {...this.state} graphId={graphId} updateData={updateData} closeWidgetModal={this.closeEditModal} widgetData={widgetData} />
                 }
 
-                <div className="d-flex flex-wrap">
+                <ReactGridLayout 
+                    margin={[0, 0]}
+                    containerPadding={[0, 0]}
+                    isDraggable={true}
+                    isResizable={false}
+                    items={5}
+                    rowHeight={50}
+                    preventCollision={true}
+                    compactType='horizontal'
+                    verticalCompact={true}
+                    breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0}}
+                    cols={{lg: 12, md: 10, sm: 6, xs: 4, xxs: 2}}
+                    layouts={this.state.layouts}
+                    onLayoutChange={(layout, layouts) =>
+                        this.onLayoutChange(layout, layouts)
+                    }
+                >
                     {
                         widgetData.map((e, i) => {
                             let template = null;
-
+                            let sumbuX =  0
+                            let sumbuY =  0
+                            
                             switch (e.widgetChart) {
-                                case 'G': template = <Gauge key={i} {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                case 'G': 
+                                    template =                                         
+                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 5}} >
+                                            <Gauge {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                        </div>
                                 break;
-                                case 'T': template = <Tachometer key={i} {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                case 'T': 
+                                    template = 
+                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 7}} >
+                                            <Tachometer {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                        </div>
                                 break;
-                                case 'DC': template = <Doughnut key={i} {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                case 'DC': 
+                                    template = 
+                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 6}} >
+                                            <Doughnut {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                        </div>
+                                break;                                
+                                case 'PB': 
+                                    template = 
+                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 6, h: 2}} >
+                                            <ProgressBar {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                        </div>
                                 break;
-                                default: template = null
+                                case 'CL': 
+                                    template = 
+                                    <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 2}} >
+                                            <CleanText {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                        </div>
+                                break;
+                                default: template = <div key={i}></div>
                             }
                             
                             return template
                         })                     
                     }
-                </div>
+                </ReactGridLayout>
             </div>
-        )
+        );
     }
 }
 

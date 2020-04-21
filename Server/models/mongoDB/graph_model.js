@@ -66,6 +66,7 @@ const graphDataSchema = new Schema({
         type: Number, 
         trim: true
     },
+    layouts : {},
     graph_widget    : [WidgetSchema],
     action          : [DataSchema]
 }, { timestamps: true });

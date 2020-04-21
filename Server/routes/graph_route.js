@@ -14,6 +14,9 @@ module.exports = (app) => {
     
     app.route('/api/graph/:id')
         .put(authMiddleware, graph.edit);
+
+    app.route('/api/graph_layouts/:id')
+        .put(authMiddleware, graph.graph_layouts);
     
     app.route('/api/graph/default/:id')
         .put(authMiddleware, graph.defaultGraph);

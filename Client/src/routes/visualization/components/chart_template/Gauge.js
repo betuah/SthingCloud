@@ -103,7 +103,7 @@ class Chart extends Component {
                 "type": "gauge",
                 "startAngle": 180,
                 "endAngle": 0,
-                "center": ["50%", "77%"],
+                "center": ["50%", "67%"],
                 "radius": 100,
                 "axisLine": {
                     "lineStyle": {
@@ -143,7 +143,7 @@ class Chart extends Component {
         };
 
         return (
-            <div className="col-xs-12 col-md-3 p-2">
+            <div className="col-xs-12 col-md-12 p-1">
                 <div className="card box">
                     <div className="p-2">
                         <div className="row">
@@ -163,7 +163,7 @@ class Chart extends Component {
                                 </Tooltip>
                             </div>
                             <div className="col-12">
-                                <ReactEcharts option={gauge.option} theme={"macarons"} style={{height: '170px'}} />
+                                <ReactEcharts option={gauge.option} theme={"macarons"} style={{height: '200px'}} />
                             </div>
                         </div>
                     </div>

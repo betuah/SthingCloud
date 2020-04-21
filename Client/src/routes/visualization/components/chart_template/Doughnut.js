@@ -131,7 +131,7 @@ class Doughnut extends Component {
         };
 
         return (
-            <div className="col-xs-12 col-md-3 p-2">
+            <div className="col-xs-12 col-md-12 p-1">
                 <div className="card box">
                     <div className="p-2">
                         <div className="row">

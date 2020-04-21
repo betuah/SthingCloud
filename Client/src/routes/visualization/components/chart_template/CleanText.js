@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import ReactEcharts from 'echarts-for-react'
 import { Typography, IconButton, Tooltip } from '@material-ui/core'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
 import 'echarts/theme/macarons'
 
-class Tachometer extends Component {
+class CleanText extends Component {
     constructor(props) {
         super(props)
 
@@ -81,30 +80,7 @@ class Tachometer extends Component {
     }   
 
     render() {
-        let gauge = {};
-
-        gauge.option = {
-            tooltip: {
-                formatter: '{a} <br/>{b} : {c}'
-            },
-            toolbox: {
-                show: true,
-            },
-            series: [
-                {
-                    name: `${this.state.widgetTitle}`,
-                    type: 'gauge',
-                    detail: {formatter: '{value}'},
-                    data: [{value: this.state.dataValue, name: 'Value'}],
-                    title: {
-                        textStyle: {
-                                color: '#898989'
-                        }
-                    }
-                }
-            ]
-        };
-
+    
         return (
             <div className="col-xs-12 col-md-12 p-1">
                 <div className="card box">
@@ -125,8 +101,14 @@ class Tachometer extends Component {
                                     </IconButton>
                                 </Tooltip>
                             </div>
-                            <div className="col-12">
-                                <ReactEcharts option={gauge.option} theme={"macarons"} />
+                            <div className="col-12 d-flex">
+                                <div className="w-100 align-self-center">
+                                    <div className="d-flex justify-content-center" style={{color: '#00BCD4'}}>
+                                        <b>
+                                            <h4>{this.state.dataValue}</h4>
+                                        </b>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -136,4 +118,4 @@ class Tachometer extends Component {
     }
 }
 
-export default withAuth(Tachometer);
+export default withAuth(CleanText);

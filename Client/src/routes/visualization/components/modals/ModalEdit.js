@@ -151,7 +151,6 @@ class ModalEditContent extends Component {
 
     handleOk = () => {
         const { server_url, axios, data } = this.props;
-        
         axios.put(`${server_url}/api/graph/${data._id}`, this.state.data)
         .then(res => {
             this.clearState()
@@ -162,7 +161,7 @@ class ModalEditContent extends Component {
                 const error = err.response.data;       
                 notif(error.code === 11000 ? 'error' : 'warning', error.code === 11000 ? 'Error' : 'Warning', error.msg)
             } else {               
-                const resMsg = { status: 'Error', code: 500, msg: 'Internal Server Error'}         
+                const resMsg = { status: 'Error', code: 500, msg: `Internal Server Error : ${err}`}         
                 notif('error', resMsg.status, resMsg.msg)
             }
         });         
