@@ -362,13 +362,13 @@ class EnhancedTable extends React.Component {
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
-    data.forEach(item => {
-      if (item.graph_default === 1)
-      graph_default = item._id
-    });
+    // data.forEach(item => {
+    //   if (item.graph_default === 1)
+    //   graph_default = item._id
+    // });
 
-    if (graph_default && !this.props.location.hash) 
-      return <Redirect push to={`/app/visualization/graph#${graph_default}`} />
+    // if (graph_default && !this.props.location.hash) 
+    //   return <Redirect push to={`/app/visualization/graph#${graph_default}`} />
 
     return (
       <Paper className={classes.root}>

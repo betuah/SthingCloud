@@ -56,7 +56,6 @@ class Graph extends Component {
 
     componentDidMount() {        
         this.updateData()
-        console.log('ini graph')
     }
 
     showEditModal() {
@@ -80,7 +79,6 @@ class Graph extends Component {
         const { data, err_data } = this.state
 
         if ( data === '' && err_data === 0) {
-            console.log('pas mau di load ulang')
             return <div><LinearProgress color="primary" /></div>
         } else if (data === '' && err_data === 1) {
             return <div>Error fetching data. Please refresh this pages!</div>
