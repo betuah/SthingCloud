@@ -1,7 +1,7 @@
 import React from 'react';
 import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
-import notif from 'components/NotificationPopUp/notif';
+import notif, { deleteConfirm } from 'components/NotificationPopUp/notif';
 import Moment from 'react-moment';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
@@ -133,21 +133,24 @@ let EnhancedTableToolbar = props => {
   const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, server_url, tokenState } = props;
 
   const handleDelete = e => {
-    axios
-      .delete(`${server_url}/api/device`, { data: { id: props.selectedData } })
-      .then(res => {
-        const cb = res.data
-        notif('success', 'Success', `Successfully  deleted ${cb.deletedCount} data.`)
-        resetSelected()
-        updateData()
-      })
-      .catch(err => {
-        if(err.code === 500) {
-          notif('error', err.status, err.msg)
-        } else {
-          notif('error', 'Error', 'Failed delete data.')
-        }        
-      })
+    deleteConfirm(confirm => {
+      if (confirm)
+        axios
+          .delete(`${server_url}/api/device`, { data: { id: props.selectedData } })
+          .then(res => {
+            const cb = res.data
+            notif('success', 'Success', `Successfully  deleted ${cb.deletedCount} data.`)
+            resetSelected()
+            updateData()
+          })
+          .catch(err => {
+            if(err.code === 500) {
+              notif('error', err.status, err.msg)
+            } else {
+              notif('error', 'Error', 'Failed delete data.')
+            }        
+          })
+    })
   }
 
   const searchData = e => {

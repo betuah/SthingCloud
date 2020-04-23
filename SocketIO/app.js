@@ -4,10 +4,10 @@ const   express         = require("express"),
         moment          = require('moment'),
         iotDeviceModel  = require('./models/device_model');
 
-//Setting Up environment
+/* Setting Up environment */
 require('dotenv').config();
 
-//Setting up express and adding socketIo middleware
+/* Setting up express and adding socketIo middleware */
 const app       = express()
 const server    = http.createServer(app)
 const io        = socketIo(server)
@@ -19,13 +19,13 @@ const port      = process.env.PORT || 4001 //Port from environment variable or d
 // Allow origins
 // io.origins([`${process.env.CLIENT_DOMAIN}`,`${process.env.SERVER_DOMAIN}`,`${process.env.API_DOMAIN}`])
 
-// Array device
+/* Array device */
 let tmp = []
 
 io.on("connection", socket => {
     console.log("New Client connected"); 
 
-    // Create Room to each user connected
+    /* Create Room to each user connected */
     socket.on('join_room', room => {
         console.log(`${room} has joined to room ${room}!`);
         socket.join(room);
@@ -41,7 +41,7 @@ io.on("connection", socket => {
         // console.log(io.sockets.adapter.rooms)
     })
 
-    // Event to receive data from iot device
+    /* Event to receive data from iot device */
     socket.on("device_connect", data => {
         const curentTime = moment() // Set current time
         const tmpData = {
@@ -54,21 +54,22 @@ io.on("connection", socket => {
             tmp[isIndex].curentTime = curentTime // Will set curent time to existing array
         } else { // Else device not found in array
 
-            let err = 0
+            let err = 0 // Variable for error status
 
             tmp.push(tmpData) // Adding new device to array
 
-            // Change state to 1 mean connected
+            /* Change state to 1 mean connected */
             iotDeviceModel.findByIdAndUpdate({ _id: data.idDevice }, { $set: { state: 1 }})
-            .catch(err => {
+            .catch(error => {
                 err = 1
-                console.log(err)
+                console.log("Some thing error in device_connect Function SocketIO")
+                console.log(error)
             })
 
-            // Get count device connected in spesific userID            
+            /* Get count device connected in spesific userID */           
             getDeviceConn = tmp.filter(val => val.idUser ? (val.idUser.match(data.idUser) ? val : '') : '')
 
-            // Tell client that device status was change
+            /* Tell client that device status was change */
             io.sockets.in(data.idUser).emit('event', {
                 statusChange: 1,
                 device: data.deviceName,
@@ -78,7 +79,7 @@ io.on("connection", socket => {
         }
     })
 
-    // Check each second for get device time out infomation
+    /* Check each second for get device time out infomation */
     setInterval(function(){ 
         const intervalCurentTime = moment() // Set current time
         
@@ -88,17 +89,18 @@ io.on("connection", socket => {
 
                 let err = 0
                 
-                // Change status to 0 mean disconnected
+                /* Change status to 0 mean disconnected */
                 iotDeviceModel.findByIdAndUpdate({ _id: item.idDevice }, { $set: { state: 0 }})
-                .catch(err => {
+                .catch(error => {
                     err = 1
-                    console.log(err)
+                    console.log("Some thing error in setInterval Function SocketIO")
+                    console.log(error)
                 })
 
-                // Get count device connected in spesific userID
+                /* Get count device connected in spesific userID */
                 getDeviceConn = tmp.filter(val => val.idUser ? (val.idUser.match(item.idUser) ? val : '') : '')
 
-                // Tell client that device status was change
+                /* Tell client that device status was change */
                 io.sockets.in(item.idUser).emit('event', {
                     statusChange: 0,
                     device: item.deviceName,
@@ -106,13 +108,13 @@ io.on("connection", socket => {
                     error: err
                 });   
                 
-                // Remove offline device from array
+                /* Remove offline device from array */
                 tmp.splice(index, 1);
             }
         })
     }, 1000);
 
-    //A special namespace "disconnect" for when a client disconnects
+    /* A special namespace "disconnect" for when a client disconnects */
     socket.on("disconnect", () => console.log("Client disconnected"));
 });
 

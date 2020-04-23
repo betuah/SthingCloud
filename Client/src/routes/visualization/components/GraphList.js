@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
-import notif from 'components/NotificationPopUp/notif';
+import notif, { deleteConfirm } from 'components/NotificationPopUp/notif';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import BeenhereIcon from '@material-ui/icons/Beenhere';
@@ -131,21 +131,24 @@ let EnhancedTableToolbar = props => {
   const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, server_url } = props;
 
   const handleDelete = e => {
-    axios
-      .delete(`${server_url}/api/graph`, { data: { id: props.selectedData } })
-      .then(res => {
-        const cb = res.data
-        notif('success', 'Success', `Successfully  deleted ${cb.deletedCount} data.`)
-        resetSelected()
-        updateData()
-      })
-      .catch(err => {
-        if(err.code === 500) {
-          notif('error', err.status, err.msg)
-        } else {
-          notif('error', 'Error', 'Failed delete data.')
-        }        
-      })
+    deleteConfirm(confirm => {
+      if (confirm) 
+        axios
+          .delete(`${server_url}/api/graph`, { data: { id: props.selectedData } })
+          .then(res => {
+            const cb = res.data
+            notif('success', 'Success', `Successfully  deleted ${cb.deletedCount} data.`)
+            resetSelected()
+            updateData()
+          })
+          .catch(err => {
+            if(err.code === 500) {
+              notif('error', err.status, err.msg)
+            } else {
+              notif('error', 'Error', 'Failed delete data.')
+            }        
+          })
+    })
   }
 
   const searchData = e => {
