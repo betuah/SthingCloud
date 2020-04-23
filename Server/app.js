@@ -37,11 +37,13 @@ const authRoute     = require('./routes/auth_route');
 const usersRoute    = require('./routes/users_route');
 const deviceRoute   = require('./routes/device_route');
 const graphRoute    = require('./routes/graph_route');
+const controlRoute  = require('./routes/control_route');
 
 authRoute(app);
 usersRoute(app);
 deviceRoute(app);
 graphRoute(app);
+controlRoute(app);
 /* End of Routing Import */
 
 /* MongoDB Connection Check */

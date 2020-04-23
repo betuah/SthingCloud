@@ -26,9 +26,7 @@ class Main extends Component {
         return (
             <div>
                 <Switch>
-                    <Route exact path={`${match.url}/graph`}>
-                        <Graph {...this.props} />
-                    </Route> 
+                    <Route exact path={`${match.url}/:graphId`} component={Graph} />
                     <Route exact path={`${match.url}`}>
                         <div className="container-fluid mt-4">
                             <div className="row">

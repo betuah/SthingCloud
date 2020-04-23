@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import { IconButton, Tooltip, LinearProgress } from '@material-ui/core'
 
-
 let ModalEdit = loadable({
     loader:() => import('./modals/ModalEdit'),
     loading: LoadingComponent
@@ -22,7 +21,7 @@ let ChartTemplate = loadable({
     loading: LoadingComponent
 })
 
-class Graph extends Component {
+class ControllerWidget extends Component {
     constructor(props) {
         super(props)
 
@@ -43,9 +42,9 @@ class Graph extends Component {
 
     updateData() {
         const { axios, server_url, match } = this.props
-        const id = match.params.graphId
+        const id = match.params.controllerId
         
-        axios.get(`${server_url}/api/graph/${id}`)
+        axios.get(`${server_url}/api/controller/${id}`)
         .then((res) => {
             this.setState({ data: {...res.data}})
         })
@@ -75,7 +74,7 @@ class Graph extends Component {
     }
 
     render() {
-        const { match } = this.props
+        const { location } = this.props
         const { data, err_data } = this.state
 
         if ( data === '' && err_data === 0) {
@@ -92,17 +91,17 @@ class Graph extends Component {
                 <div className="container-fluid mt-4">
                     <div className="row">
                         <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start">
-                            <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF9800'}}><MaterialIcon icon="bubble_chart" style={{color: '#FFFFFF'}} /> {data.graph}</span></b></h5>
+                            <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF5722'}}><MaterialIcon icon="bubble_chart" style={{color: '#FFFFFF'}} /> {data.controller}</span></b></h5>
                         </div>
                         <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-end">
-                            <Tooltip title="Add Widget">
+                            <Tooltip title="Add Button">
                                 <IconButton aria-label="Add Widget" size="medium" onClick={this.showWidgetModal}>
                                     <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
                                 </IconButton>
                             </Tooltip>
-                            <Link to="/app/visualization/#show" >
-                                <Tooltip title="Graph List">
-                                    <IconButton aria-label="Graph List" size="medium">
+                            <Link to="/app/controller/#show" >
+                                <Tooltip title="Controller List">
+                                    <IconButton aria-label="Controller List" size="medium">
                                         <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
                                     </IconButton>
                                 </Tooltip>
@@ -114,7 +113,7 @@ class Graph extends Component {
                             </Tooltip>
                         </div>
                         <div className="col-xs-12 col-md-12">
-                            <ChartTemplate layouts={this.state.data.layouts} widgetData={this.state.data.graph_widget} graphId={match.params.graphId} updateData={this.updateData} />
+                            {/* <ChartTemplate layouts={this.state.data.layouts} widgetData={this.state.data.graph_widget} graphId={location.hash.replace('#', '')} updateData={this.updateData} /> */}
                         </div>
                     </div>
                 </div>              
@@ -123,4 +122,4 @@ class Graph extends Component {
     }
 }
 
-export default withAuth(Graph)
+export default withAuth(ControllerWidget)

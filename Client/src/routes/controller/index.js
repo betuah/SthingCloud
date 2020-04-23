@@ -1,3 +1,3 @@
-import controller from './components/Controller';
+import Controller from './components/Controller';
 
-export default controller;
+export default Controller;

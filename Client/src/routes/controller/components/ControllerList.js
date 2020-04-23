@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import BeenhereIcon from '@material-ui/icons/Beenhere';
 import DeleteIcon from '@material-ui/icons/Delete';
-import AddGraph from './AddGraph';
+import AddControl from './AddControl';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import MaterialIcon from 'components/MaterialIcon';
 import { withStyles } from '@material-ui/core/styles';
@@ -41,8 +41,8 @@ function getSorting(order, orderBy) {
 
 const columnData = [
   
-  { id: 'graphId', disablePadding: false, label: 'Graph ID' },
-  { id: 'name', disablePadding: false, label: 'Graph Name' },
+  { id: 'controllerId', disablePadding: false, label: 'Controller ID' },
+  { id: 'name', disablePadding: false, label: 'Controller Name' },
   { id: 'desc', disablePadding: false, label: 'desc' },
 ];
 
@@ -132,7 +132,7 @@ let EnhancedTableToolbar = props => {
 
   const handleDelete = e => {
     axios
-      .delete(`${server_url}/api/graph`, { data: { id: props.selectedData } })
+      .delete(`${server_url}/api/controller`, { data: { id: props.selectedData } })
       .then(res => {
         const cb = res.data
         notif('success', 'Success', `Successfully  deleted ${cb.deletedCount} data.`)
@@ -154,11 +154,11 @@ let EnhancedTableToolbar = props => {
     handleSearch(text)
   }
 
-  const handleGraphDefault = e => {
+  const handleControllerDefault = e => {
     axios
-      .put(`${server_url}/api/graph/default/${props.selectedData}`)
+      .put(`${server_url}/api/controller/default/${props.selectedData}`)
       .then(res => {
-        notif('success', 'Success', `Default graph was changed.`)
+        notif('success', 'Success', `Default controller was changed.`)
         resetSelected()
         updateData()
       })
@@ -166,7 +166,7 @@ let EnhancedTableToolbar = props => {
         if(err.code === 500) {
           notif('error', err.status, err.msg)
         } else {
-          notif('error', 'Error', 'Failed change default graph.')
+          notif('error', 'Error', 'Failed change default controller.')
         }        
       })
   }
@@ -199,7 +199,7 @@ let EnhancedTableToolbar = props => {
         {numSelected === 1 ? (
           <div className="text-right">
             <Tooltip title="Set Default Graph">              
-              <IconButton aria-label="Copy" onClick={handleGraphDefault}>
+              <IconButton aria-label="Copy" onClick={handleControllerDefault}>
                 <BeenhereIcon style={{color: '#4CAF50'}} />
               </IconButton>              
             </Tooltip>
@@ -219,7 +219,7 @@ let EnhancedTableToolbar = props => {
           </div>
         ) : (
           <div className="text-right">         
-            <AddGraph updateData={updateData} />
+            <AddControl updateData={updateData} />
           </div>
         ))}
       </div>
@@ -287,7 +287,7 @@ class EnhancedTable extends React.Component {
 
   updateData = () => {
     const handleData = this.handleData;
-    axios.get(`${this.props.server_url}/api/graph`)
+    axios.get(`${this.props.server_url}/api/controller`)
     .then((res) => {
         handleData(res.data)
     })
@@ -358,17 +358,17 @@ class EnhancedTable extends React.Component {
 
   render() {
     const { classes } = this.props;
-    let graph_default = null;
+    let controller_default = null;
     const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
     data.forEach(item => {
-      if (item.graph_default === 1)
-      graph_default = item._id
+      if (item.controller_default === 1)
+      controller_default = item._id
     });
 
-    if (graph_default && !this.props.location.hash) 
-      return <Redirect push to={`/app/visualization/${graph_default}`} />
+    if (controller_default && !this.props.location.hash) 
+      return <Redirect push to={`/app/controller/${controller_default}`} />
 
     return (
       <Paper className={classes.root}>
@@ -396,7 +396,7 @@ class EnhancedTable extends React.Component {
                 .sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .filter(val => {
-                  return val.graph.match(this.state.searchValue.toLowerCase())})
+                  return val.controller.match(this.state.searchValue.toLowerCase())})
                 .map(n => {
                   const isSelected = this.isSelected(n._id);
 
@@ -416,11 +416,11 @@ class EnhancedTable extends React.Component {
                       <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n._id}</TableCell>
                       <TableCell width="25%" style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word'}}>
                         <Tooltip title={`Click to access graph`}>
-                          <Link className="link-animated-hover link-hover-v3" to={`/app/visualization/${n._id}`}>{<b style={{color: '#FF9800'}}>
-                            {n.graph}</b>}
+                          <Link className="link-animated-hover link-hover-v3" to={`/app/controller/${n._id}`}>{<b style={{color: '#FF9800'}}>
+                            {n.controller}</b>}
                           </Link>                          
                         </Tooltip>&nbsp;&nbsp;&nbsp;
-                        {n.graph_default === 1 && <small><span className="ui-highlight" style={{backgroundColor: '#2196F3'}}>Default Graph</span></small>}                        
+                        {n.controller_default === 1 && <small><span className="ui-highlight" style={{backgroundColor: '#2196F3'}}>Default Graph</span></small>}                        
                       </TableCell>
                       <TableCell width="60%" style={{ maxWidth: '80px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.desc}</TableCell>
                     </TableRow>
