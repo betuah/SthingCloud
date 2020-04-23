@@ -1,4 +1,4 @@
-<h1>SEA Cloud Platform (v0.2.2)</h1>
+<h1>SEA Cloud Platform (v0.3.1)</h1>
 
 > **Desc :** This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
 
@@ -93,6 +93,22 @@ $ npm run start
 <hr>
 
 # Enjoy!
+
+## Version Change Log (v0.3.0)
+- Add Layout for controller list
+- Add widget feature
+- Add default controller
+- Add Edit and adding button features
+
+## Version Change Log (v0.2.4)
+- Fix layout bug
+- Fix visualization route in front end
+- Fix issue default graph in graph list
+
+## Version Change Log (v0.2.3)
+- Modify Edit widget menu
+- Add graph template (Clean Text and Proggress Bar)
+- Fix UI bug in Progress Bar value
 
 ## Version Change Log (v0.2.2)
 - Add widget menu
