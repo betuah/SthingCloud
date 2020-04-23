@@ -94,6 +94,10 @@ $ npm run start
 
 # Enjoy!
 
+## Version Change Log (v0.3.1)
+- Fix socket io device status
+- Add delete confirmation in all component list
+
 ## Version Change Log (v0.3.0)
 - Add Layout for controller list
 - Add widget feature
