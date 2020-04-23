@@ -90,13 +90,10 @@ MONGO_PORT=YOUR_MONGODB_PORT
 ```sh
 $ npm run start 
 ```
-<hr>
-
-# Enjoy!
 
 <hr>
 
-# Version Change Log
+# Version Log
 
 ## Version Change Log (v0.3.1)
 - Fix socket io device status
@@ -145,5 +142,9 @@ $ npm run start
 - Fix Flooding to device API
 - Change dashboard menu
 - Add Graph menu
+
+<hr>
+
+# Enjoy!
 
 <hr>
