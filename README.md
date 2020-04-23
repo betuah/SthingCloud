@@ -94,6 +94,10 @@ $ npm run start
 
 # Enjoy!
 
+<hr>
+
+# Version Change Log
+
 ## Version Change Log (v0.3.1)
 - Fix socket io device status
 - Add delete confirmation in all component list
