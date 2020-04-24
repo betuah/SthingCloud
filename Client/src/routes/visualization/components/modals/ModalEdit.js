@@ -61,6 +61,22 @@ const Content = props => {
                             <FormControlLabel
                                 control={
                                     <Switch
+                                        checked={props.Editable}
+                                        onChange={props.editableWidget}
+                                        value={props.Editable ? '1' : '0'}
+                                        color="primary"
+                                        name='editable'
+                                    />
+                                }
+                                label="Editable Widget"
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="input-group-v1">
+                            <FormControlLabel
+                                control={
+                                    <Switch
                                         checked={props.data.share}
                                         onChange={props.onSwitch('share')}
                                         value={props.data.share ? '1' : '0'}
@@ -186,7 +202,7 @@ class ModalEditContent extends Component {
                         <Button key="submit" variant="contained" color="primary" onClick={this.handleOk}> Save </Button>,
                     ]}
                 >
-                    <Content onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
+                    <Content onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} editable={this.props.Editable} editableWidget={this.props.editableWidget} />
                 </Modal> 
             </Fragment>
         )

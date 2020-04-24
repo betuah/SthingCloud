@@ -46,6 +46,7 @@ class Chart_template extends Component {
         this.state = {
             widgetId: '',
             ModalEditWidget: false,
+            editableWidget: props.Editable,
             layouts: JSON.parse(localStorage.getItem('widgetLayouts')) ? JSON.parse(localStorage.getItem('widgetLayouts')) : {}
         }
 
@@ -105,8 +106,7 @@ class Chart_template extends Component {
     }
     
     render() {
-        const { widgetData, graphId, updateData } = this.props
-
+        const { widgetData, graphId, updateData, Editable } = this.props
         return (
             <div>
                 { this.state.widgetId !== '' && 
@@ -140,31 +140,31 @@ class Chart_template extends Component {
                                 case 'G': 
                                     template =                                         
                                         <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 5}} >
-                                            <Gauge {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                            <Gauge {...e} graphId={graphId} Editable={Editable} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
                                         </div>
                                 break;
                                 case 'T': 
                                     template = 
                                         <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 7}} >
-                                            <Tachometer {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                            <Tachometer {...e} graphId={graphId} Editable={Editable} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
                                         </div>
                                 break;
                                 case 'DC': 
                                     template = 
                                         <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 6}} >
-                                            <Doughnut {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                            <Doughnut {...e} graphId={graphId} Editable={Editable} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
                                         </div>
                                 break;                                
                                 case 'PB': 
                                     template = 
                                         <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 6, h: 2}} >
-                                            <ProgressBar {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                            <ProgressBar {...e} graphId={graphId} Editable={Editable} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
                                         </div>
                                 break;
                                 case 'CL': 
                                     template = 
                                     <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 2}} >
-                                            <CleanText {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                            <CleanText {...e} graphId={graphId} Editable={Editable} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
                                         </div>
                                 break;
                                 default: template = <div key={i}></div>

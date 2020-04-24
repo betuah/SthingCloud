@@ -29,6 +29,7 @@ class Graph extends Component {
         this.state = {
             ModalWidget: false,
             ModalEdit: false,
+            Editable: false,
             data: '',
             input: '',
             err_data: 0
@@ -39,6 +40,7 @@ class Graph extends Component {
         this.closeEditModal     = this.closeEditModal.bind(this)
         this.showWidgetModal    = this.showWidgetModal.bind(this)
         this.closeWidgetModal   = this.closeWidgetModal.bind(this)
+        this.editableWidget     = this.editableWidget.bind(this)
     }
 
     updateData() {
@@ -74,6 +76,12 @@ class Graph extends Component {
         this.setState({ ModalWidget: false })
     }
 
+    editableWidget() {
+        this.setState({
+            Editable: !this.state.Editable
+        })
+    }
+
     render() {
         const { match } = this.props
         const { data, err_data } = this.state
@@ -86,7 +94,7 @@ class Graph extends Component {
 
         return (
             <Fragment>
-                <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>
+                <ModalEdit {...this.state} editableWidget={this.editableWidget} updateData={this.updateData} closeEditModal={this.closeEditModal}/>
                 <ModalWidget {...this.state} updateData={this.updateData} closeWidgetModal={this.closeWidgetModal}/>      
                 
                 <div className="container-fluid mt-4">
@@ -114,7 +122,7 @@ class Graph extends Component {
                             </Tooltip>
                         </div>
                         <div className="col-xs-12 col-md-12">
-                            <ChartTemplate layouts={this.state.data.layouts} widgetData={this.state.data.graph_widget} graphId={match.params.graphId} updateData={this.updateData} />
+                            <ChartTemplate layouts={this.state.data.layouts} widgetData={this.state.data.graph_widget} graphId={match.params.graphId} updateData={this.updateData} Editable={this.state.Editable} />
                         </div>
                     </div>
                 </div>              
