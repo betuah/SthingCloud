@@ -1,16 +1,16 @@
-import React from 'react';
+import React from 'react'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { Modal } from 'antd';
-import notif from 'components/NotificationPopUp/notif';
-import MaterialIcon from 'components/MaterialIcon';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import { TextField, Button, IconButton, Tooltip } from '@material-ui/core';
+import { Modal } from 'antd'
+import notif from 'components/NotificationPopUp/notif'
+import MaterialIcon from 'components/MaterialIcon'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import { TextField, Button, IconButton, Tooltip } from '@material-ui/core'
 
 const Content = (props) => {
     return (
         <div>            
             <div className="col-md-12 mx-auto">
-                <h4 style={{color: '#FF5722'}} className="text-center">Add New <b>Controller</b></h4>
+                <h4 style={{color: '#FF5722'}} className="text-center">Add <b>Controller</b></h4>
                 <div className="divider divider-dotted"></div>             
                 <form className="form-v1">
                     <div className="form-group">

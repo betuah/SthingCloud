@@ -16,10 +16,10 @@ let ModalWidget = loadable({
     loading: LoadingComponent
 })
 
-let ChartTemplate = loadable({
-    loader: () => import('./chart_template'),
-    loading: LoadingComponent
-})
+// let ChartTemplate = loadable({
+//     loader: () => import('./chart_template'),
+//     loading: LoadingComponent
+// })
 
 class ControllerWidget extends Component {
     constructor(props) {
@@ -74,7 +74,7 @@ class ControllerWidget extends Component {
     }
 
     render() {
-        const { location } = this.props
+        // const { location } = this.props
         const { data, err_data } = this.state
 
         if ( data === '' && err_data === 0) {

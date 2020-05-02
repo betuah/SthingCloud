@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react'
 import notif from 'components/NotificationPopUp/notif'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { TextField, Button, Switch, FormControlLabel } from '@material-ui/core'
+import { TextField, Button } from '@material-ui/core'
 import {  Modal } from 'antd'
 
 const Content = props => {

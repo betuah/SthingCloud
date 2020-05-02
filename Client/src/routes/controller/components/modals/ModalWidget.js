@@ -2,15 +2,14 @@ import React, { Fragment, Component } from 'react'
 import notif from 'components/NotificationPopUp/notif'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { TextField, Button, FormControl, Select, MenuItem, InputLabel } from '@material-ui/core'
+import SwipeableViews from 'react-swipeable-views'
+import { TextField, Button, FormControl, Select, MenuItem, InputLabel, Tabs, Tab } from '@material-ui/core'
 import {  Modal } from 'antd'
 
-const Content = props => {
+const ContentWidget = props => {
     return (
         <div>
-            <div className="col-md-12 mx-auto">
-                <h4 style={{color: '#00BCD4'}} className="text-center">Add <b>Button</b></h4>
-                <div className="divider divider-dotted"></div>             
+            <div className="w-100 mt-4">
                 <form className="form-v1">
                     <div className="form-group">
                         <div className="input-group-v1">
@@ -35,31 +34,9 @@ const Content = props => {
                         </div>
                     </div>
                     <div className="form-group">
-                        <div className="input-group-v1">
-                            <FormControl fullWidth required>
-                                <InputLabel htmlFor="resourceType">Widget data Resource</InputLabel>
-                                <Select
-                                    value={props.data.resourceType}
-                                    onChange={props.onChange}
-                                    inputProps={{
-                                        name: 'resourceType',
-                                            id: 'resourceType',
-                                        }
-                                    }
-                                    required
-                                >
-                                    <MenuItem value={0} disabled>
-                                        <em>Select widget data resources</em>
-                                    </MenuItem>
-                                    {props.inputResource.map((item, i) => <MenuItem key={i} value={item.value}>{item.name}</MenuItem>)}
-                                </Select>
-                            </FormControl>                            
-                        </div>
-                    </div>
-                    <div className="form-group" style={props.data.resourceType === 0 ? { display: 'none' } : { display: 'block' }}>
                         <div className="input-group-v1">                            
                             <FormControl fullWidth required>
-                                <InputLabel htmlFor="resourceId">{props.data.resourceType === 1 ? "Device List" : (props.data.resourceType === 2 ? "Data Bucket List" : "Resource")}</InputLabel>
+                                <InputLabel htmlFor="resourceId">{"Device"}</InputLabel>
                                 <Select
                                     value={props.data.resourceId}
                                     onChange={props.onChange}
@@ -71,17 +48,17 @@ const Content = props => {
                                     required                                    
                                 >
                                     <MenuItem value={0} disabled>
-                                        <em>{props.data.resourceType === 1 ? "Select your device" : (props.data.resourceType === 2 ? "Select your data bucket" : "Select your Resource")}</em>
+                                        <em>{"Select your device"}</em>
                                     </MenuItem>
                                     {props.deviceList.map((item, i) => <MenuItem key={i} value={item._id}>{`${item.device} (${item._id})`}</MenuItem>)}
                                 </Select>
                             </FormControl>                            
                         </div>
                     </div>
-                    <div className="form-group" style={props.data.resourceId === 0 ? { display: 'none' } : { display: 'block' }}>
+                    <div className="form-group">
                         <div className="input-group-v1">                            
                             <FormControl fullWidth required>
-                                <InputLabel htmlFor="widgetChart">Widget Template</InputLabel>
+                                <InputLabel htmlFor="widgetChart">Controller Display</InputLabel>
                                 <Select
                                     value={props.data.widgetChart}
                                     onChange={props.onChange}
@@ -93,14 +70,93 @@ const Content = props => {
                                     required
                                 >
                                     <MenuItem value={0} disabled>
-                                        <em>Select your chart template</em>
+                                        <em>Select your button</em>
                                     </MenuItem>
-                                    {props.chart.map((item, i) => <MenuItem key={i} value={item.code}>{item.value}</MenuItem>)}
+                                    {props.btn.map((item, i) => <MenuItem key={i} value={item.code}>{`${item.value}`}</MenuItem>)}
                                 </Select>
                             </FormControl>                            
                         </div>
                     </div>
-                    <div className="form-group" style={props.data.widgetChart === 0 ? { display: 'none' } : { display: 'block' }}>
+                    <div className="form-group">
+                        <div className="input-group-v1">
+                            <div className="input-group-icon">
+                                <MaterialIcon icon="settings_ethernet" style={{color: '#00BCD4'}} />
+                            </div>
+                            <TextField                                   
+                                id="dataId"
+                                name="dataId"
+                                label="Data Type name"
+                                type="text"
+                                fullWidth
+                                autoComplete="off"
+                                onChange={props.onChange}
+                                required
+                                placeholder="Your data type name"
+                                value={props.data.dataId}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </div>
+                    </div>
+                </form>                  
+            </div>
+            <div className="divider divider-dotted"></div>
+        </div>
+    )
+}
+
+const ContentEvent = props => {
+    return (
+        <div>
+            <div className="w-100 mt-4">
+                <form className="form-v1">
+                    <div className="form-group">
+                        <div className="input-group-v1">                            
+                            <FormControl fullWidth required>
+                                <InputLabel htmlFor="triggerSource">{"Trigger Source"}</InputLabel>
+                                <Select
+                                    value={props.data.triggerSource}
+                                    onChange={props.onChange}
+                                    inputProps={
+                                        {
+                                            name: 'triggerSource',
+                                            id: 'triggerSource',
+                                        }
+                                    }
+                                    required                                    
+                                >
+                                    <MenuItem value={0} disabled>
+                                        <em>{"Select trigger source"}</em>
+                                    </MenuItem>
+                                    {props.triggerSourceList.map((item, i) => <MenuItem key={i} value={item.code}>{`${item.value}`}</MenuItem>)}
+                                </Select>
+                            </FormControl>                            
+                        </div>
+                    </div>
+                    <div className="form-group" style={props.data.triggerSource === 0 ? { display: 'none' } : { display: 'block' }}>
+                        <div className="input-group-v1">                            
+                            <FormControl fullWidth required>
+                                <InputLabel htmlFor="widgetChart">{ props.data.triggerSource === 'DV' ? 'Graph List' : 'Controller List'}</InputLabel>
+                                <Select
+                                    value={props.data.widgetChart}
+                                    onChange={props.onChange}
+                                    inputProps={{
+                                        name: 'widgetChart',
+                                            id: 'widgetChart',
+                                        }
+                                    }
+                                    required
+                                >
+                                    <MenuItem value={0} disabled>
+                                        <em>Select your button</em>
+                                    </MenuItem>
+                                    {props.dataList.map((item, i) => <MenuItem key={i} value={item._id}>{`${ props.data.triggerSource === 'DV' ? item.graph : item.controller}`}</MenuItem>)}
+                                </Select>
+                            </FormControl>                            
+                        </div>
+                    </div>
+                    <div className="form-group">
                         <div className="input-group-v1">
                             <div className="input-group-icon">
                                 <MaterialIcon icon="settings_ethernet" style={{color: '#00BCD4'}} />
@@ -134,35 +190,62 @@ class ModalWidget extends Component {
         super(props)
         
         this.state = {
+            tabIndexValues: 0,
             data: {
                 widgetTitle: '',
-                resourceType: 0,
                 resourceId: 0,
                 widgetChart: 0,
+                triggerSource: 0,
+                graphId: 0,
+                controllerId: 0,
+                dataWidget: 0,
                 dataId: ''
             },
-            chart: [
-                { code: 'T', value: 'Tachometer' },
-                { code: 'DC', value: 'Doughnut' },
-                { code: 'G', value: 'Gauge' },
-                { code: 'PB', value: 'Progressbar' },
-                { code: 'LI', value: 'Led Indicator' },
-                { code: 'CL', value: 'Clean Text'}
+            btn: [
+                { code: 'BTN', value: 'Button' },
+                { code: 'BTN_FLT', value: 'Floating Button' },
+                { code: 'SW', value: 'Switch' }
             ],
-            inputResource: [
-                { value: 'DEVICE', name: 'From Device' }, 
-                // { value: 'BUCKET', name: 'From Data Bucket' }
+            triggerSourceList: [
+                { code: 'DV', value: 'Data Visualization' },
+                { code: 'BTN', value: 'Controller Button'}
             ],
-            deviceList: [],
-            bucketList: []
+            dataList: [],
+            widgetList: [],
+            deviceList: []
         }
 
-        this.clearState = this.clearState.bind(this)
-        this.handleChange = this.handleChange.bind(this)
+        this.clearState         = this.clearState.bind(this)
+        this.handleChange       = this.handleChange.bind(this)
+        this.handleChangeTabs   = this.handleChangeTabs.bind(this)
+        this.handleChangeIndex  = this.handleChangeIndex.bind(this)
     }
+
+    componentDidMount() {
+        const { server_url, axios } = this.props; 
+
+        axios.get(`${server_url}/api/device`)
+        .then((res) => {
+            this.setState({
+                deviceList: [...res.data]
+            })
+            console.log(res.data)
+        })
+
+    }
+
+    handleChangeTabs = (event, tabIndexValues) => {
+        this.setState({ tabIndexValues });
+    };
+    
+    handleChangeIndex = index => {
+        this.setState({ tabIndexValues: index });
+    };
 
     handleChange = (e) => {
         const { name, value } = e.target;
+        const { server_url, axios } = this.props; 
+
         this.setState({
             data: {
                 ...this.state.data,
@@ -170,15 +253,28 @@ class ModalWidget extends Component {
             }
         })
 
-        if (name === 'resourceType' && value === 'DEVICE') {
-            const { server_url, axios } = this.props; 
 
-            axios.get(`${server_url}/api/device`)
-            .then((res) => {
-                this.setState({
-                    deviceList: [...res.data]
-                })
-            })
+        switch (name) {
+            case 'triggerSource':
+                if (value === 'DV' ) {
+                    axios.get(`${server_url}/api/graph`)
+                    .then((res) => {
+                        this.setState({
+                            dataList: [...res.data]
+                        })
+                    })
+                } else if (value === 'BTN') {
+                    axios.get(`${server_url}/api/controller`)
+                    .then((res) => {
+                        this.setState({
+                            dataList: [...res.data]
+                        })
+                    })
+                }
+                break;
+        
+            default:
+                break;
         }
     }
 
@@ -214,17 +310,23 @@ class ModalWidget extends Component {
         this.setState({
             data: {
                 widgetTitle: '',
-                resourceType: 0,
                 resourceId: 0,
                 widgetChart: 0,
+                triggerSource: 0,
+                graphId: 0,
+                controllerId: 0,
+                dataWidget: 0,
                 dataId: ''
             },
-            deviceList: [],
-            bucketList: []
+            dataList: [],
+            widgetList: [],
+            deviceList: []
         })
     }
 
     render() {
+        const { tabIndexValues } = this.state
+        console.log(this.state.dataList)
         return (
             <Fragment>
                 <Modal
@@ -237,7 +339,21 @@ class ModalWidget extends Component {
                         <Button key="submit" variant="contained" color="primary" onClick={this.handleOk}> Save </Button>,
                     ]}
                 >
-                    <Content onChange={this.handleChange} {...this.state} />
+                    <div className="col-md-12">
+                        <h4 style={{color: '#00BCD4'}} className="text-center">Add <b>Button</b></h4>
+                        <div className="divider divider-dotted"></div>   
+                        <Tabs value={tabIndexValues} onChange={this.handleChangeTabs} variant="fullWidth">
+                            <Tab label="Widget" />
+                            <Tab label="Event" />
+                        </Tabs>
+                        <SwipeableViews
+                            index={tabIndexValues}
+                            onChangeIndex={this.handleChangeIndex}
+                        >
+                            <ContentWidget onChange={this.handleChange} {...this.state} />
+                            <ContentEvent onChange={this.handleChange} {...this.state} />
+                        </SwipeableViews>
+                    </div>
                 </Modal> 
             </Fragment>
         )
