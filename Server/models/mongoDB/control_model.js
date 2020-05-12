@@ -5,20 +5,25 @@ const WidgetSchema = new Schema({
     widgetTitle: {
         type: String,
         trim: true,
-    },    
-    resourceType: {
-        type: String,
-        trim: true,
     },
     resourceId: {
         type: String,
         trim: true,
     },
-    widgetChart: {
+    widgetDisplay: {
         type: String,
         trim: true,
     },
-    data: {}
+    dataId: {
+        type: String,
+        trim: true,
+    },
+    dataValue: {
+        type: Number,
+        trim: true,
+    },
+    event_on: [],
+    event_off: []
 })
 
 const controllerDataSchema = new Schema({
@@ -47,7 +52,7 @@ const controllerDataSchema = new Schema({
         trim: true
     },
     layouts : {},
-    controller_widget    : [WidgetSchema],
+    controller_widget    : [WidgetSchema]
 }, { timestamps: true });
 
 const ControllerData = mongoose.model('control_data', controllerDataSchema);

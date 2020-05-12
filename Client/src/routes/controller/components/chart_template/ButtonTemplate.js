@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import ReactEcharts from 'echarts-for-react'
-import { Typography, IconButton, Tooltip } from '@material-ui/core'
+import { Typography, IconButton, Tooltip, Button } from '@material-ui/core'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
 import 'echarts/theme/macarons'
 
-class Tachometer extends Component {
+class ButtonTemplate extends Component {
     constructor(props) {
         super(props)
 
@@ -14,11 +13,12 @@ class Tachometer extends Component {
 
         this.state = {
             widgetTitle: '',
-            dataValue: 0
+            btn_action: false,
         }
 
-        this.deleteWidget = this.deleteWidget.bind(this)
-        this.editWidget = this.editWidget.bind(this)
+        this.editWidget     = this.editWidget.bind(this)
+        this.deleteWidget   = this.deleteWidget.bind(this)
+        // this.btnOnClick     = this.btnOnClick.bind(this)
     }
 
     componentWillMount() {
@@ -26,21 +26,21 @@ class Tachometer extends Component {
     }
     
     componentDidMount() {
-        const { widgetTitle, resourceId, data, socket } = this.props
+        const { widgetTitle, resourceId, dataValue, dataId, socket } = this.props
         this._isMounted && this.setState({
             widgetTitle: widgetTitle,
-            dataValue: data[0].value
+            btn_action: dataValue
         })
 
-        socket.on(`${resourceId}-${data[0].type}`, resData => {
+        socket.on(`${resourceId}-${dataId}`, resData => {
             this._isMounted && this.setState({
-                dataValue: resData.value
+                btn_action: resData.value
             })
         });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.widgetTitle === this.state.widgetTitle && this.state.dataValue === nextState.dataValue ? false : true
+        return nextProps.widgetTitle === this.state.widgetTitle && this.state.btn_action === nextState.btn_action ? ( this.props.Editable === nextProps.Editable ? false : true ) : true
     }
 
     componentDidUpdate() {
@@ -51,12 +51,15 @@ class Tachometer extends Component {
     }
 
     componentWillUnmount() {
-        const { server_url, axios, graphId, _id } = this.props
+        const { server_url, axios, controllerId, _id } = this.props
 
-        this._isMounted && axios.put(`${server_url}/api/graph/widgetData/${graphId}/${_id}`, { value: this.state.dataValue })
+        // this._isMounted && axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { value: this.state.btn_action })
 
         this._isMounted = false;
+
+        console.log(this.props)
     }
+
 
     editWidget() {
         const { _id, showEditModal } = this.props
@@ -66,10 +69,10 @@ class Tachometer extends Component {
 
     deleteWidget() {
         deleteConfirm(confirm => {
-            const { server_url, axios, graphId, _id, updateData } = this.props
+            const { server_url, axios, controllerId, _id, updateData } = this.props
             
             if (confirm)
-                axios.delete(`${server_url}/api/graph/widget/${graphId}/${_id}`)
+                axios.delete(`${server_url}/api/controller/widget/${controllerId}/${_id}`)
                 .then(res => {
                     updateData()
                     notif('success', res.data.status , 'Delete widget is success.')   
@@ -78,33 +81,9 @@ class Tachometer extends Component {
                     console.log(err)
                 })
         })
-    }   
+    }  
 
     render() {
-        let gauge = {};
-
-        gauge.option = {
-            tooltip: {
-                formatter: '{a} <br/>{b} : {c}'
-            },
-            toolbox: {
-                show: true,
-            },
-            series: [
-                {
-                    name: `${this.state.widgetTitle}`,
-                    type: 'gauge',
-                    detail: {formatter: '{value}'},
-                    data: [{value: this.state.dataValue, name: 'Value'}],
-                    title: {
-                        textStyle: {
-                                color: '#898989'
-                        }
-                    }
-                }
-            ]
-        };
-
         return (
             <div className="col-xs-12 col-md-12 p-1">
                 <div className="card box">
@@ -125,8 +104,10 @@ class Tachometer extends Component {
                                     </IconButton>
                                 </Tooltip>
                             </div>
-                            <div className="col-12">
-                                <ReactEcharts option={gauge.option} theme={"macarons"} />
+                            <div className="col-12 p-2 d-flex justify-content-center">
+                                <Button variant="contained" size="large" color="secondary" >
+                                    Turn On
+                                </Button>
                             </div>
                         </div>
                     </div>
@@ -136,4 +117,4 @@ class Tachometer extends Component {
     }
 }
 
-export default withAuth(Tachometer);
+export default withAuth(ButtonTemplate);

@@ -225,8 +225,8 @@ class ModalEditWidget extends Component {
                 resourceType: n.resourceType,
                 resourceId: n.resourceId,
                 widgetChart: n.widgetChart,
-                dataId: n.data[0].type,
-                dataValue: n.data[0].value
+                dataId: n.dataId,
+                dataValue: n.dataValue
             }
         )
 

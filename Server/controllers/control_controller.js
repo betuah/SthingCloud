@@ -209,23 +209,20 @@ exports.widget_create = async (req, res) => {
 
         const bodyData = {
             widgetTitle : req.body.widgetTitle,
-            resourceType : req.body.resourceType,
             resourceId : req.body.resourceId,
-            widgetChart : req.body.widgetChart,
-            data: [{
-                type: req.body.dataId,
-                value: 0
-            }]            
+            widgetDisplay : req.body.widgetDisplay,
+            dataId : req.body.dataId,
+            dataValue : 0
         }
 
         controlModel.findOneAndUpdate({ _id: req.params.controlId }, { 
-            $addToSet: { graph_widget: {
+            $addToSet: { controller_widget: {
                 ...bodyData
             }}
         })
         .then((cb) => {
             if(cb) {
-                res.status(201).json({ status: 'Success', code: 200, msg:`Success add new widget.`})
+                res.status(201).json({ status: 'Success', code: 200, msg:`Success saving data.`})
             } else {
                 res.status(404).json({ status: 'Error', code: 404, msg: 'Widget not found!'})
             }
@@ -280,9 +277,9 @@ exports.widget_update = async (req, res) => {
 exports.widgetData_update = async (req, res) => {
     try {
 
-        controlModel.findOneAndUpdate({ _id: req.params.controlId, 'graph_widget._id': req.params.widgetId }, { 
+        controlModel.findOneAndUpdate({ _id: req.params.controlId, 'controller_widget._id': req.params.widgetId }, { 
             $set: { 
-                'graph_widget.$.data.0.value': req.body.value
+                'controller_widget': {...req.body.value}
             }
         })
         .then((cb) => {
@@ -304,8 +301,8 @@ exports.widgetData_update = async (req, res) => {
 
 exports.widget_delete = async (req, res) => {
     try {
-        controlModel.findOneAndUpdate({ _id: req.params.controlId, 'graph_widget._id': req.params.widgetId }, {
-            $pull: { graph_widget : { 
+        controlModel.findOneAndUpdate({ _id: req.params.controlId, 'controller_widget._id': req.params.widgetId }, {
+            $pull: { controller_widget : { 
                 _id: req.params.widgetId 
             }}
         })

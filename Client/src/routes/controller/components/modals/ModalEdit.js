@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react'
 import notif from 'components/NotificationPopUp/notif'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { TextField, Button } from '@material-ui/core'
+import { TextField, Button} from '@material-ui/core'
 import {  Modal } from 'antd'
 
 const Content = props => {
@@ -71,12 +71,12 @@ class ModalEditContent extends Component {
             data: {
                 graph_name: '',
                 desc: '',
+                share: ''
             }
         }
 
         this.clearState = this.clearState.bind(this)
         this.handleChange = this.handleChange.bind(this)
-        this.handleSwitch = this.handleSwitch.bind(this)
     }
 
     componentDidMount() {
@@ -96,15 +96,6 @@ class ModalEditContent extends Component {
                 ...this.state.data,
                 [name]: value
             }
-        })
-    }
-
-    handleSwitch = name => e => {
-        this.setState({                 
-            data: {
-                ...this.state.data,
-                [name]: e.target.checked 
-            }                                
         })
     }
 
@@ -149,7 +140,7 @@ class ModalEditContent extends Component {
                         <Button key="submit" variant="contained" color="primary" onClick={this.handleOk}> Save </Button>,
                     ]}
                 >
-                    <Content onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
+                    <Content onChange={this.handleChange} {...this.state} />
                 </Modal> 
             </Fragment>
         )

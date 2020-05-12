@@ -8,28 +8,8 @@ import './style.css'
 
 const ReactGridLayout = WidthProvider(Responsive);
 
-let Gauge = loadable({
-    loader: () => import('./Gauge'),
-    loading: LoadingComponent
-})
-
-let Tachometer = loadable({
-    loader: () => import('./Tachometer'),
-    loading: LoadingComponent
-})
-
-let Doughnut = loadable({
-    loader: () => import('./Doughnut'),
-    loading: LoadingComponent
-})
-
-let ProgressBar = loadable({
-    loader: () => import('./ProgressBar'),
-    loading: LoadingComponent
-})
-
-let CleanText = loadable({
-    loader: () => import('./CleanText'),
+let ButtonTemplate = loadable({
+    loader: () => import('./ButtonTemplate'),
     loading: LoadingComponent
 })
 
@@ -75,7 +55,7 @@ class Chart_template extends Component {
     }
 
     componentWillUnmount() {
-        const { server_url, axios, graphId } = this.props;
+        const { server_url, axios, controllerId } = this.props;
 
         const data = {
             layouts: {
@@ -83,7 +63,7 @@ class Chart_template extends Component {
             }
         }
         
-        this._isMounted && axios.put(`${server_url}/api/graph_layouts/${graphId}`, data)
+        this._isMounted && axios.put(`${server_url}/api/controller/widget_layouts/${controllerId}`, data)
         .catch(err => {
             if(err.response) {
                 const error = err.response.data;       
@@ -105,12 +85,12 @@ class Chart_template extends Component {
     }
     
     render() {
-        const { widgetData, graphId, updateData } = this.props
+        const { widgetData, controllerId, updateData } = this.props
 
         return (
             <div>
                 { this.state.widgetId !== '' && 
-                    <ModalWidgetEdit {...this.state} graphId={graphId} updateData={updateData} closeWidgetModal={this.closeEditModal} widgetData={widgetData} />
+                    <ModalWidgetEdit {...this.state} controllerId={controllerId} updateData={updateData} closeWidgetModal={this.closeEditModal} widgetData={widgetData} />
                 }
 
                 <ReactGridLayout 
@@ -136,35 +116,11 @@ class Chart_template extends Component {
                             let sumbuX =  0
                             let sumbuY =  0
                             
-                            switch (e.widgetChart) {
-                                case 'G': 
+                            switch (e.widgetDisplay) {
+                                case 'BTN': 
                                     template =                                         
-                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 5}} >
-                                            <Gauge {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
-                                        </div>
-                                break;
-                                case 'T': 
-                                    template = 
-                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 7}} >
-                                            <Tachometer {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
-                                        </div>
-                                break;
-                                case 'DC': 
-                                    template = 
-                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 6}} >
-                                            <Doughnut {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
-                                        </div>
-                                break;                                
-                                case 'PB': 
-                                    template = 
-                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 6, h: 2}} >
-                                            <ProgressBar {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
-                                        </div>
-                                break;
-                                case 'CL': 
-                                    template = 
-                                    <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 3, h: 2}} >
-                                            <CleanText {...e} graphId={graphId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 2, h: 2}} >
+                                            <ButtonTemplate {...e} controllerId={controllerId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
                                         </div>
                                 break;
                                 default: template = <div key={i}></div>

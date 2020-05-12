@@ -3,17 +3,7 @@ import notif from 'components/NotificationPopUp/notif'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import SwipeableViews from 'react-swipeable-views'
-import { 
-    TextField, 
-    Button, 
-    FormControl, 
-    Select, 
-    MenuItem, 
-    InputLabel, 
-    Switch,
-    FormControlLabel,
-    Tabs, 
-    Tab } from '@material-ui/core'
+import { TextField, Button, FormControl, Select, MenuItem, InputLabel, Tabs, Tab, Switch, FormControlLabel } from '@material-ui/core'
 import {  Modal } from 'antd'
 
 const ContentWidget = props => {
@@ -123,6 +113,21 @@ const ContentEventOn = props => {
             <div className="w-100 mt-4">
                 <form className="form-v1">
                     <div className="form-group">
+                        <div className="input-group-v1">
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={props.data.share}
+                                        onChange={props.onSwitch}
+                                        value={props.data.share ? '1' : '0'}
+                                        color="primary"
+                                        name='share'
+                                    />
+                                }                                
+                            />
+                        </div>
+                    </div>
+                    <div className="form-group">
                         <div className="input-group-v1">                         
                             <FormControl fullWidth required>
                                 <InputLabel htmlFor="controllerSource">{"Destination Target Controller"}</InputLabel>
@@ -190,28 +195,13 @@ const ContentEventOn = props => {
                             </FormControl>                            
                         </div>
                     </div>
-                    <div className="form-group ml-3">
-                        <div className="input-group-v1">
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={props.data.eventOnActive}
-                                        onChange={props.onSwitch('eventOnActive')}
-                                        value={props.data.share}
-                                        color="primary"
-                                        name='eventOnActive'
-                                    />
-                                }
-                                label="Activate"
-                            />
-                        </div>
-                    </div>
                 </form>                  
             </div>
             <div className="divider divider-dotted"></div>
         </div>
     )
 }
+
 class ModalWidget extends Component {
     constructor(props) {
         super(props)
@@ -227,8 +217,7 @@ class ModalWidget extends Component {
                 widgetTarget: 0,
                 controllerSource: 0,
                 action: 0,
-                eventOnActive: false,
-                eventOffActive: false
+                share: ''
             },
             btn: [
                 { code: 'BTN', value: 'Button' },
@@ -240,11 +229,11 @@ class ModalWidget extends Component {
             deviceList: []
         }
 
-        this.clearState     = this.clearState.bind(this)
-        this.handleChange   = this.handleChange.bind(this)
-        this.handleSwitch   = this.handleSwitch.bind(this)
+        this.clearState         = this.clearState.bind(this)
+        this.handleChange       = this.handleChange.bind(this)
         this.handleChangeTabs   = this.handleChangeTabs.bind(this)
         this.handleChangeIndex  = this.handleChangeIndex.bind(this)
+        this.handleChageSwitch  = this.handleChageSwitch(this)
     }
 
     componentDidMount() {
@@ -266,30 +255,6 @@ class ModalWidget extends Component {
         })
     }
 
-    handleSwitch = name => e => {
-        console.log(name)
-        this.setState({                 
-            data: {
-                ...this.state.data,
-                [name]: e.target.checked 
-            }                                
-        })
-    }
-
-    handleChange = (e) => {
-        const { name, value } = e.target;
-        this.setState({
-            data: {
-                ...this.state.data,
-                [name]: value
-            }
-        })
-
-        if (name === 'controllerSource') {
-            console.log(this.props)
-        }
-    }
-
     handleChangeTabs = (event, tabIndexValues) => {
         this.setState({ tabIndexValues });
     };
@@ -298,14 +263,36 @@ class ModalWidget extends Component {
         this.setState({ tabIndexValues: index });
     };
 
+    handleChageSwitch = (e) => {
+        
+        // console.log(e)
+        // this.setState({
+        //     data: {
+        //         ...this.state.data,
+        //         [name]: e.target.checked 
+        //     }
+        // })
+    }
+
+    handleChange = (e) => {
+        const { name, value } = e.target;
+
+        this.setState({
+            data: {
+                ...this.state.data,
+                [name]: value
+            }
+        })
+    }
+
     handleOk = () => {
         const { server_url, axios, data, updateData } = this.props
-        const { widgetTitle, resourceType, resourceId, widgetChart, dataId } = this.state.data 
+        const { widgetTitle, resourceId, widgetDisplay, dataId } = this.state.data 
     
-        if (widgetTitle === '' || resourceType === 0 || resourceId === 0 || widgetChart === 0 || dataId === '') {
+        if (widgetTitle === '' || resourceId === 0 || widgetDisplay === 0 || dataId === '') {
             notif('warning', 'Warning' , 'Please fill all required fields!')
         } else {
-            axios.post(`${server_url}/api/graph/widget/${data._id}`, this.state.data)
+            axios.post(`${server_url}/api/controller/widget/${data._id}`, this.state.data)
             .then(res => {
                 this.clearState()
                 notif('success', res.data.status , 'Success Adding New Widget.')
@@ -326,23 +313,23 @@ class ModalWidget extends Component {
     clearState() {
         const { closeWidgetModal, updateData, data } = this.props
         closeWidgetModal()
-        updateData(data._id)
         this.setState({
+            tabIndexValues: 0,
             data: {
                 widgetTitle: '',
-                resourceType: 0,
                 resourceId: 0,
-                widgetChart: 0,
-                dataId: ''
-            },
-            deviceList: [],
-            bucketList: []
-        })
+                widgetDisplay: 0,
+                dataId: '',
+                widgetTarget: 0,
+                controllerSource: 0,
+                action: 0
+            }
+        })        
+        updateData(data._id)
     }
 
     render() {
         const { tabIndexValues } = this.state
-
         return (
             <Fragment>
                 <Modal
@@ -357,7 +344,7 @@ class ModalWidget extends Component {
                 >
                     <div className="col-md-12">
                         <h4 style={{color: '#00BCD4'}} className="text-center">Add <b>Button</b></h4>
-                        <div className="divider divider-dotted"></div>  
+                        <div className="divider divider-dotted"></div>   
                         <Tabs value={tabIndexValues} onChange={this.handleChangeTabs} variant="fullWidth">
                             <Tab label="Widget" />
                             <Tab label="Event On" />
@@ -366,10 +353,9 @@ class ModalWidget extends Component {
                             index={tabIndexValues}
                             onChangeIndex={this.handleChangeIndex}
                         >
-                            <ContentWidget onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
-                            <ContentEventOn onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
-                        </SwipeableViews> 
-                        
+                            <ContentWidget onChange={this.handleChange} {...this.state} />
+                            <ContentEventOn ontheway={this.handleChageSwitch} onChange={this.handleChange} {...this.state} />
+                        </SwipeableViews>
                     </div>
                 </Modal> 
             </Fragment>

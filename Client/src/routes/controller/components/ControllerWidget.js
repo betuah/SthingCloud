@@ -16,10 +16,10 @@ let ModalWidget = loadable({
     loading: LoadingComponent
 })
 
-// let ChartTemplate = loadable({
-//     loader: () => import('./chart_template'),
-//     loading: LoadingComponent
-// })
+let ChartTemplate = loadable({
+    loader: () => import('./chart_template'),
+    loading: LoadingComponent
+})
 
 class ControllerWidget extends Component {
     constructor(props) {
@@ -76,6 +76,7 @@ class ControllerWidget extends Component {
     render() {
         // const { location } = this.props
         const { data, err_data } = this.state
+        const { match } = this.props
 
         if ( data === '' && err_data === 0) {
             return <div><LinearProgress color="primary" /></div>
@@ -113,7 +114,7 @@ class ControllerWidget extends Component {
                             </Tooltip>
                         </div>
                         <div className="col-xs-12 col-md-12">
-                            {/* <ChartTemplate layouts={this.state.data.layouts} widgetData={this.state.data.graph_widget} graphId={location.hash.replace('#', '')} updateData={this.updateData} /> */}
+                            <ChartTemplate layouts={this.state.data.layouts} widgetData={this.state.data.controller_widget} controllerId={match.params.controllerId} updateData={this.updateData} />
                         </div>
                     </div>
                 </div>              
