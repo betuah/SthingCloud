@@ -62,7 +62,7 @@ io.on("connection", socket => {
             iotDeviceModel.findByIdAndUpdate({ _id: data.idDevice }, { $set: { state: 1 }})
             .catch(error => {
                 err = 1
-                console.log("Some thing error in device_connect Function SocketIO")
+                console.log("Something error in device_connect Function SocketIO")
                 console.log(error)
             })
 

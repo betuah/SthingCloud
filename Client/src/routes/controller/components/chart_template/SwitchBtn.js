@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { Typography, IconButton, Tooltip, Button } from '@material-ui/core'
+import { Typography, IconButton, Tooltip, FormControlLabel, Switch } from '@material-ui/core'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
-import 'echarts/theme/macarons'
-import PowerIcon from '@material-ui/icons/PowerSettingsNew';
+import PowerIcon from '@material-ui/icons/PowerSettingsNew'
 
-class ButtonTemplate extends Component {
+class SwitchBtn extends Component {
     constructor(props) {
         super(props)
 
@@ -14,12 +13,12 @@ class ButtonTemplate extends Component {
 
         this.state = {
             widgetTitle: '',
-            btn_action: 0,
+            btn_action: true,
         }
 
         this.editWidget     = this.editWidget.bind(this)
         this.deleteWidget   = this.deleteWidget.bind(this)
-        this.btnClick       = this.btnClick.bind(this)
+        this.handleSwitch   = this.handleSwitch.bind(this)
     }
 
     componentWillMount() {
@@ -40,6 +39,18 @@ class ButtonTemplate extends Component {
         });
     }
 
+    handleSwitch = name => e => {
+        console.log(this.state.btn_action)
+        console.log(name)
+        console.log(e.target.checked)
+
+        this.setState({
+            ...this.state,
+            [name]: e.target.checked
+        })
+        console.log(this.state.btn_action)
+    }
+
     shouldComponentUpdate(nextProps, nextState) {
         return nextProps.widgetTitle === this.state.widgetTitle && this.state.btn_action === nextState.btn_action ? ( this.props.Editable === nextProps.Editable ? false : true ) : true
     }
@@ -57,16 +68,6 @@ class ButtonTemplate extends Component {
         this._isMounted && axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: this.state.btn_action })
 
         this._isMounted = false;
-    }
-
-    btnClick () {
-        const { server_url, axios, controllerId, _id } = this.props
-
-        this._isMounted && this.setState({
-            btn_action: !this.state.btn_action
-        })
-
-        this._isMounted && axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: this.state.btn_action })
     }
 
     editWidget() {
@@ -95,7 +96,7 @@ class ButtonTemplate extends Component {
         const { btn_action } = this.state
 
         return (
-            <div className="col-xs-12 col-md-12 p-1 h-100">
+            <div className="col-xs-12 col-md-12 p-1">
                 <div className="card box">
                     <div className="p-2">
                         <div className="row">
@@ -115,10 +116,14 @@ class ButtonTemplate extends Component {
                                 </Tooltip>
                             </div>
                             <div className="col-12 p-2 d-flex justify-content-center">
-                                <Button variant="contained" size="large" color={btn_action ? "primary" : 'default'} onClick={this.btnClick}>
-                                    {btn_action ? 'Turn Off' : 'Turn On'}
-                                    <PowerIcon className="ml-2" />
-                                </Button>
+                                {/* {console.log(btn_action)} */}
+                                <Switch
+                                    checked={btn_action ? true : false}
+                                    onChange={this.handleSwitch('btn_action')}
+                                    value={btn_action}
+                                    color="primary"
+                                    name='btn_action'
+                                />
                             </div>
                         </div>
                     </div>
@@ -128,4 +133,4 @@ class ButtonTemplate extends Component {
     }
 }
 
-export default withAuth(ButtonTemplate);
+export default withAuth(SwitchBtn);

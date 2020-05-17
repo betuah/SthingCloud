@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Typography, IconButton, Tooltip, Button } from '@material-ui/core'
+import { Typography, IconButton, Tooltip, Fab } from '@material-ui/core'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
 import 'echarts/theme/macarons'
 import PowerIcon from '@material-ui/icons/PowerSettingsNew';
 
-class ButtonTemplate extends Component {
+class ButtonFloat extends Component {
     constructor(props) {
         super(props)
 
@@ -60,13 +60,9 @@ class ButtonTemplate extends Component {
     }
 
     btnClick () {
-        const { server_url, axios, controllerId, _id } = this.props
-
-        this._isMounted && this.setState({
+        this.setState({
             btn_action: !this.state.btn_action
         })
-
-        this._isMounted && axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: this.state.btn_action })
     }
 
     editWidget() {
@@ -95,7 +91,7 @@ class ButtonTemplate extends Component {
         const { btn_action } = this.state
 
         return (
-            <div className="col-xs-12 col-md-12 p-1 h-100">
+            <div className="col-xs-12 col-md-12 p-1">
                 <div className="card box">
                     <div className="p-2">
                         <div className="row">
@@ -115,10 +111,9 @@ class ButtonTemplate extends Component {
                                 </Tooltip>
                             </div>
                             <div className="col-12 p-2 d-flex justify-content-center">
-                                <Button variant="contained" size="large" color={btn_action ? "primary" : 'default'} onClick={this.btnClick}>
-                                    {btn_action ? 'Turn Off' : 'Turn On'}
-                                    <PowerIcon className="ml-2" />
-                                </Button>
+                                <Fab size="large" aria-label="Power On" color={btn_action ? "primary" : 'default'} onClick={this.btnClick}>
+                                    <PowerIcon />
+                                </Fab>
                             </div>
                         </div>
                     </div>
@@ -128,4 +123,4 @@ class ButtonTemplate extends Component {
     }
 }
 
-export default withAuth(ButtonTemplate);
+export default withAuth(ButtonFloat);

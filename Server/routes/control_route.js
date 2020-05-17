@@ -21,19 +21,19 @@ module.exports = (app) => {
     app.route('/api/controller/default/:id')
         .put(authMiddleware, control.defaultControl);
 
-    app.route('/api/controller')
+    app.route('/api/controller') 
         .delete(authMiddleware, control.delete);
         
-    app.route('/api/controller/widget/:controlId')
+    app.route('/api/controller/widget/:controllerId')
         .post(authMiddleware, control.widget_create);
     
-    app.route('/api/controller/widget/:controlId/:widgetId')
+    app.route('/api/controller/widget/:controllerId/:widgetId')
         .put(authMiddleware, control.widget_update);
     
-    app.route('/api/controller/widget/:controlId/:widgetId')
+    app.route('/api/controller/widget/:controllerId/:widgetId')
         .delete(authMiddleware, control.widget_delete);
 
-    app.route('/api/controller/widgetData/:controlId/:widgetId')
+    app.route('/api/controller/widgetData/:controllerId/:widgetId')
         .put(authMiddleware, control.widgetData_update);
         
 };

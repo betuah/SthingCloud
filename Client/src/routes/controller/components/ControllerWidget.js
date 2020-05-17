@@ -114,7 +114,7 @@ class ControllerWidget extends Component {
                             </Tooltip>
                         </div>
                         <div className="col-xs-12 col-md-12">
-                            <ChartTemplate layouts={this.state.data.layouts} widgetData={this.state.data.controller_widget} controllerId={match.params.controllerId} updateData={this.updateData} />
+                            <ChartTemplate layouts={this.state.data.layouts} widgetData={data.controller_widget} controllerId={match.params.controllerId} updateData={this.updateData} />
                         </div>
                     </div>
                 </div>              

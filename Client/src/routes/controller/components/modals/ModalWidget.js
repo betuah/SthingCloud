@@ -119,42 +119,18 @@ const ContentWidget = props => {
 const ContentEventOn = props => {
     return (
         <div>
-            {/* {console.log(props)} */}
             <div className="w-100 mt-4">
                 <form className="form-v1">
                     <div className="form-group">
-                        <div className="input-group-v1">                         
-                            <FormControl fullWidth required>
-                                <InputLabel htmlFor="controllerSource">{"Destination Target Controller"}</InputLabel>
-                                <Select
-                                    value={props.data.controllerSource}
-                                    onChange={props.onChange}
-                                    inputProps={
-                                        {
-                                            name: 'controllerSource',
-                                            id: 'controllerSource',
-                                        }
-                                    }
-                                    required                                    
-                                >
-                                    <MenuItem value={0} disabled>
-                                        <em>{"Select Controller"}</em>
-                                    </MenuItem>
-                                    {props.controllerList.map((item, i) => <MenuItem key={i} value={item._id}>{`${item.controller} - (${item._id})`}</MenuItem>)}
-                                </Select>
-                            </FormControl>                            
-                        </div>
-                    </div>
-                    <div className="form-group" style={props.data.controllerSource === 0 ? { display: 'none' } : { display: 'block' }}>
                         <div className="input-group-v1">                            
                             <FormControl fullWidth required>
                                 <InputLabel htmlFor="widgetTarget">{'Widget Target'}</InputLabel>
                                 <Select
-                                    value={props.data.widgetTarget}
+                                    value={props.data.eventOnWidgetTarget}
                                     onChange={props.onChange}
                                     inputProps={{
-                                        name: 'widgetTarget',
-                                            id: 'widgetTarget',
+                                        name: 'eventOnWidgetTarget',
+                                            id: 'eventOnWidgetTarget',
                                         }
                                     }
                                     required
@@ -162,21 +138,21 @@ const ContentEventOn = props => {
                                     <MenuItem value={0} disabled>
                                         <em>Select your button</em>
                                     </MenuItem>
-                                    {props.widgetList.map((item, i) => <MenuItem key={i} value={item._id}>{`${ props.data.triggerSource === 'DV' ? item.graph : item.controller}`}</MenuItem>)}
+                                    {props.widgetList.map((item, i) => <MenuItem key={i} value={item._id}>{`${item.widgetTitle}`}</MenuItem>)}
                                 </Select>
                             </FormControl>                            
                         </div>
                     </div>
-                    <div className="form-group" style={props.data.widgetTarget === 0 ? { display: 'none' } : { display: 'block' }}>
+                    <div className="form-group">
                         <div className="input-group-v1">                            
                             <FormControl fullWidth required>
-                                <InputLabel htmlFor="action">{'Action'}</InputLabel>
+                                <InputLabel htmlFor="action">{'Action Target'}</InputLabel>
                                 <Select
-                                    value={props.data.action}
+                                    value={props.data.eventOnActionTarget}
                                     onChange={props.onChange}
                                     inputProps={{
-                                        name: 'action',
-                                            id: 'action',
+                                        name: 'eventOnActionTarget',
+                                            id: 'eventOnActionTarget',
                                         }
                                     }
                                     required
@@ -190,7 +166,7 @@ const ContentEventOn = props => {
                             </FormControl>                            
                         </div>
                     </div>
-                    <div className="form-group ml-3">
+                    <div className="form-group ml-2">
                         <div className="input-group-v1">
                             <FormControlLabel
                                 control={
@@ -200,6 +176,79 @@ const ContentEventOn = props => {
                                         value={props.data.share}
                                         color="primary"
                                         name='eventOnActive'
+                                    />
+                                }
+                                label="Activate"
+                            />
+                        </div>
+                    </div>
+                </form>                  
+            </div>
+            <div className="divider divider-dotted"></div>
+        </div>
+    )
+}
+
+const ContentEventOff = props => {
+    return (
+        <div>
+            <div className="w-100 mt-4">
+                <form className="form-v1">
+                    <div className="form-group">
+                        <div className="input-group-v1">                            
+                            <FormControl fullWidth required>
+                                <InputLabel htmlFor="widgetTarget">{'Widget Target'}</InputLabel>
+                                <Select
+                                    value={props.data.eventOnWidgetTarget}
+                                    onChange={props.onChange}
+                                    inputProps={{
+                                        name: 'eventOffWidgetTarget',
+                                            id: 'eventOffWidgetTarget',
+                                        }
+                                    }
+                                    required
+                                >
+                                    <MenuItem value={0} disabled>
+                                        <em>Select your button</em>
+                                    </MenuItem>
+                                    {props.widgetList.map((item, i) => <MenuItem key={i} value={item._id}>{`${item.widgetTitle}`}</MenuItem>)}
+                                </Select>
+                            </FormControl>                            
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="input-group-v1">                            
+                            <FormControl fullWidth required>
+                                <InputLabel htmlFor="action">{'Action Target'}</InputLabel>
+                                <Select
+                                    value={props.data.eventOnActionTarget}
+                                    onChange={props.onChange}
+                                    inputProps={{
+                                        name: 'eventOffActionTarget',
+                                            id: 'eventOffActionTarget',
+                                        }
+                                    }
+                                    required
+                                >
+                                    <MenuItem value={0} disabled>
+                                        <em>Select action</em>
+                                    </MenuItem>
+                                    <MenuItem key={1} value={1}>On</MenuItem>
+                                    <MenuItem key={2} value={2}>Off</MenuItem>
+                                </Select>
+                            </FormControl>                            
+                        </div>
+                    </div>
+                    <div className="form-group ml-2">
+                        <div className="input-group-v1">
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={props.data.eventOnActive}
+                                        onChange={props.onSwitch('eventOnActive')}
+                                        value={props.data.share}
+                                        color="primary"
+                                        name='eventOffActive'
                                     />
                                 }
                                 label="Activate"
@@ -224,10 +273,11 @@ class ModalWidget extends Component {
                 resourceId: 0,
                 widgetDisplay: 0,
                 dataId: '',
-                widgetTarget: 0,
-                controllerSource: 0,
-                action: 0,
+                eventOnWidgetTarget: 0,
+                eventOnActionTarget: 0,
                 eventOnActive: false,
+                eventOffWidgetTarget: 0,
+                eventOffActionTarget: 0,
                 eventOffActive: false
             },
             btn: [
@@ -235,20 +285,20 @@ class ModalWidget extends Component {
                 { code: 'BTN_FLT', value: 'Floating Button' },
                 { code: 'SW', value: 'Switch' }
             ],
-            controllerList: [],
             widgetList: [],
             deviceList: []
         }
 
-        this.clearState     = this.clearState.bind(this)
-        this.handleChange   = this.handleChange.bind(this)
-        this.handleSwitch   = this.handleSwitch.bind(this)
+        this.clearState         = this.clearState.bind(this)
+        this.handleChange       = this.handleChange.bind(this)
+        this.handleSwitch       = this.handleSwitch.bind(this)
         this.handleChangeTabs   = this.handleChangeTabs.bind(this)
         this.handleChangeIndex  = this.handleChangeIndex.bind(this)
     }
 
     componentDidMount() {
-        const { server_url, axios } = this.props; 
+        const { server_url, axios, data } = this.props
+        const widgetList = data.controller_widget
 
         axios.get(`${server_url}/api/device`)
         .then((res) => {
@@ -257,17 +307,12 @@ class ModalWidget extends Component {
             })
         })
 
-        axios.get(`${server_url}/api/controller`)
-        .then((res) => {
-            this.setState({
-                controllerList: [...res.data]
-            })
-            // console.log(this.state.controllerList)
+        this.setState({
+            widgetList: [...widgetList]
         })
     }
 
     handleSwitch = name => e => {
-        console.log(name)
         this.setState({                 
             data: {
                 ...this.state.data,
@@ -284,10 +329,6 @@ class ModalWidget extends Component {
                 [name]: value
             }
         })
-
-        if (name === 'controllerSource') {
-            console.log(this.props)
-        }
     }
 
     handleChangeTabs = (event, tabIndexValues) => {
@@ -305,7 +346,7 @@ class ModalWidget extends Component {
         if (widgetTitle === '' || resourceType === 0 || resourceId === 0 || widgetChart === 0 || dataId === '') {
             notif('warning', 'Warning' , 'Please fill all required fields!')
         } else {
-            axios.post(`${server_url}/api/graph/widget/${data._id}`, this.state.data)
+            axios.post(`${server_url}/api/controller/widget/${data._id}`, this.state.data)
             .then(res => {
                 this.clearState()
                 notif('success', res.data.status , 'Success Adding New Widget.')
@@ -330,13 +371,16 @@ class ModalWidget extends Component {
         this.setState({
             data: {
                 widgetTitle: '',
-                resourceType: 0,
                 resourceId: 0,
-                widgetChart: 0,
-                dataId: ''
+                widgetDisplay: 0,
+                dataId: '',
+                eventOnWidgetTarget: 0,
+                eventOnActionTarget: 0,
+                eventOnActive: false,
+                eventOffWidgetTarget: 0,
+                eventOffActionTarget: 0,
+                eventOffActive: false
             },
-            deviceList: [],
-            bucketList: []
         })
     }
 
@@ -356,11 +400,12 @@ class ModalWidget extends Component {
                     ]}
                 >
                     <div className="col-md-12">
-                        <h4 style={{color: '#00BCD4'}} className="text-center">Add <b>Button</b></h4>
+                        <h4 style={{color: '#00BCD4'}} className="text-center">Edit <b>Button</b></h4>
                         <div className="divider divider-dotted"></div>  
                         <Tabs value={tabIndexValues} onChange={this.handleChangeTabs} variant="fullWidth">
                             <Tab label="Widget" />
                             <Tab label="Event On" />
+                            <Tab label="Event Off" />
                         </Tabs>
                         <SwipeableViews
                             index={tabIndexValues}
@@ -368,6 +413,7 @@ class ModalWidget extends Component {
                         >
                             <ContentWidget onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
                             <ContentEventOn onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
+                            <ContentEventOff onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
                         </SwipeableViews> 
                         
                     </div>

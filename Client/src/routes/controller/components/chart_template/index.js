@@ -13,6 +13,16 @@ let ButtonTemplate = loadable({
     loading: LoadingComponent
 })
 
+let ButtonFloat = loadable({
+    loader: () => import('./ButtonFloat'),
+    loading: LoadingComponent
+})
+
+let SwitchBtn = loadable({
+    loader: () => import('./SwitchBtn'),
+    loading: LoadingComponent
+})
+
 let ModalWidgetEdit = loadable({
     loader: () => import('../modals/ModalWidgetEdit'),
     loading: LoadingComponent
@@ -26,7 +36,7 @@ class Chart_template extends Component {
         this.state = {
             widgetId: '',
             ModalEditWidget: false,
-            layouts: JSON.parse(localStorage.getItem('widgetLayouts')) ? JSON.parse(localStorage.getItem('widgetLayouts')) : {}
+            layouts: {}
         }
 
         this.showEditModal      = this.showEditModal.bind(this)
@@ -86,7 +96,7 @@ class Chart_template extends Component {
     
     render() {
         const { widgetData, controllerId, updateData } = this.props
-
+        
         return (
             <div>
                 { this.state.widgetId !== '' && 
@@ -99,7 +109,7 @@ class Chart_template extends Component {
                     isDraggable={true}
                     isResizable={false}
                     items={5}
-                    rowHeight={50}
+                    rowHeight={42}
                     preventCollision={true}
                     compactType='horizontal'
                     verticalCompact={true}
@@ -119,8 +129,20 @@ class Chart_template extends Component {
                             switch (e.widgetDisplay) {
                                 case 'BTN': 
                                     template =                                         
-                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 2, h: 2}} >
+                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 2, h: 3}} >
                                             <ButtonTemplate {...e} controllerId={controllerId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                        </div>
+                                break;
+                                case 'BTN_FLT': 
+                                    template =                                         
+                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 2, h: 3}} >
+                                            <ButtonFloat {...e} controllerId={controllerId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                        </div>
+                                break;
+                                case 'SW': 
+                                    template =                                         
+                                        <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 2, h: 3}} >
+                                            <SwitchBtn {...e} controllerId={controllerId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
                                         </div>
                                 break;
                                 default: template = <div key={i}></div>

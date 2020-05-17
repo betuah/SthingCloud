@@ -2,15 +2,24 @@ import React, { Fragment, Component } from 'react'
 import notif from 'components/NotificationPopUp/notif'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { TextField, Button, FormControl, Select, MenuItem, InputLabel } from '@material-ui/core'
+import SwipeableViews from 'react-swipeable-views'
+import { 
+    TextField, 
+    Button, 
+    FormControl, 
+    Select, 
+    MenuItem, 
+    InputLabel, 
+    Switch,
+    FormControlLabel,
+    Tabs, 
+    Tab } from '@material-ui/core'
 import {  Modal } from 'antd'
 
-const Content = props => {
+const ContentWidget = props => {
     return (
         <div>
-            <div className="col-md-12 mx-auto">
-                <h4 style={{color: '#00BCD4'}} className="text-center">Edit <b>Widget</b></h4>
-                <div className="divider divider-dotted"></div>             
+            <div className="w-100 mt-4">
                 <form className="form-v1">
                     <div className="form-group">
                         <div className="input-group-v1">
@@ -35,33 +44,11 @@ const Content = props => {
                         </div>
                     </div>
                     <div className="form-group">
-                        <div className="input-group-v1">
-                            <FormControl fullWidth required>
-                                <InputLabel htmlFor="resourceType">Widget data Resource</InputLabel>
-                                <Select
-                                    value={props.data.resourceType}
-                                    onChange={props.onChange}
-                                    inputProps={{
-                                        name: 'resourceType',
-                                            id: 'resourceType',
-                                        }
-                                    }
-                                    required
-                                >
-                                    <MenuItem value={0} disabled>
-                                        <em>Select widget data resources</em>
-                                    </MenuItem>
-                                    {props.inputResource.map((item, i) => <MenuItem key={i} value={item.value}>{item.name}</MenuItem>)}
-                                </Select>
-                            </FormControl>                            
-                        </div>
-                    </div>
-                    <div className="form-group" style={props.data.resourceType === 0 ? { display: 'none' } : { display: 'block' }}>
                         <div className="input-group-v1">                            
                             <FormControl fullWidth required>
-                                <InputLabel htmlFor="resourceId">{props.data.resourceType === 1 ? "Device List" : (props.data.resourceType === 2 ? "Data Bucket List" : "Resource")}</InputLabel>
+                                <InputLabel htmlFor="resourceId">{"Device"}</InputLabel>
                                 <Select
-                                    value={props.data.resourceId}
+                                    value={`${props.data.resourceId}`}
                                     onChange={props.onChange}
                                     inputProps={{
                                         name: 'resourceId',
@@ -70,37 +57,37 @@ const Content = props => {
                                     }
                                     required                                    
                                 >
-                                    <MenuItem value={0} disabled>
-                                        <em>{props.data.resourceType === 1 ? "Select your device" : (props.data.resourceType === 2 ? "Select your data bucket" : "Select your Resource")}</em>
+                                    <MenuItem value={'0'} disabled>
+                                        <em>{"Select your device"}</em>
                                     </MenuItem>
                                     {props.deviceList.map((item, i) => <MenuItem key={i} value={item._id}>{`${item.device} (${item._id})`}</MenuItem>)}
                                 </Select>
                             </FormControl>                            
                         </div>
                     </div>
-                    <div className="form-group" style={props.data.resourceId === 0 ? { display: 'none' } : { display: 'block' }}>
+                    <div className="form-group">
                         <div className="input-group-v1">                            
                             <FormControl fullWidth required>
-                                <InputLabel htmlFor="widgetChart">Widget Template</InputLabel>
+                                <InputLabel htmlFor="widgetDisplay">{'Controller Display'}</InputLabel>
                                 <Select
-                                    value={props.data.widgetChart}
+                                    value={props.data.widgetDisplay}
                                     onChange={props.onChange}
                                     inputProps={{
-                                        name: 'widgetChart',
-                                            id: 'widgetChart',
+                                        name: 'widgetDisplay',
+                                            id: 'widgetDisplay',
                                         }
                                     }
                                     required
                                 >
                                     <MenuItem value={0} disabled>
-                                        <em>Select your chart template</em>
+                                        <em>Select your button</em>
                                     </MenuItem>
-                                    {props.chart.map((item, i) => <MenuItem key={i} value={item.code}>{item.value}</MenuItem>)}
+                                    {props.btn.map((item, i) => <MenuItem key={i} value={item.code}>{`${item.value}`}</MenuItem>)}
                                 </Select>
                             </FormControl>                            
                         </div>
                     </div>
-                    <div className="form-group" style={props.data.widgetChart === 0 ? { display: 'none' } : { display: 'block' }}>
+                    <div className="form-group">
                         <div className="input-group-v1">
                             <div className="input-group-icon">
                                 <MaterialIcon icon="settings_ethernet" style={{color: '#00BCD4'}} />
@@ -129,6 +116,152 @@ const Content = props => {
     )
 }
 
+const ContentEventOn = props => {
+    return (
+        <div>
+            <div className="w-100 mt-4">
+                <form className="form-v1">
+                    <div className="form-group">
+                        <div className="input-group-v1">                            
+                            <FormControl fullWidth required>
+                                <InputLabel htmlFor="widgetTarget">{'Widget Target'}</InputLabel>
+                                <Select
+                                    value={props.data.eventOnWidgetTarget}
+                                    onChange={props.onChange}
+                                    inputProps={{
+                                        name: 'eventOnWidgetTarget',
+                                            id: 'eventOnWidgetTarget',
+                                        }
+                                    }
+                                    required
+                                >
+                                    <MenuItem value={0} disabled>
+                                        <em>Select your button</em>
+                                    </MenuItem>
+                                    {props.widgetList.filter(val => { return val._id !== props.widgetId }).map((item, i) => <MenuItem key={i} value={item._id}>{`${item.widgetTitle}`}</MenuItem>)}
+                                </Select>
+                            </FormControl>                            
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="input-group-v1">                            
+                            <FormControl fullWidth required>
+                                <InputLabel htmlFor="action">{'Action Target'}</InputLabel>
+                                <Select
+                                    value={props.data.eventOnActionTarget}
+                                    onChange={props.onChange}
+                                    inputProps={{
+                                        name: 'eventOnActionTarget',
+                                            id: 'eventOnActionTarget',
+                                        }
+                                    }
+                                    required
+                                >
+                                    <MenuItem value={0} disabled>
+                                        <em>Select action</em>
+                                    </MenuItem>
+                                    <MenuItem key={1} value={1}>On</MenuItem>
+                                    <MenuItem key={2} value={2}>Off</MenuItem>
+                                </Select>
+                            </FormControl>                            
+                        </div>
+                    </div>
+                    <div className="form-group ml-2">
+                        <div className="input-group-v1">
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={props.data.eventOnActive}
+                                        onChange={props.onSwitch('eventOnActive')}
+                                        value={props.data.eventOnActive}
+                                        color="primary"
+                                        name='eventOnActive'
+                                    />
+                                }
+                                label="Activate"
+                            />
+                        </div>
+                    </div>
+                </form>                  
+            </div>
+            <div className="divider divider-dotted"></div>
+        </div>
+    )
+}
+
+const ContentEventOff = props => {
+    return (
+        <div>
+            <div className="w-100 mt-4">
+                <form className="form-v1">
+                    <div className="form-group">
+                        <div className="input-group-v1">                            
+                            <FormControl fullWidth required>
+                                <InputLabel htmlFor="widgetTarget">{'Widget Target'}</InputLabel>
+                                <Select
+                                    value={props.data.eventOnWidgetTarget}
+                                    onChange={props.onChange}
+                                    inputProps={{
+                                        name: 'eventOffWidgetTarget',
+                                            id: 'eventOffWidgetTarget',
+                                        }
+                                    }
+                                    required
+                                >
+                                    <MenuItem value={0} disabled>
+                                        <em>Select your button</em>
+                                    </MenuItem>
+                                    {props.widgetList.filter(val => { return val._id !== props.widgetId }).map((item, i) => <MenuItem key={i} value={item._id}>{`${item.widgetTitle}`}</MenuItem>)}
+                                </Select>
+                            </FormControl>                            
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="input-group-v1">                            
+                            <FormControl fullWidth required>
+                                <InputLabel htmlFor="action">{'Action Target'}</InputLabel>
+                                <Select
+                                    value={props.data.eventOnActionTarget}
+                                    onChange={props.onChange}
+                                    inputProps={{
+                                        name: 'eventOffActionTarget',
+                                            id: 'eventOffActionTarget',
+                                        }
+                                    }
+                                    required
+                                >
+                                    <MenuItem value={0} disabled>
+                                        <em>Select action</em>
+                                    </MenuItem>
+                                    <MenuItem key={1} value={1}>On</MenuItem>
+                                    <MenuItem key={2} value={2}>Off</MenuItem>
+                                </Select>
+                            </FormControl>                            
+                        </div>
+                    </div>
+                    <div className="form-group ml-2">
+                        <div className="input-group-v1">
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={props.data.eventOffActive}
+                                        onChange={props.onSwitch('eventOffActive')}
+                                        value={props.data.eventOffActive}
+                                        color="primary"
+                                        name='eventOffActive'
+                                    />
+                                }
+                                label="Activate"
+                            />
+                        </div>
+                    </div>
+                </form>                  
+            </div>
+            <div className="divider divider-dotted"></div>
+        </div>
+    )
+}
+
 class ModalEditWidget extends Component {
     constructor(props) {
         super(props)
@@ -136,33 +269,36 @@ class ModalEditWidget extends Component {
         this._isMounted = false;
 
         this.state = {
+            tabIndexValues: 0,
+            eventOnActive: '',
+            widgetId: '',
             data: {
                 widgetTitle: '',
-                resourceType: 0,
                 resourceId: 0,
-                widgetChart: 0,
+                widgetDisplay: 0,
                 dataId: '',
-                dataValue: ''
+                dataValue: '',
+                eventOnWidgetTarget: 0,
+                eventOnActionTarget: 0,
+                eventOnActive: false,
+                eventOffWidgetTarget: 0,
+                eventOffActionTaeger: 0,
+                eventOffActive: false
             },
-            chart: [
-                { code: 'T', value: 'Tachometer' },
-                { code: 'DC', value: 'Doughnut' },
-                { code: 'G', value: 'Gauge' },
-                { code: 'PB', value: 'Progressbar' },
-                { code: 'LI', value: 'Led Indicator' },
-                { code: 'CL', value: 'Clean Text'}
+            btn: [
+                { code: 'BTN', value: 'Button' },
+                { code: 'BTN_FLT', value: 'Floating Button' },
+                { code: 'SW', value: 'Switch' }
             ],
-            inputResource: [
-                { value: 'DEVICE', name: 'From Device' }, 
-                // { value: 'BUCKET', name: 'From Data Bucket' }
-            ],
-            deviceList: [],
-            bucketList: []
+            widgetList: [],
+            deviceList: []
         }
 
-        this.clearState     = this.clearState.bind(this)
-        this.handleChange   = this.handleChange.bind(this)
-        this.updateState    = this.updateState.bind(this)
+        this.clearState         = this.clearState.bind(this)
+        this.handleChange       = this.handleChange.bind(this)
+        this.handleChangeTabs   = this.handleChangeTabs.bind(this)
+        this.handleChangeIndex  = this.handleChangeIndex.bind(this)
+        this.handleSwitch       = this.handleSwitch.bind(this)
     }
 
     componentWillMount() {
@@ -170,67 +306,61 @@ class ModalEditWidget extends Component {
     }
 
     componentDidMount() {
-        const data = this.updateState()
+        const { 
+            widgetData, 
+            widgetId, 
+            server_url, 
+            axios }         = this.props
+        const data          = widgetData.find(n => n._id === widgetId)
 
-        if (data.resourceType === 'DEVICE') {
-            const { server_url, axios } = this.props; 
-
-            axios.get(`${server_url}/api/device`)
-            .then((res) => {                
-                this._isMounted && this.setState({
-                    data: {
-                        ...data
-                    },
-                    deviceList: [...res.data]
-                })
+        this._isMounted && axios.get(`${server_url}/api/device`)
+        .then((res) => {
+            this.setState({
+                deviceList: [...res.data]
             })
-        }
+        })
+        
+        this._isMounted && this.setState({
+            widgetList: [...widgetData]
+        })
+
+        this._isMounted && this.setState({
+            widgetId: widgetId,
+            data: {
+                widgetTitle: data.widgetTitle,
+                resourceId: data.resourceId,
+                widgetDisplay: data.widgetDisplay,
+                dataId: data.dataId,
+                dataValue: data.dataValue,
+                eventOnWidgetTarget: data.eventOn.widget,
+                eventOnActionTarget: data.eventOn.action,
+                eventOnActive: data.eventOn.activate,
+                eventOffWidgetTarget: data.eventOff.widget,
+                eventOffActionTaeger: data.eventOff.widget,
+                eventOffActive: data.eventOff.activate
+            },
+        })
     }
-
-    // componentDidUpdate() {
-    //     const data = this.updateState()
-    //     if (data.resourceType === 'DEVICE') {
-    //         const { server_url, axios } = this.props;             
-
-    //         axios.get(`${server_url}/api/device`)
-    //         .then((res) => {
-    //             const dataUpdate = 
-    //             { 
-    //                 data: {
-    //                     ...data
-    //                 },
-    //                 deviceList: [...res.data]
-    //             }
-
-    //             this._isMounted && this.setState({
-    //                 ...this.state.data,
-    //                 dataUpdate
-    //             })
-    //         })
-    //     }
-    // }
 
     componentWillUnmount() {
         this._isMounted = false;
     }
 
-    updateState() {
-        const { widgetData, widgetId } = this.props
+    handleChangeTabs = (event, tabIndexValues) => {
+        this._isMounted && this.setState({ tabIndexValues });
+    };
+    
+    handleChangeIndex = index => {
+        this._isMounted && this.setState({ tabIndexValues: index });
+    };
 
-        let data = {}
-
-        widgetData.filter(n => n._id === widgetId).map(n =>             
-            data = {
-                widgetTitle: n.widgetTitle,
-                resourceType: n.resourceType,
-                resourceId: n.resourceId,
-                widgetChart: n.widgetChart,
-                dataId: n.dataId,
-                dataValue: n.dataValue
-            }
-        )
-
-        return data;
+    handleSwitch = name => e => {
+        this.setState({                 
+            data: {
+                ...this.state.data,
+                [name]: e.target.checked 
+            }                                
+        })
     }
 
     handleChange = (e) => {
@@ -241,27 +371,16 @@ class ModalEditWidget extends Component {
                 [name]: value
             }
         })
-
-        if (name === 'resourceType' && value === 'DEVICE') {
-            const { server_url, axios } = this.props; 
-
-            axios.get(`${server_url}/api/device`)
-            .then((res) => {
-                this.setState({
-                    deviceList: [...res.data]
-                })
-            })
-        }
     }
 
     handleOk = () => {
-        const { server_url, axios, graphId, widgetId } = this.props
-        const { widgetTitle, resourceType, resourceId, widgetChart, dataId } = this.state.data 
+        const { server_url, axios, controllerId, widgetId } = this.props
+        const { widgetTitle , resourceId, dataId, widgetDisplay } = this.state.data 
 
-        if (widgetTitle === '' || resourceType === 0 || resourceId === 0 || widgetChart === 0 || dataId === '') {
+        if (widgetTitle === '' || widgetDisplay === 0 || resourceId === 0 || dataId === '') {
             notif('warning', 'Warning' , 'Please fill all required fields!')
         } else {
-            axios.put(`${server_url}/api/graph/widget/${graphId}/${widgetId}`, this.state.data)
+            this._isMounted && axios.put(`${server_url}/api/controller/widget/${controllerId}/${widgetId}`, this.state.data)
             .then(res => {
                 
                 notif('success', res.data.status , 'Success Update Widget.')
@@ -282,26 +401,28 @@ class ModalEditWidget extends Component {
     clearState() {
         const { closeWidgetModal, updateData } = this.props
 
+        closeWidgetModal()
         updateData()
 
         this._isMounted && this.setState({
             data: {
                 widgetTitle: '',
-                resourceType: 0,
                 resourceId: 0,
-                widgetChart: 0,
+                widgetDisplay: 0,
                 dataId: '',
-                dataValue: ''
+                eventOnWidgetTarget: 0,
+                eventOnActionTarget: 0,
+                eventOnActive: false,
+                eventOffWidgetTarget: 0,
+                eventOffActionTarget: 0,
+                eventOffActive: false
             },
-            deviceList: [],
-            bucketList: []
         })
-
-        closeWidgetModal()
     }
 
     render() {
-
+        const { tabIndexValues } = this.state
+        
         return (
             <Fragment>
                 <Modal
@@ -314,7 +435,24 @@ class ModalEditWidget extends Component {
                         <Button key="submit" variant="contained" color="primary" onClick={this.handleOk}> Update </Button>,
                     ]}
                 >
-                    <Content onChange={this.handleChange} {...this.state} />
+                    <div className="col-md-12">
+                        <h4 style={{color: '#00BCD4'}} className="text-center">Add <b>Button</b></h4>
+                        <div className="divider divider-dotted"></div>  
+                        <Tabs value={tabIndexValues} onChange={this.handleChangeTabs} variant="fullWidth">
+                            <Tab label="Widget" />
+                            <Tab label="Event On" />
+                            <Tab label="Event Off" />
+                        </Tabs>
+                        <SwipeableViews
+                            index={tabIndexValues}
+                            onChangeIndex={this.handleChangeIndex}
+                        >
+                            <ContentWidget onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
+                            <ContentEventOn onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
+                            <ContentEventOff onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
+                        </SwipeableViews> 
+                        
+                    </div>
                 </Modal> 
             </Fragment>
         )

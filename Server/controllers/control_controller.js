@@ -82,7 +82,6 @@ exports.create = async (req, res) => {
 exports.edit = async (req, res) => {
     const controller    = req.body.controller_name
     const desc          = req.body.desc
-    const share         = req.body.share
 
     try {
         if(controller.trim() === "" || desc.trim() === "" || controller === null || desc === null) {
@@ -212,10 +211,20 @@ exports.widget_create = async (req, res) => {
             resourceId : req.body.resourceId,
             widgetDisplay : req.body.widgetDisplay,
             dataId : req.body.dataId,
-            dataValue : 0
+            dataValue : 0,
+            eventOn: {
+                widget: req.body.eventOnWidgetTarget,
+                action: req.body.eventOnActionTarget,
+                activate: req.body.eventOnActive
+            },
+            eventOff: {
+                widget: req.body.eventOffWidgetTarget,
+                action: req.body.eventOffActionTarget,
+                activate: req.body.eventOffActive
+            }
         }
 
-        controlModel.findOneAndUpdate({ _id: req.params.controlId }, { 
+        controlModel.findOneAndUpdate({ _id: req.params.controllerId }, { 
             $addToSet: { controller_widget: {
                 ...bodyData
             }}
@@ -241,19 +250,23 @@ exports.widget_update = async (req, res) => {
     try {
         const bodyData = {
             widgetTitle : req.body.widgetTitle,
-            resourceType : req.body.resourceType,
             resourceId : req.body.resourceId,
-            widgetChart : req.body.widgetChart,
-            data: [{
-                type: req.body.dataId,
-                value: req.body.dataValue
-            }]
+            widgetDisplay : req.body.widgetDisplay,
+            dataId : req.body.dataId,
+            eventOn: {
+                widget: req.body.eventOnWidgetTarget,
+                action: req.body.eventOnActionTarget,
+                activate: req.body.eventOnActive
+            },
+            eventOff: {
+                widget: req.body.eventOffWidgetTarget,
+                action: req.body.eventOffActionTarget,
+                activate: req.body.eventOffActive
+            }
         }
 
-        console.log(req.params.widgetId)
-
-        controlModel.findOneAndUpdate({ _id: req.params.controlId, 'graph_widget._id': req.params.widgetId  }, { 
-            $set: { 'graph_widget.$' : {
+        controlModel.findOneAndUpdate({ _id: req.params.controllerId, 'controller_widget._id': req.params.widgetId  }, { 
+            $set: { 'controller_widget.$' : {
                 ...bodyData
             }}
         })
@@ -276,10 +289,9 @@ exports.widget_update = async (req, res) => {
 
 exports.widgetData_update = async (req, res) => {
     try {
-
-        controlModel.findOneAndUpdate({ _id: req.params.controlId, 'controller_widget._id': req.params.widgetId }, { 
+        controlModel.findOneAndUpdate({ _id: req.params.controllerId, 'controller_widget._id': req.params.widgetId }, { 
             $set: { 
-                'controller_widget': {...req.body.value}
+                'controller_widget.$.dataValue': req.body.dataValue
             }
         })
         .then((cb) => {
@@ -301,7 +313,7 @@ exports.widgetData_update = async (req, res) => {
 
 exports.widget_delete = async (req, res) => {
     try {
-        controlModel.findOneAndUpdate({ _id: req.params.controlId, 'controller_widget._id': req.params.widgetId }, {
+        controlModel.findOneAndUpdate({ _id: req.params.controllerId, 'controller_widget._id': req.params.widgetId }, {
             $pull: { controller_widget : { 
                 _id: req.params.widgetId 
             }}

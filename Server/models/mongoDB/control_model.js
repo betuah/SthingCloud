@@ -22,8 +22,8 @@ const WidgetSchema = new Schema({
         type: Number,
         trim: true,
     },
-    event_on: [],
-    event_off: []
+    eventOn: {},
+    eventOff: {}
 })
 
 const controllerDataSchema = new Schema({

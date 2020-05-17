@@ -47,7 +47,7 @@ class Chart_template extends Component {
             widgetId: '',
             ModalEditWidget: false,
             editableWidget: props.Editable,
-            layouts: JSON.parse(localStorage.getItem('widgetLayouts')) ? JSON.parse(localStorage.getItem('widgetLayouts')) : {}
+            layouts: {}
         }
 
         this.showEditModal      = this.showEditModal.bind(this)

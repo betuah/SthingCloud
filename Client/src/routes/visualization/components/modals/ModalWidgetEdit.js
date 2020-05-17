@@ -149,7 +149,6 @@ class ModalEditWidget extends Component {
                 { code: 'DC', value: 'Doughnut' },
                 { code: 'G', value: 'Gauge' },
                 { code: 'PB', value: 'Progressbar' },
-                { code: 'LI', value: 'Led Indicator' },
                 { code: 'CL', value: 'Clean Text'}
             ],
             inputResource: [
