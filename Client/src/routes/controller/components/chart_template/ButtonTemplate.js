@@ -66,7 +66,7 @@ class ButtonTemplate extends Component {
             btn_action: !this.state.btn_action
         })
 
-        this._isMounted && axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: this.state.btn_action })
+        this._isMounted && axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: !this.state.btn_action })
     }
 
     editWidget() {
@@ -93,7 +93,7 @@ class ButtonTemplate extends Component {
 
     render() {
         const { btn_action } = this.state
-
+        
         return (
             <div className="col-xs-12 col-md-12 p-1 h-100">
                 <div className="card box">

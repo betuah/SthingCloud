@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Typography, IconButton, Tooltip, FormControlLabel, Switch } from '@material-ui/core'
+import { Typography, IconButton, Tooltip, Switch } from '@material-ui/core'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
-import PowerIcon from '@material-ui/icons/PowerSettingsNew'
 
 class SwitchBtn extends Component {
     constructor(props) {
@@ -40,15 +39,10 @@ class SwitchBtn extends Component {
     }
 
     handleSwitch = name => e => {
-        console.log(this.state.btn_action)
-        console.log(name)
-        console.log(e.target.checked)
-
         this.setState({
             ...this.state,
             [name]: e.target.checked
         })
-        console.log(this.state.btn_action)
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -116,7 +110,6 @@ class SwitchBtn extends Component {
                                 </Tooltip>
                             </div>
                             <div className="col-12 p-2 d-flex justify-content-center">
-                                {/* {console.log(btn_action)} */}
                                 <Switch
                                     checked={btn_action ? true : false}
                                     onChange={this.handleSwitch('btn_action')}

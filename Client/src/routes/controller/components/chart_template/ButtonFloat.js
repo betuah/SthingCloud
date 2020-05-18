@@ -60,9 +60,13 @@ class ButtonFloat extends Component {
     }
 
     btnClick () {
+        const { server_url, axios, controllerId, _id } = this.props
+
         this.setState({
             btn_action: !this.state.btn_action
         })
+
+        this._isMounted && axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: !this.state.btn_action })
     }
 
     editWidget() {
