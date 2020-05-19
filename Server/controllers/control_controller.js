@@ -249,16 +249,16 @@ exports.widget_create = async (req, res) => {
 exports.widget_update = async (req, res) => {
     try {
         const bodyData = {
-            widgetTitle : req.body.widgetTitle,
-            resourceId : req.body.resourceId,
-            widgetDisplay : req.body.widgetDisplay,
-            dataId : req.body.dataId,
-            eventOn: {
+            'controller_widget.$.widgetTitle' : req.body.widgetTitle,
+            'controller_widget.$.resourceId' : req.body.resourceId,
+            'controller_widget.$.widgetDisplay' : req.body.widgetDisplay,
+            'controller_widget.$.dataId' : req.body.dataId,
+            'controller_widget.$.eventOn' : {
                 widget: req.body.eventOnWidgetTarget,
                 action: req.body.eventOnActionTarget,
                 activate: req.body.eventOnActive
             },
-            eventOff: {
+            'controller_widget.$.eventOff' : {
                 widget: req.body.eventOffWidgetTarget,
                 action: req.body.eventOffActionTarget,
                 activate: req.body.eventOffActive
@@ -266,9 +266,7 @@ exports.widget_update = async (req, res) => {
         }
 
         controlModel.findOneAndUpdate({ _id: req.params.controllerId, 'controller_widget._id': req.params.widgetId  }, { 
-            $set: { 'controller_widget.$' : {
-                ...bodyData
-            }}
+            $set: bodyData
         })
         .then((cb) => {
             if(cb) {

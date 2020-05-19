@@ -97,7 +97,7 @@ class ButtonTemplate extends Component {
         return (
             <div className="col-xs-12 col-md-12 p-1 h-100">
                 <div className="card box">
-                    <div className="p-2">
+                    <div className="p-3">
                         <div className="row">
                             <div className="col-10 d-flex justify-content-start">
                                 <Typography noWrap>{this.state.widgetTitle}</Typography>

@@ -17,8 +17,6 @@ const WidgetSchema = new Schema({
     dataId: {
         type: String,
         trim: true,
-        unique: true,
-        required: true
     },
     dataValue: {
         type: Number,

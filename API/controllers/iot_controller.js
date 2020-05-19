@@ -1,13 +1,36 @@
-const iotData   = require('../models/iotData_model');
-let socket      = require('socket.io-client')('http://127.0.0.1:4001');
+// const iotData   = require('../models/iotData_model');
+const controlModel = require('../models/control_model')
+const env          = require('../env')
+let socket         = require('socket.io-client')(`${env.socket_domain}`)
 
 exports.index = (req, res) => {
     res.send('Holla')
 }
 
+exports.getData = async (req, res) => {
+    try {
+        controlModel.findOne({ 
+            _id: req.params.controllerId, 
+            userId: req.idUser
+        }).then((datas) => {
+            if(datas) {
+                const data = datas.controller_widget.find(n => n.dataId === `${req.params.dataId}` && n.resourceId === `${req.idDevice}`)
+                res.status(200).json(data === '' || null ? "Not Found!" : data.dataValue);
+            } else {
+                res.status(404).json({ status: 'Error', code: 404, msg: 'Not Found!'})
+            }            
+        }).catch((err) => {
+            console.log(err)
+            res.status(400).json({ status: 'Error', code: 500, msg: 'Internal Server Error' })
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Internal Server Error')
+    }
+}
+
 exports.data = async (req, res) => {
     try {
-
         if(req.body.type && req.body.value) {
             const data = {
                 idUser : req.idUser,

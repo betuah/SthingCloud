@@ -104,7 +104,7 @@ class ProgressBar extends Component {
                             <div className="col-12 d-flex" style={{height: 50}}>
                                 <div className="w-100 align-self-center">
                                     <div className="d-flex justify-content-center" style={{color: '#00BCD4'}}><b>{this.state.dataValue} %</b></div>
-                                    <div className=""><LinearProgress variant="determinate" value={this.state.dataValue} /></div>
+                                    <div className=""><LinearProgress variant="determinate" value={parseInt(this.state.dataValue)} /></div>
                                 </div>
                             </div>
                         </div>

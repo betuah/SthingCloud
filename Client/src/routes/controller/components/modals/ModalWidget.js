@@ -109,6 +109,26 @@ const ContentWidget = props => {
                             />
                         </div>
                     </div>
+                    <div className="form-group">
+                        <div className="input-group-v1">
+                            <div className="input-group-icon">
+                                <MaterialIcon icon="http" style={{color: '#00BCD4'}} />
+                            </div>
+                            <TextField                                   
+                                id="api"
+                                name="api"
+                                label="End Point"
+                                type="text"
+                                fullWidth
+                                autoComplete="off"
+                                value={`${props.api_url}/api/iot/${props.id}/${props.data.dataId === '' ? '{Data Type Name}' : props.data.dataId}`}
+                                disabled
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </div>
+                    </div>
                 </form>                  
             </div>
             <div className="divider divider-dotted"></div>
@@ -385,7 +405,9 @@ class ModalWidget extends Component {
     }
 
     render() {
-        const { tabIndexValues } = this.state
+        const { tabIndexValues }  = this.state
+        const { api_url, data }   = this.props
+        const controllerId        = data._id
 
         return (
             <Fragment>
@@ -411,7 +433,7 @@ class ModalWidget extends Component {
                             index={tabIndexValues}
                             onChangeIndex={this.handleChangeIndex}
                         >
-                            <ContentWidget onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
+                            <ContentWidget onChange={this.handleChange} api_url={api_url} id={controllerId} onSwitch={this.handleSwitch} {...this.state} />
                             <ContentEventOn onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
                             <ContentEventOff onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
                         </SwipeableViews> 

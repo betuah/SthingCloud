@@ -34,6 +34,7 @@ class Chart_template extends Component {
         this._isMounted = true;
 
         this.state = {
+            controllerId: '',
             widgetId: '',
             ModalEditWidget: false,
             layouts: {}
@@ -48,9 +49,9 @@ class Chart_template extends Component {
     }
 
     componentDidMount() {
-        const { checkToken, layouts } = this.props
+        const { checkToken, layouts, controllerId } = this.props
         checkToken();
-        this._isMounted && this.setState({ layouts });
+        this._isMounted && this.setState({ layouts: layouts, controllerId: controllerId });
     }
 
     showEditModal(id) {
