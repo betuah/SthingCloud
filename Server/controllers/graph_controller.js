@@ -32,6 +32,28 @@ exports.findOne = async (req, res) => {
     }
 }
 
+exports.findShareGraph = async (req, res) => {
+    try {
+        graphModel.findOne({ _id: req.params.id }).then((data) => {
+            if(data) {
+                if(data.share) {
+                    res.status(201).json(data)
+                } else {
+                    res.status(401).json({ status: 'Error', code: 401, msg:"This content did not share! " })
+                }
+            } else {
+                res.status(404).json({ status: 'Error', code: 404, msg: 'Graph Not Found!'})
+            }            
+        }).catch((err) => {
+            console.log(err)
+            res.status(400).json({ status: 'Error', code: 500, msg: 'Internal Server Error' })
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Internal Server Error')
+    }
+}
+
 exports.create = async (req, res) => {
     try {
         const id        = uuid.generate()

@@ -141,7 +141,7 @@ class ModalEditContent extends Component {
                 graph_name: data.graph || '',
                 desc: data.desc || '',
                 share: data.share ? true : false,
-                share_link: `${client_url}/graph/${data.userId}/${data._id}`
+                share_link: `${client_url}/#/graph/${data.userId}/${data._id}`
             }
         })
     }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { ConnectedRouter } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import { AuthContextProvider } from './Auth/context/AuthContext'
+import { ConfigContextProvider } from 'components/Auth/context/ConfigContext'
 import { Route } from 'react-router-dom';
 import ScrollToTop from 'components/ScrollToTop';
 import App from './App'; 
@@ -14,8 +15,10 @@ export default class Root extends Component {
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <ScrollToTop>
-            <AuthContextProvider {...this.props}>  
-              <Route path="/" component={App} />   
+            <AuthContextProvider {...this.props}>
+              <ConfigContextProvider {...this.props}>
+                <Route path="/" component={App} />
+              </ConfigContextProvider>
             </AuthContextProvider>            
           </ScrollToTop>
         </ConnectedRouter>

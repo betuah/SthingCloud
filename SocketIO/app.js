@@ -23,7 +23,7 @@ const port      = process.env.PORT || 4001 //Port from environment variable or d
 let tmp = []
 
 io.on("connection", socket => {
-    console.log("New Client connected"); 
+    // console.log("New Client connected"); 
 
     /* Create Room to each user connected */
     socket.on('join_room', room => {

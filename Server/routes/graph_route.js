@@ -3,6 +3,9 @@ const graph = require('../controllers/graph_controller');
 
 module.exports = (app) => {   
 
+    app.route('/api/sharegraph/:userId/:id')
+        .get(graph.findShareGraph);
+
     app.route('/api/graph')
         .get(authMiddleware, graph.index);
 

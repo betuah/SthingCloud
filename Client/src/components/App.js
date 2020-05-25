@@ -29,6 +29,11 @@ let Auth = loadable({
   loading: LoadingComponent
 })
 
+let ShareContent = loadable({
+  loader: () => import('./Layout/ShareContent'),
+  loading: LoadingComponent
+})
+
 class App extends React.Component {
 
   render() {
@@ -59,7 +64,8 @@ class App extends React.Component {
           }>                    
             <Route path={`${match.url}app`} component={AppLayout} />
             <Route path={`${match.url}exception`} component={Exception} />
-            <Route path={`${match.url}user/:req`} component={Auth} />       
+            <Route path={`${match.url}user/:req`} component={Auth} />
+            <Route path={`${match.url}graph/:userId/:graphId`} component={ShareContent} />
         </div>
       </MuiThemeProvider>
     );
