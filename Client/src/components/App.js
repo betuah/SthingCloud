@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import { withAuth } from 'components/Auth/context/AuthContext';
 import loadable from 'react-loadable';
 import classnames from 'classnames';
@@ -20,10 +20,6 @@ import "styles/layout.scss"
 import "styles/theme.scss"
 import "styles/ui.scss"
 
-let Exception = loadable({
-  loader: () => import('routes/exception/'),
-  loading: LoadingComponent
-})
 let Auth = loadable({
   loader: () => import('./Auth'),
   loading: LoadingComponent
@@ -31,6 +27,11 @@ let Auth = loadable({
 
 let ShareContent = loadable({
   loader: () => import('./Layout/ShareContent'),
+  loading: LoadingComponent
+})
+
+let Exception = loadable({
+  loader: () => import('./Layout/Exception'),
   loading: LoadingComponent
 })
 
@@ -61,11 +62,14 @@ class App extends React.Component {
           className={classnames('app-main', {
             'theme-gray': theme === 'gray',
             'theme-dark': theme === 'dark'})
-          }>                    
-            <Route path={`${match.url}app`} component={AppLayout} />
-            <Route path={`${match.url}exception`} component={Exception} />
-            <Route path={`${match.url}user/:req`} component={Auth} />
-            <Route path={`${match.url}graph/:userId/:graphId`} component={ShareContent} />
+          }>
+            <Switch>
+              <Route path={`${match.url}app`} component={AppLayout} />
+              <Route path={`${match.url}exception`} component={Exception} />
+              <Route path={`${match.url}user/:req`} component={Auth} />
+              <Route path={`${match.url}graph/:userId/:graphId`} component={ShareContent} />
+              <Route path="*" component={Exception} />
+            </Switch>
         </div>
       </MuiThemeProvider>
     );

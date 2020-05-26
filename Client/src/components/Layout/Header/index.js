@@ -114,8 +114,8 @@ class AppHeader extends React.Component {
                 >
                   <MenuItem onClick={this.handleClose} className="d-block d-md-none"> <div>Signed in as <strong>{this.state.person.name ? this.state.person.name : ''}</strong></div> </MenuItem>
                   <div className="divider divider-solid my-1 d-block d-md-none"></div>
-                  <MenuItem disabled> <a href={DEMO.link}><MaterialIcon icon="settings" />Account</a> </MenuItem>
-                  <MenuItem onClick={this.handleClose}> <a href={DEMO.headerLink.about}><MaterialIcon icon="info" />Settings</a> </MenuItem>
+                  <MenuItem > <a href={DEMO.link}><MaterialIcon icon="account_circle" />Account</a> </MenuItem>
+                  <MenuItem onClick={this.handleClose}> <a href={DEMO.headerLink.about}><MaterialIcon icon="settings" />Settings</a> </MenuItem>
                   <div className="divider divider-solid my-1"></div>
                   <MenuItem onClick={this.props.logout}> <a href={'/'}><MaterialIcon icon="forward" />Sign out</a> </MenuItem>
                 </Menu>
