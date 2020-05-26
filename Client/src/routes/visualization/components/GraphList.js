@@ -423,7 +423,7 @@ class EnhancedTable extends React.Component {
                             {n.graph}</b>}
                           </Link>                          
                         </Tooltip>&nbsp;&nbsp;&nbsp;
-                        {n.graph_default === 1 && <small><span className="ui-highlight" style={{backgroundColor: '#2196F3'}}>Default Graph</span></small>}                        
+                        {n.graph_default === 1 && <small><span className="ui-highlight" style={{backgroundColor: '#2196F3'}}>Default</span></small>}                        
                       </TableCell>
                       <TableCell width="60%" style={{ maxWidth: '80px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.desc}</TableCell>
                     </TableRow>
