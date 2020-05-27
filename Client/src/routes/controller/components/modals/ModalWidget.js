@@ -437,7 +437,6 @@ class ModalWidget extends Component {
                             <ContentEventOn onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
                             <ContentEventOff onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} />
                         </SwipeableViews> 
-                        
                     </div>
                 </Modal> 
             </Fragment>
