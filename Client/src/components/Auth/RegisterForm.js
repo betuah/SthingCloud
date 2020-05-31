@@ -4,7 +4,6 @@ import { withAuth } from '../Auth/context/AuthContext'
 import notif from '../NotificationPopUp/notif'
 import { FireAuth } from 'config/Firebase'
 
-import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import LockIcon from '@material-ui/icons/Lock'
 import EmailIcon from '@material-ui/icons/Email'
@@ -47,14 +46,13 @@ class RegisterForm extends Component {
         const props     = this.props
         const t         = e.target.elements
         const fullName  = t.name.value.trim()
-        const username  = t.username.value.trim()
         const pass      = t.pass.value.trim()
         const email     = t.email.value.trim()
 
         const data = {
-            username: username,
             fullName: fullName,
-            email: email
+            email: email,
+            photoUrl: false
         }
 
         this.handleLoading(true)
@@ -77,7 +75,6 @@ class RegisterForm extends Component {
     }
 
   render() {
-
     return (
                 <section className="form-v1-container full-width">
                     <h2 className="text-primary">Create an Account</h2>
@@ -96,23 +93,6 @@ class RegisterForm extends Component {
                                 autoComplete="off"
                                 name="name"
                                 placeholder="Your full name "
-                                type="text"
-                                required
-                            />
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <div className="input-group-v1">
-                            <div className="input-group-icon">
-                                <AccountCircleIcon color="primary" />
-                            </div>
-                            <TextField
-                                id="username"
-                                label="Username"
-                                fullWidth
-                                autoComplete="off"
-                                name="username"
-                                placeholder="Pick your unique username"
                                 type="text"
                                 required
                             />

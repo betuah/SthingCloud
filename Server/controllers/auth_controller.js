@@ -12,20 +12,21 @@ exports.tokenVerify = (req, res) => {
 
 exports.signIn = async (req, res) => {
     try {
-        firebaseAuth.verifyIdToken(req.body.token)
+        firebaseAuth.verifyIdToken(req.body.token, true)
         .then(decodedToken => {
             const databaseRef   = firebaseDatabaseAdmin.ref('users/' + decodedToken.uid)
 
             databaseRef.once('value').then(snapshot => {
                 const getPerson = snapshot.val().personalData
                 const getRoles  = snapshot.val().roles
-                const token     = jwt.sign({ uid: decodedToken.uid, id: `${getPerson.username}`, roles: `${getRoles.id}`}, secret, { expiresIn: '2h' });
+                const token     = jwt.sign({ uid: decodedToken.uid, roles: `${getRoles.id}`, refresh_token: req.body.token}, secret, { expiresIn: '2h' });
                 const userData  = {
                     token: token,
                     dataProfile: {
-                        id: getPerson.username,
+                        uid: decodedToken.uid,
                         fullName: getPerson.fullName,
-                        email: getPerson.email
+                        email: getPerson.email,
+                        photoUrl: getPerson.photoUrl
                     }
                 }
                 res.status(200).json(userData);
@@ -41,17 +42,17 @@ exports.signIn = async (req, res) => {
 
 exports.signUp = async (req, res) => {
     try {
-        const fireDatabase = firebaseDatabaseAdmin.ref("users/" + req.body.uid)
+        const fireDatabase = firebaseDatabaseAdmin.ref(`users/${req.body.uid}`)
 
         fireDatabase.set({
             personalData : {
-                username: req.body.username,
                 fullName: req.body.fullName,
-                email: req.body.email
+                email: req.body.email,
+                photoUrl: req.body.photoUrl
             },
             roles : {
                 id: 1,
-                name: "user"
+                title: "user"
             }
         }).then(() => {
             const msg = {
@@ -102,11 +103,13 @@ exports.signUp = async (req, res) => {
 
 exports.signOut = async (req, res) => {
 
-    const token     = req.header('Authorization').replace('Bearer ','')
+    const token     = req.token
     const decoded   = jwt.verify(token, secret)
-    
+
     firebaseAuth.revokeRefreshTokens(decoded.uid).then(Response => {
         res.status(200).json({msg: 'Success Revoke Refresh Token!', res: Response})
+    }).catch(err => {
+        res.status(500).json({msg: 'Cannot revoke token! '+err})
     })
 }
 

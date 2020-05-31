@@ -70,7 +70,7 @@ class AppHeader extends React.Component {
 
   render() {
     const { headerShadow, colorOption, showLogo } = this.props;
-    const { anchorEl } = this.state
+    const { anchorEl, profileData } = this.state
 
     return (
       <Header className={classnames('app-header', {
@@ -113,7 +113,7 @@ class AppHeader extends React.Component {
                   aria-haspopup="true"
                   onClick={this.handleClick}
                 >
-                  <img src="assets/images-demo/g1-sm.jpg" alt="avatar" className="avatar-img" />
+                  <img src={profileData.photoUrl ? profileData.photoUrl : "assets/images-demo/g1-sm.jpg"} alt="avatar" className="avatar-img" />
                   <span className="avatar-text d-none d-md-inline">{this.state.profileData.fullName ? this.state.profileData.fullName : ''}</span>
                 </div>
                 <Menu

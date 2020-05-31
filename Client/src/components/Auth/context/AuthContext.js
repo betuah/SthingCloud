@@ -52,12 +52,12 @@ export class AuthContextProvider extends Component {
 
     initUser = async () => {
         const profileData = JSON.parse(localStorage.getItem('profileData'))
-        return socket.emit('join_room', profileData.id )
+        return socket.emit('join_room', profileData.uid )
     }
 
-    setIsLoggin () {
+    setIsLoggin (stats) {
         this.setState({
-            isLoggedIn: true,
+            isLoggedIn: stats,
         })
     }
 
@@ -109,14 +109,15 @@ export class AuthContextProvider extends Component {
         
         return new Promise ((resolver, reject) => {
             firebaseUser.updateProfile({
-                displayName: `${data.fullName}`
+                displayName: `${data.fullName}`,
+                photoUrl: data.photoUrl
             }).then(() => {
                 this.sendEmailVerification(data.email)
                 axios.post(`${server_url}/api/signup`, { 
                     uid: data.uid,
-                    username: data.username,
                     fullName: data.fullName,
-                    email: data.email
+                    email: data.email,
+                    photoUrl: data.photoUrl
                 }).then(() => {
                     resolver('Success!', null)
                 }).catch(err => {
@@ -130,23 +131,23 @@ export class AuthContextProvider extends Component {
 
     //logout
     signOut() {
-        FireAuth.signOut()
-            
-        // resolve('You are now SignOut!')
+        FireAuth.signOut().then(() => {
+            axiosReq.post(`${server_url}/api/signout`)
+            .then(res => {
+                this.setState({
+                    isLoggedIn: false
+                })
         
-        this.setState({
-            isLoggedIn: false
+                localStorage.removeItem('token')
+                localStorage.removeItem('profileData')
+
+                return true
+            }).catch(err => {
+                return false
+            })
+        }).catch(err => {
+            return false
         })
-
-        localStorage.removeItem('token')
-        localStorage.removeItem('profileData')
-
-        // return new Promise((resolve, reject) => axiosReq.post(`${server_url}/api/signout`)
-        // .then(res => {
-            
-        // }).catch(err => {
-        //     reject(err)
-        // }))
     }
 
     render() {

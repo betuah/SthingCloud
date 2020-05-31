@@ -46,14 +46,58 @@ class LoginForm extends React.Component {
     }
 
     signInWithGoogle () {
+        const props = this.props
+        
         this.handleLoading('googleLoading', true)
+
         FireAuth.signInWithPopup(FireGoogleAuthProvider).then(res => {
-            console.log(res.additionalUserInfo.isNewUser)
-            this.handleLoading('googleLoading', false)
-            console.log(res.additionalUserInfo.profile)
+            const profile = res.additionalUserInfo.profile
+
+            if (res.additionalUserInfo.isNewUser) {
+                const profileData = {
+                    uid: res.user.uid,
+                    fullName: profile.name,
+                    email: profile.email,
+                    photoUrl: profile.picture
+                }
+
+                props.userUpdateProfile(profileData)
+                .then(res => {
+                    FireAuth.currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
+                        props.signIn({token: idToken}).then(res => {
+                            this.handleLoading('googleLoading', false)
+                            props.setIsLoggin(true)
+                        })
+                        .catch(err => {
+                            this.handleLoading('loading', false)
+                            notif('error', 'Error 500!' , 'Server Error! Please contact your Administrator')
+                        })
+                    }).catch(err => {
+                        this.handleLoading('loading', false)
+                        notif('error', 'Error 500!' , 'Server Error! ' + err + 'Please contact your Administrator')
+                    })
+                }).catch(err => {
+                    notif('error', 'Error 500!' , 'An error occurred while sending new data! Please contact your Administrator')
+                    this.handleLoading('googleLoading', false)
+                })
+            } else {
+                FireAuth.currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
+                    props.signIn({token: idToken}).then(res => {
+                        this.handleLoading('googleLoading', false)
+                        props.setIsLoggin(true)
+                    })
+                    .catch(err => {
+                        this.handleLoading('loading', false)
+                        notif('error', 'Error 500!' , 'Server Error! Please contact your Administrator')
+                    })
+                }).catch(err => {
+                    this.handleLoading('loading', false)
+                    notif('error', 'Error 500!' , 'Server Error! ' + err + 'Please contact your Administrator')
+                })
+            }
         }).catch(err => {
             this.handleLoading('googleLoading', false)
-            console.log(err)
+            notif('error', 'Error!' , 'An error occurred while trying to sign in with Google! Please contact your Administrator')
         })
     }
 
@@ -73,11 +117,10 @@ class LoginForm extends React.Component {
                 FireAuth.currentUser.getIdToken(/* forceRefresh */ true).then(idToken => {
                     props.signIn({token: idToken}).then(res => {
                         this.handleLoading(false)
-                        props.setIsLoggin()
+                        props.setIsLoggin(true)
                     })
                     .catch(err => {
                         this.handleLoading('loading', false)
-                        console.log(err)
                         notif('error', 'Error 500!' , 'Server Error! Please contact your Administrator')
                     })
                 }).catch(err => {
