@@ -30,7 +30,7 @@ class Profile extends Component {
 
     render() {
         const profile = DEMO.profiles[2];
-        const { person } = this.props
+        const { profileData } = this.props
         const { tabIndexValues } = this.state
 
         return (
@@ -47,9 +47,9 @@ class Profile extends Component {
                         <div className="col-lg-3">
                             <article className="profile-card-v2 border-0 mdc-elevation--z2 h-auto">
                                 <img src={profile.avatar} alt="avatar"/>
-                                <h4>{person.name}</h4>
+                                <h4>{profileData.name}</h4>
                                 <span>{profile.title}</span>
-                                <p>{`+62 813 83073355 ${person.email} `}</p>
+                                <p>{`+62 813 83073355 ${profileData.email} `}</p>
                             </article>
                         </div>
                         <div className="col-xs-12 col-lg-9 col-md-9">

@@ -1,10 +1,10 @@
-const bcrypt                = require('bcryptjs')
 const jwt                   = require('jsonwebtoken')
 const env                   = require('../env')
-const authModel             = require('../models/mysql/crud_model')
-const transporter           = require('../config/mail_config')
+const firebaseAdmin         = require('../config/firebaseAdminConfig')
+const firebaseAuth          = firebaseAdmin.auth()
+const firebaseDatabaseAdmin = firebaseAdmin.database()
 
-const secret                = env.token_secret;
+const secret                = env.token_secret
 
 exports.tokenVerify = (req, res) => {
     res.status(202).json({'status': 'Token Verified', code: 202})
@@ -12,156 +12,63 @@ exports.tokenVerify = (req, res) => {
 
 exports.signIn = async (req, res) => {
     try {
-        const username      = req.query.username ? req.query.username : (req.body.username ? req.body.username : req.params.username);
-        const password      = req.query.password ? req.query.password : (req.body.password ? req.body.password : req.params.password);
-        const tb            = "v_user_roles";
+        firebaseAuth.verifyIdToken(req.body.token)
+        .then(decodedToken => {
+            const databaseRef   = firebaseDatabaseAdmin.ref('users/' + decodedToken.uid)
 
-        if (username && password) {
-            const data = {
-                table: tb,
-                condition: `WHERE email="${username}" or id_users="${username}"`
-            }
-
-            authModel.findCondition(data, async (err, result) => {                
-                if(err) {
-                    const error = {
-                        status: "Error",
-                        code: "500",
-                        msg: "Internal Server Error!"
-                    }
-                    res.status(500).json(error);
-                } else {
-                    if (result.data) { 
-                        console.log(result.data.status)
-                        if (result.data.status == '1') {                   
-                            const id            = result.data.id_users;
-                            const role          = result.data.id_roles;
-                            const existPassword = result.data.password;
-                            const isTrueHashed  = await bcrypt.compare(password, existPassword);
-
-                            if(isTrueHashed === true) {
-                                const token     = jwt.sign({ id: `${id}`, roles: `${role}`}, secret, { expiresIn: '2h' });
-                                const userData  = {
-                                    status: result.status,
-                                    code: result.code,
-                                    token: token,
-                                    data: {
-                                        id: result.data.id_users,
-                                        name: result.data.name,
-                                        email: result.data.email
-                                    }
-                                }
-                                res.status(200).json(userData);
-                            } else {
-                                const err = {
-                                    status: "Error",
-                                    code: "400",
-                                    msg: "Invalid Username or password!"
-                                }
-                                res.status(400).json(err);
-                            }
-                        } else {
-                            const err = {
-                                status: "Error",
-                                code: "406",
-                                msg: "Your account is not active. Please check your email and click activation link!"
-                            }
-                            res.status(406).json(err);
-                        }
-                    } else {
-                        const err = {
-                            status: "Error",
-                            code: "400",
-                            msg: "Your email or username not found!"
-                        }
-                        res.status(400).json(err);
+            databaseRef.once('value').then(snapshot => {
+                const getPerson = snapshot.val().personalData
+                const getRoles  = snapshot.val().roles
+                const token     = jwt.sign({ uid: decodedToken.uid, id: `${getPerson.username}`, roles: `${getRoles.id}`}, secret, { expiresIn: '2h' });
+                const userData  = {
+                    token: token,
+                    dataProfile: {
+                        id: getPerson.username,
+                        fullName: getPerson.fullName,
+                        email: getPerson.email
                     }
                 }
-            }); 
-        } else {
-            const err = {
-                STATUS: "Error",
-                CODE: "501",
-                MSG: "Post Data required!",
-                POST_DATA_REQUIREMENT: {
-                    username: {
-                        type: 'text',
-                        required: 'true',
-                        unique: 'true',
-                        data_type: 'varchar(50)'
-                    },
-                    password: {
-                        type: 'password',
-                        required: 'true',
-                        unique: 'false',
-                        data_type: 'varchar(50)'
-                    }
-                }
-
-            }
-            res.status(400).json(err);
-        }
-
-           
+                res.status(200).json(userData);
+            })
+        }).catch(err => {
+            res.status(401).json({status: 'UNAUTHORIZED', code: 401, msg: 'You are not authenticated!'})
+            console.log(err)
+        })
     } catch (error) {
-        res.status(500).send();
+        res.status(500).send({status: 'INTERNAL_SERVER_ERROR', code: 500, msg: 'Something wrong in the server!'})
     }
-    
 }
 
 exports.signUp = async (req, res) => {
     try {
-        const id                = req.body.username; // User username as ID
-        const name              = req.body.name;
-        const email             = req.body.email;
-        const password          = req.body.password;
-        const passwordHashed    = await bcrypt.hash(password, 8);
+        const fireDatabase = firebaseDatabaseAdmin.ref("users/" + req.body.uid)
 
-        const val = `"${id}","${name}","${email}","${passwordHashed}","2", "0"`;
-
-        const check_data = {
-            table: 'tb_users',
-            condition: `WHERE email="${email}" or id_users="${id}"`
-        }
-
-        authModel.findCondition(check_data, async (err, result) => {
-            if(!err) {
-                const error = {
-                    status: "Error",
-                    code: "400",
-                    msg: "Username or Email already exist!"
-                }
-                res.status(400).json(error);
-            } else {
-                const data = {
-                    table: 'tb_users',
-                    column: 'id_users, name, email, password, id_roles, status',
-                    values: val
-                }
-        
-                authModel.insert(data, (err, result) => {
-                    if(err) {
-                        res.status(500).json(err);
-                    } else {
-                        const token     = jwt.sign({ id: `${id}`}, secret, { expiresIn: '7d' });
-                        const mailOptions = {
-                            from: '"SCP-IOT" <noreply@seamolec.org>',
-                            to: `${email}`,
-                            subject: 'Account Activation',
-                            html: `Welcome to SEAMOLEC IoT Cloud Platform. For activation your account click <a href="${env.server_domain}/activated/${token}">Activated</a>`
-                        }
-                
-                        transporter.sendMail(mailOptions, (err, info) => {
-                            if (err) {
-                                console.log(err)
-                            }
-                        });
-
-                        res.status(200).json(result);                      
-                    }
-                });
+        fireDatabase.set({
+            personalData : {
+                username: req.body.username,
+                fullName: req.body.fullName,
+                email: req.body.email
+            },
+            roles : {
+                id: 1,
+                name: "user"
             }
-        });       
+        }).then(() => {
+            const msg = {
+                status: "Success",
+                code: "200",
+                msg: "Success Saving Data!"
+            }
+            res.status(200).json(msg)
+        }).catch(err => {
+            console.log(err)
+            const msg = {
+                status: "INTERNAL_SERVER_ERROR",
+                code: 500,
+                msg: "Internal Server Error! Something wrong in firebase backend!"
+            }
+            res.status(500).json(msg)
+        })
     } catch (error) {
         console.log(error);
         const data = {
@@ -175,7 +82,7 @@ exports.signUp = async (req, res) => {
                     unique: 'true',
                     data_type: 'varchar(50)'
                 },
-                name: {
+                fullName: {
                     type: 'text',
                     required: 'true',
                     unique: 'true',
@@ -186,44 +93,30 @@ exports.signUp = async (req, res) => {
                     required: 'true',
                     unique: 'true',
                     data_type: 'varchar(50)'
-                },
-                password: {
-                    type: 'password',
-                    required: 'true',
-                    unique: 'false',
-                    data_type: 'varchar(50)'
                 }
             }
         }
         res.status(400).json(data);
-    }
+    }    
+}
+
+exports.signOut = async (req, res) => {
+
+    const token     = req.header('Authorization').replace('Bearer ','')
+    const decoded   = jwt.verify(token, secret)
     
-};
+    firebaseAuth.revokeRefreshTokens(decoded.uid).then(Response => {
+        res.status(200).json({msg: 'Success Revoke Refresh Token!', res: Response})
+    })
+}
 
 exports.profile = async (req, res) => {
-    const id_val    = req.id_user;
-    const tb        = "v_users";
+    const databaseRef   = firebaseDatabaseAdmin.ref('users/' + req.uid)
 
-    const data = {
-        table: tb,
-        column: 'id_users',
-        values: id_val
-    }
-    
-    authModel.findOne(data, (err, result) => {
-        if(err) {
-            res.status(500).json(err);
-        } else {
-            if(result.data === null) {
-                const dataRes = {
-                status: result.status,
-                code: result.code,
-                msg: result.msg
-                }
-                res.status(result.code).json(dataRes);
-            } else {
-                res.status(200).json(result);
-            }            
-        }
-    });    
-};
+    databaseRef.once('value').then(snapshot => {
+        const getPerson = snapshot.val().personalData
+        res.status(200).json(getPerson);
+    }).catch(err => {
+        res.status(500).send({status: 'INTERNAL_SERVER_ERROR', code: 500, msg: 'Something wrong in the server!'})
+    })
+}

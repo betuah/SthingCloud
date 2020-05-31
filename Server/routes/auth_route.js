@@ -8,6 +8,9 @@ module.exports = (app) => {
     
     app.route('/api/signup')
         .post(Auth.signUp);
+
+    app.route('/api/signout')
+        .post(Auth.signOut);
     
     app.route('/api/tokenverify')
         .get(authMiddleware, Auth.tokenVerify);

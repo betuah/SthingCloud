@@ -1,4 +1,4 @@
-const DeviceData    = require('../models/mongoDB/device_model')
+const DeviceData    = require('../models/device_model')
 const uuid          = require('shortid')
 const jwt           = require('jsonwebtoken')
 const env           = require('../env')

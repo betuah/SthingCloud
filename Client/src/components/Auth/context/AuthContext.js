@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import axios from "axios"
-import socketOpen from 'socket.io-client';
+import socketOpen from 'socket.io-client'
+import { FireAuth } from 'config/Firebase'
 
 const server_url    = `${process.env.REACT_APP_SERVER_DOMAIN ? process.env.REACT_APP_SERVER_DOMAIN :'http://localhost:8000'}` 
 const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}` 
@@ -23,8 +24,8 @@ export class AuthContextProvider extends Component {
     constructor() {
         super()
             this.state = {
-                person: JSON.parse(localStorage.getItem('person')) || "",
-                token: localStorage.getItem('token') || "",
+                profileData: JSON.parse(localStorage.getItem('profileData')) || false,
+                token: localStorage.getItem('token') || false,
                 isLoggedIn: (localStorage.getItem('token') === null) ? false : true,
                 server_url: server_url,
                 socket_url: socket_url,
@@ -32,10 +33,13 @@ export class AuthContextProvider extends Component {
                 api_url: api_url
             }
 
-            this.checkToken = this.checkToken.bind(this)
-            this.initUser = this.initUser.bind(this)
-            this.login = this.login.bind(this)
-            this.logout = this.logout.bind(this)
+            this.checkToken             = this.checkToken.bind(this)
+            this.initUser               = this.initUser.bind(this)
+            this.signIn                 = this.signIn.bind(this)
+            this.signOut                = this.signOut.bind(this)
+            this.setIsLoggin            = this.setIsLoggin.bind(this)
+            this.userUpdateProfile      = this.userUpdateProfile.bind(this)
+            this.sendEmailVerification  = this.sendEmailVerification.bind(this)
     }
 
     checkToken () {
@@ -43,69 +47,116 @@ export class AuthContextProvider extends Component {
             .catch(err => {
                 this.setState({ isLoggedIn: false });
                 localStorage.clear()
-                console.log(err)
             })
     }
 
-    initUser () {
-        return axiosReq.get(`${server_url}/api/profile`)
-            .then(response => {               
-                const res = response.data
+    initUser = async () => {
+        const profileData = JSON.parse(localStorage.getItem('profileData'))
+        return socket.emit('join_room', profileData.id )
+    }
 
-                socket.emit('join_room', res.data.id_users )  
-              
-                this.setState({ person: res.data });
-            }).catch(err => {
-                this.setState({ isLoggedIn: false });
-                localStorage.clear()
-            })
+    setIsLoggin () {
+        this.setState({
+            isLoggedIn: true,
+        })
     }
 
     //login
-    login (credentials) {
-        return axios.post(`${server_url}/api/signin`, credentials)
+    signIn (credentials) {
+        return new Promise((resolve, reject) => axios.post(`${server_url}/api/signin`, credentials)
             .then(response => {
-                const { token, data } =  response.data
-                const person = JSON.stringify(data);
+                const { token, dataProfile } =  response.data
+                const profileData = JSON.stringify(dataProfile);
 
-                localStorage.setItem("token", token)
-                localStorage.setItem("person", person)
-
-                this.setState({
-                    token: token,
-                    isLoggedIn: true
-                })
-
-                const res = { status: 'Success', code: 200, msg: 'Success SignIn' }
-
-                return res
+                FireAuth.onAuthStateChanged(user => {
+                    if (user) {
+                        localStorage.setItem("token", token)
+                        localStorage.setItem("profileData", profileData)
+        
+                        const res = { status: 'Success', code: 200, msg: 'Success SignIn' }
+        
+                        return resolve(res)
+                    } else {
+                    const err = { status: 'Error', code: 404, msg: 'User not SignIn' }
+                      return reject(err)
+                    }
+                });                
             })
             .catch(error => {
                 if(error.response) {
                     const res = error.response.data;
                     const resMsg = { status: 'Error', code: res.code === '406' ? res.code : 400, msg: res.msg }  
-                    // console.log(error)           
-                    return resMsg
-                } else {              
-                    // console.log('error yang 500') 
+                    return reject(resMsg)
+                } else {
                     const resMsg = { status: 'Error', code: 500, msg: 'Internal Server Error'}         
-                    return resMsg
+                    return reject(resMsg)
                 }
-            });   
+            })
+        ) 
+    }
+
+    sendEmailVerification = email => {
+        const actionCodeSettings = {
+            url: `${client_url}`,
+            handleCodeInApp: true,
+        }
+
+        return FireAuth.currentUser.sendEmailVerification(actionCodeSettings)
+    }
+
+    userUpdateProfile = (data) => {
+        const firebaseUser = FireAuth.currentUser
+        
+        return new Promise ((resolver, reject) => {
+            firebaseUser.updateProfile({
+                displayName: `${data.fullName}`
+            }).then(() => {
+                this.sendEmailVerification(data.email)
+                axios.post(`${server_url}/api/signup`, { 
+                    uid: data.uid,
+                    username: data.username,
+                    fullName: data.fullName,
+                    email: data.email
+                }).then(() => {
+                    resolver('Success!', null)
+                }).catch(err => {
+                    reject(null, err)
+                })
+            }).catch(err => {
+                reject(null, err)
+            })
+        })
     }
 
     //logout
-    logout () {
+    signOut() {
+        FireAuth.signOut()
+            
+        // resolve('You are now SignOut!')
+        
+        this.setState({
+            isLoggedIn: false
+        })
+
         localStorage.removeItem('token')
-        localStorage.removeItem('person')
+        localStorage.removeItem('profileData')
+
+        // return new Promise((resolve, reject) => axiosReq.post(`${server_url}/api/signout`)
+        // .then(res => {
+            
+        // }).catch(err => {
+        //     reject(err)
+        // }))
     }
 
     render() {
         return (
                 <AuthContext.Provider 
                     value={{
-                        login: this.login,
-                        logout: this.logout,
+                        signIn: this.signIn,
+                        setIsLoggin: this.setIsLoggin,
+                        userUpdateProfile: this.userUpdateProfile,
+                        signOut: this.signOut,
                         initUser: this.initUser,
                         checkToken: this.checkToken,
                         socket: socket,

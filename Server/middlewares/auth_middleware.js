@@ -9,9 +9,10 @@ const authMiddleware = async (req, res, next) => {
         const token     = req.header('Authorization').replace('Bearer ','');
         const decoded   = jwt.verify(token, secret);
 
-        req.token   = token;
-        req.id_user = decoded.id;
-        req.role    = decoded.roles; 
+        req.token   = token
+        req.id_user = decoded.id
+        req.role    = decoded.roles
+        req.uid     = decoded.uid
 
         next();
 

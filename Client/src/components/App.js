@@ -38,10 +38,11 @@ let Exception = loadable({
 class App extends React.Component {
 
   render() {
-    const { match, location, theme } = this.props;
-    const isRoot = location.pathname === '/' ? true : false;
+    const { match, location, theme, isLoggedIn } = this.props
+    const isRoot = location.pathname === '/' ? true : false
+
     if (isRoot) {
-      return ( this.props.isLoggedIn ? <Redirect to={'/app/dashboard'}/> : <Redirect to={'/user/signin'}/> );
+      return ( isLoggedIn ? <Redirect to={'/app/dashboard'}/> : <Redirect to={'/user/signin'}/> );
     }
 
     let materialUITheme;

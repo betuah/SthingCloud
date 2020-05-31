@@ -7,7 +7,7 @@ import { InitConfig } from 'components/Auth/context/ConfigContext'
 import { LinearProgress } from '@material-ui/core'
 
 let ChartTemplate = loadable({
-    loader: () => import('./components/chart_template'),
+    loader: () => import('./chart_template'),
     loading: LoadingComponent
 })
 

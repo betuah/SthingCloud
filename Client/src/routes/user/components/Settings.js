@@ -14,7 +14,7 @@ class Settings extends Component {
                 <div className="container-fluid mt-4">    
                     <div className="row">
                         <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start" style={{color: '#2196F3' }}>                            
-                            <h5><b><span className="ui-highlight" style={{backgroundColor: '#4CAF50'}}><MaterialIcon icon="dashboard" style={{color: '#FFFFFF'}} />  Dashboard   </span></b></h5>
+                            <h5><b><span className="ui-highlight" style={{backgroundColor: '#4CAF50'}}><MaterialIcon icon="dashboard" style={{color: '#FFFFFF'}} />  Settings   </span></b></h5>
                         </div>
                         <div className="col-xs-12 col-md-6 d-flex justify-content-md-end" >
                             <div className="d-none d-sm-block">

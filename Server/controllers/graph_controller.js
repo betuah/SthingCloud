@@ -1,4 +1,4 @@
-const graphModel    = require('../models/mongoDB/graph_model')
+const graphModel    = require('../models/graph_model')
 const uuid          = require('shortid')
 
 exports.index = async (req, res) => {

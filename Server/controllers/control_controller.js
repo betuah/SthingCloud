@@ -1,4 +1,4 @@
-const controlModel    = require('../models/mongoDB/control_model')
+const controlModel    = require('../models/control_model')
 const uuid          = require('shortid')
 
 exports.index = async (req, res) => {

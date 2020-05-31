@@ -1,66 +1,88 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { withAuth } from '../Auth/context/AuthContext';
-import axios from 'axios';
-import notif from '../NotificationPopUp/notif';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import { withAuth } from '../Auth/context/AuthContext'
+import notif from '../NotificationPopUp/notif'
+import { FireAuth } from 'config/Firebase'
 
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import AccountBoxIcon from '@material-ui/icons/AccountBox';
-import LockIcon from '@material-ui/icons/Lock';
-import EmailIcon from '@material-ui/icons/Email';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import AccountBoxIcon from '@material-ui/icons/AccountBox'
+import LockIcon from '@material-ui/icons/Lock'
+import EmailIcon from '@material-ui/icons/Email'
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import Checkbox from '@material-ui/core/Checkbox'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 
+import "styles/loaders/loaders.scss"
+
+const Loading = () => {
+    return(
+        <div className="ball-pulse">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    )
+}
 class RegisterForm extends Component {
     constructor(props) {
-        super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        super(props)
+
+        this.state = {
+            loading: false
+        }
+
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    handleLoading = action => {
+        this.setState({
+           loading: action
+       })
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const props     = this.props;
-        const t         = e.target.elements;
-        const name      = t.name.value.trim();
-        const username  = t.username.value.trim();
-        const pass      = t.pass.value.trim();
-        const email     = t.email.value.trim();
-        // const agreement = t.agree.checked; // For get value use t.agree.value
+        const props     = this.props
+        const t         = e.target.elements
+        const fullName  = t.name.value.trim()
+        const username  = t.username.value.trim()
+        const pass      = t.pass.value.trim()
+        const email     = t.email.value.trim()
 
-        axios.post(`${this.props.url}/api/signup`, {
-            name: name,
+        const data = {
             username: username,
-            email: email,
-            password: pass
+            fullName: fullName,
+            email: email
+        }
+
+        this.handleLoading(true)
+
+        FireAuth.createUserWithEmailAndPassword(email, pass)
+        .then(res => {
+            props.userUpdateProfile({ ...data, uid: res.user.uid }).then(res => {
+                this.handleLoading(false)
+                notif('sucess', 'Success', 'Your account has been created! Please check your email to activated your account!')
+                props.history.push('/user/signin')
+            }).catch(err => {
+                this.handleLoading(false)
+                notif('error', 'Sign Up Failed!', err.message)
+            })
         })
-        .then(function (response) {
-            
-            notif('sucess', 'Success', 'Your account has been created! Please check your email to activated your account!')
-            props.history.push('/user/signin')
+        .catch(err => {
+            this.handleLoading(false)
+            notif('error', 'Sign Up Failed!', err.message)
         })
-        .catch(function (error) {
-            if(error.response) {
-                const res = error.response.data;
-                
-                notif('error', res.status, res.msg)
-            } else {
-                notif('warning', 'Error 500', 'Internal Server Error')
-            }
-        }); 
     }
 
   render() {
 
     return (
-        <section className="form-card mdc-elevation--z1">
-            <div className="form-card__body p-lg-5 p-4">
-                <section className="form-v1-container ">
+                <section className="form-v1-container full-width">
                     <h2 className="text-primary">Create an Account</h2>
                     <p className="lead text-dark">Discovering and connecting your things around the globe.</p>
-                    <div className="col-md-12 mx-auto">
+                    <div className="col-md-10 mx-auto">
                     <form onSubmit={this.handleSubmit} className="form-v1">
                         <div className="form-group">
                             <div className="input-group-v1">
@@ -139,21 +161,19 @@ class RegisterForm extends Component {
                                         required
                                     />                                
                                 }
-                                label={<div>I have read the <Link to="/agreement">agreement</Link></div>}
+                                label={<div className="text-dark">I have read the <Link to="/agreement">agreement</Link></div>}
                                 name="agree"
                             />
                         </div>
                         <div className="form-group">
-                            <Button variant="contained" color="primary" type="submit" className="btn-cta btn-block">
-                            Sign Up
+                            <Button disabled={this.state.loading ? true : false} variant="contained" size="medium" color="primary" type="submit" className="btn-cta btn-block">
+                                    {this.state.loading ? <Loading /> : 'Sign Up'}
                             </Button>
                         </div>
                         </form>
                         <p className="additional-info text-dark">Already have an account? <Link to="/user/signin">Login</Link></p>
                     </div>
                 </section>
-            </div>
-        </section>
     );
   }
 }

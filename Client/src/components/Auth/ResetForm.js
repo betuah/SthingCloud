@@ -1,19 +1,56 @@
-import React from 'react';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { FireAuth } from 'config/Firebase'
+import notif from '../NotificationPopUp/notif'
+import { Button, TextField } from '@material-ui/core'
+import EmailIcon from '@material-ui/icons/Email'
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import "styles/loaders/loaders.scss"
 
-import EmailIcon from '@material-ui/icons/Email';
-
+const Loading = () => {
+    return(
+        <div className="ball-pulse">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    )
+}
 class ResetForm extends React.Component {
     constructor(props) {
-        super(props);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        super(props)
+
+        this.state = {
+            loading: false
+        }
+
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    handleLoading = action => {
+        this.setState({
+           loading: action
+       })
     }
 
     handleSubmit = (e) => {
-        e.preventDefault();
-           
+        e.preventDefault()
+        const props     = this.props
+
+        const t         = e.target.elements
+        const email     = t.email.value.trim()
+
+        this.handleLoading(true)
+
+        FireAuth.sendPasswordResetEmail(email)
+        .then(res => {
+            this.handleLoading(false)
+            notif('sucess', 'Success', 'Please check your email address to reset your password !')
+            props.history.push('/user/signin')
+        }).catch(err => {
+            notif('error', 'Warning', err.message)
+            this.handleLoading(false)
+        })
     }
 
     render() {
@@ -33,6 +70,7 @@ class ResetForm extends React.Component {
                                 <TextField
                                     id="resetpassword1-email"
                                     label="Email"
+                                    name="email"
                                     fullWidth
                                     autoComplete="off"
                                     placeholder="Enter your email address"
@@ -41,11 +79,12 @@ class ResetForm extends React.Component {
                                 </div>
                             </div>
                             <div className="form-group">
-                                <Button variant="contained" color="primary" type="submit" className="btn-cta btn-block">
-                                Send Reset Instructions
+                                <Button disabled={this.state.loading ? true : false} variant="contained" size="medium" color="primary" type="submit" className="btn-cta btn-block">
+                                    {this.state.loading ? <Loading /> : 'Send Reset Instructions'}
                                 </Button>
                             </div>
                             </form>
+                            <p className="additional-info text-dark">Go back to Sign In ? <Link to="/user/signin">Login</Link></p>
                         </div>
                     </section>
                 </div>

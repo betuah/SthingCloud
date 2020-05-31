@@ -1,41 +1,52 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import classnames from 'classnames';
-import DEMO from 'constants/demoData';
-import { Layout, Popover } from 'antd';
-import Badge from '@material-ui/core/Badge';
-import Logo from 'components/Logo';
-import { toggleCollapsedNav, toggleOffCanvasMobileNav } from 'actions/settingsActions';
-import Notifications from 'routes/layout/routes/header/components/Notifications';
-import MaterialIcon from 'components/MaterialIcon';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import notif from 'components/NotificationPopUp/notif';
+import React from 'react'
+import { Link } from "react-router-dom"
+import { connect } from 'react-redux'
+import classnames from 'classnames'
+import DEMO from 'constants/demoData'
+import { Layout, Popover } from 'antd'
+import Badge from '@material-ui/core/Badge'
+import Logo from 'components/Logo'
+import { toggleCollapsedNav, toggleOffCanvasMobileNav } from 'actions/settingsActions'
+import Notifications from 'routes/layout/routes/header/components/Notifications'
+import MaterialIcon from 'components/MaterialIcon'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import notif from 'components/NotificationPopUp/notif'
 
 import { withAuth } from '../../Auth/context/AuthContext'
 
 const { Header } = Layout;
 
 class AppHeader extends React.Component {
-  state = {
-    anchorEl: null,
-    person: JSON.parse(localStorage.getItem('person')) ? JSON.parse(localStorage.getItem('person')) : '',
-    badge: 5
-  };
+  constructor(props) {
+    super(props) 
+    this._isMounted = true
+    this.state = {
+      anchorEl: null,
+      profileData: JSON.parse(localStorage.getItem('profileData')) ? JSON.parse(localStorage.getItem('profileData')) : false,
+      badge: 5
+    }
+
+    this.handleSignOut = this.handleSignOut.bind(this)
+  }
 
   handleClick = event => {
     this.setState({ anchorEl: event.currentTarget });
-  };
+  }
+
   handleClose = () => {
     this.setState({ anchorEl: null });
-  };
+  }
 
-  componentWillMount() {
-    this._isMounted = true;
+  handleSignOut() {
+    const { signOut } = this.props
+
+    signOut()
   }
 
   componentDidMount() {
     const { initUser, socket } = this.props
+
     initUser();
 
     socket.on('event', data => {
@@ -59,7 +70,7 @@ class AppHeader extends React.Component {
 
   render() {
     const { headerShadow, colorOption, showLogo } = this.props;
-    const { anchorEl } = this.state;
+    const { anchorEl } = this.state
 
     return (
       <Header className={classnames('app-header', {
@@ -103,7 +114,7 @@ class AppHeader extends React.Component {
                   onClick={this.handleClick}
                 >
                   <img src="assets/images-demo/g1-sm.jpg" alt="avatar" className="avatar-img" />
-                  <span className="avatar-text d-none d-md-inline">{this.state.person.name ? this.state.person.name : ''}</span>
+                  <span className="avatar-text d-none d-md-inline">{this.state.profileData.fullName ? this.state.profileData.fullName : ''}</span>
                 </div>
                 <Menu
                   id="app-header-menu"
@@ -112,12 +123,12 @@ class AppHeader extends React.Component {
                   open={Boolean(anchorEl)}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose} className="d-block d-md-none"> <div>Signed in as <strong>{this.state.person.name ? this.state.person.name : ''}</strong></div> </MenuItem>
+                  <MenuItem onClick={this.handleClose} className="d-block d-md-none"> <div>Signed in as <strong>{this.state.profileData.fullName ? this.state.profileData.fullName : ''}</strong></div> </MenuItem>
                   <div className="divider divider-solid my-1 d-block d-md-none"></div>
-                  <MenuItem > <a href={DEMO.link}><MaterialIcon icon="account_circle" />Account</a> </MenuItem>
-                  <MenuItem onClick={this.handleClose}> <a href={DEMO.headerLink.about}><MaterialIcon icon="settings" />Settings</a> </MenuItem>
+                  <MenuItem onClick={this.handleClose}> <Link to={'/app/user/profile'}><MaterialIcon icon="account_circle" />Account</Link> </MenuItem>
+                  <MenuItem onClick={this.handleClose}> <Link to={'/app/user/settings'}><MaterialIcon icon="settings" />Settings</Link> </MenuItem>
                   <div className="divider divider-solid my-1"></div>
-                  <MenuItem onClick={this.props.logout}> <a href={'/'}><MaterialIcon icon="forward" />Sign out</a> </MenuItem>
+                  <MenuItem onClick={this.handleSignOut}> <Link to={'/'}><MaterialIcon icon="forward" />Sign out</Link> </MenuItem>
                 </Menu>
               </a>
             </div>

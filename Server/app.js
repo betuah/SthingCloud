@@ -10,11 +10,6 @@ app.use(helmet())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-/* Bypass CORS for Route */
-const activationRoute     = require('./routes/activation_route');
-activationRoute(app);
-/* End bypass */
-
 /* Dynamic CORS */
 const whitelist = ['http://localhost:8000', 'http://localhost:3000', 'http://localhost:8080', 'http://114.4.109.110:8000', 'http://114.4.109.110:3000']
 
@@ -33,17 +28,15 @@ app.use(cors(options))
 /* End Dynamic CORS */
 
 /* Start of Routing Import */
-const authRoute     = require('./routes/auth_route');
-const usersRoute    = require('./routes/users_route');
-const deviceRoute   = require('./routes/device_route');
-const graphRoute    = require('./routes/graph_route');
-const controlRoute  = require('./routes/control_route');
+const authRoute     = require('./routes/auth_route')
+const deviceRoute   = require('./routes/device_route')
+const graphRoute    = require('./routes/graph_route')
+const controlRoute  = require('./routes/control_route')
 
-authRoute(app);
-usersRoute(app);
-deviceRoute(app);
-graphRoute(app);
-controlRoute(app);
+authRoute(app)
+deviceRoute(app)
+graphRoute(app)
+controlRoute(app)
 /* End of Routing Import */
 
 /* MongoDB Connection Check */
