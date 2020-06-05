@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { withAuth } from '../Auth/context/AuthContext'
 import notif from '../NotificationPopUp/notif'
 import { FireAuth } from 'config/Firebase'
+import { withStyles } from "@material-ui/core/styles"
 
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import LockIcon from '@material-ui/icons/Lock'
@@ -14,6 +15,29 @@ import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 import "styles/loaders/loaders.scss"
+
+const LoginTextField = withStyles({
+    root: {
+        '& label': {
+            color: '#E3F2FD',
+        },
+        '& input' : {
+            color: '#E3F2FD',
+        },
+        '& .MuiInput-root::before': {
+            borderColor: '#64B5F6',
+        },
+        '& .MuiInput-root:hover::before': {
+            borderColor: '#64B5F6',
+        },
+        '& label.Mui-focused': {
+            color: '#E3F2FD',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#E3F2FD',
+        }
+    },
+})(TextField)
 
 const Loading = () => {
     return(
@@ -76,85 +100,85 @@ class RegisterForm extends Component {
 
   render() {
     return (
-                <section className="form-v1-container full-width">
-                    <h2 className="text-primary">Create an Account</h2>
-                    <p className="lead text-dark">Discovering and connecting your things around the globe.</p>
-                    <div className="col-md-10 mx-auto">
-                    <form onSubmit={this.handleSubmit} className="form-v1">
-                        <div className="form-group">
-                            <div className="input-group-v1">
-                            <div className="input-group-icon">
-                                <AccountBoxIcon color="primary" />
-                            </div>
-                            <TextField
-                                id="signup1-name"
-                                label="Name"
-                                fullWidth
-                                autoComplete="off"
-                                name="name"
-                                placeholder="Your full name "
-                                type="text"
-                                required
-                            />
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <div className="input-group-v1">
-                            <div className="input-group-icon">
-                                <EmailIcon color="primary" />
-                            </div>
-                            <TextField
-                                id="signup1-email"
-                                label="Email"
-                                fullWidth
-                                autoComplete="off"
-                                type="email"
-                                name="email"
-                                placeholder="Your active email address"
-                                required
-                            />
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <div className="input-group-v1">
-                            <div className="input-group-icon">
-                                <LockIcon color="primary" />
-                            </div>
-                            <TextField
-                                id="signup1-password"
-                                label="Password"
-                                type="password"
-                                fullWidth
-                                autoComplete="off"
-                                name="pass"
-                                placeholder="Your new password"
-                                required
-                            />
-                            </div>
-                        </div>
-                        <div>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        value="agreement"
-                                        color="primary"
-                                        required
-                                    />                                
-                                }
-                                label={<div className="text-dark">I have read the <Link to="/agreement">agreement</Link></div>}
-                                name="agree"
-                            />
-                        </div>
-                        <div className="form-group">
-                            <Button disabled={this.state.loading ? true : false} variant="contained" size="medium" color="primary" type="submit" className="btn-cta btn-block">
-                                    {this.state.loading ? <Loading /> : 'Sign Up'}
-                            </Button>
-                        </div>
-                        </form>
-                        <p className="additional-info text-dark">Already have an account? <Link to="/user/signin">Login</Link></p>
+        <section className="form-v1-container full-width">
+            <h2 className="text-primary">Create an Account</h2>
+            <p className="lead text-light">Discovering and connecting your things around the globe.</p>
+            <div className="col-md-10 mx-auto">
+            <form onSubmit={this.handleSubmit} className="form-v1">
+                <div className="form-group">
+                    <div className="input-group-v1">
+                    <div className="input-group-icon">
+                        <AccountBoxIcon color="primary" />
                     </div>
-                </section>
-    );
+                    <LoginTextField
+                        id="signup1-name"
+                        label="Name"
+                        fullWidth
+                        autoComplete="off"
+                        name="name"
+                        placeholder="Your full name "
+                        type="text"
+                        required
+                    />
+                    </div>
+                </div>
+                <div className="form-group">
+                    <div className="input-group-v1">
+                    <div className="input-group-icon">
+                        <EmailIcon color="primary" />
+                    </div>
+                    <LoginTextField
+                        id="signup1-email"
+                        label="Email"
+                        fullWidth
+                        autoComplete="off"
+                        type="email"
+                        name="email"
+                        placeholder="Your active email address"
+                        required
+                    />
+                    </div>
+                </div>
+                <div className="form-group">
+                    <div className="input-group-v1">
+                    <div className="input-group-icon">
+                        <LockIcon color="primary" />
+                    </div>
+                    <LoginTextField
+                        id="signup1-password"
+                        label="Password"
+                        type="password"
+                        fullWidth
+                        autoComplete="off"
+                        name="pass"
+                        placeholder="Your new password"
+                        required
+                    />
+                    </div>
+                </div>
+                <div>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                value="agreement"
+                                color="primary"
+                                required
+                            />                                
+                        }
+                        label={<div className="text-light">I have read the <Link className="text-primary" to="/agreement">agreement</Link></div>}
+                        name="agree"
+                    />
+                </div>
+                <div className="form-group">
+                    <Button disabled={this.state.loading ? true : false} variant="contained" size="medium" color="primary" type="submit" className="btn-cta btn-block">
+                            {this.state.loading ? <Loading /> : 'Sign Up'}
+                    </Button>
+                </div>
+                </form>
+                <p className="additional-info text-light">Already have an account? <Link className="text-light" to="/user/signin">Login</Link></p>
+            </div>
+        </section>
+    )
   }
 }
 

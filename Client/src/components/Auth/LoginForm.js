@@ -10,7 +10,8 @@ import LockIcon from '@material-ui/icons/Lock'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 
-import { GoogleOutlined, GithubOutlined } from '@ant-design/icons';
+import { GoogleOutlined, GithubOutlined } from '@ant-design/icons'
+import { withStyles } from "@material-ui/core/styles"
 import "styles/loaders/loaders.scss"
 
 const Loading = () => {
@@ -22,6 +23,30 @@ const Loading = () => {
         </div>
     )
 }
+
+const LoginTextField = withStyles({
+    root: {
+        '& label': {
+            color: '#E3F2FD',
+        },
+        '& input' : {
+            color: '#E3F2FD',
+        },
+        '& .MuiInput-root::before': {
+            borderColor: '#64B5F6',
+        },
+        '& .MuiInput-root:hover::before': {
+            borderColor: '#64B5F6',
+        },
+        '& label.Mui-focused': {
+            color: '#E3F2FD',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#E3F2FD',
+        }
+    },
+})(TextField)
+
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
@@ -97,7 +122,6 @@ class LoginForm extends React.Component {
             }
         }).catch(err => {
             this.handleLoading('googleLoading', false)
-            notif('error', 'Error!' , 'An error occurred while trying to sign in with Google! Please contact your Administrator')
         })
     }
 
@@ -139,13 +163,14 @@ class LoginForm extends React.Component {
     }
 
   render() {
+
     if(this.props.isLoggedIn)
         return <Redirect push to='/app/dashboard' />
     
     return (
         <section className="form-v1-container full-width">
             <h2 style={{color: ''}} className="text-primary">Login to Continue</h2>
-            <p className="lead text-dark">Welcome back<br></br> Sign In with your <b className="text-primary ">SMLC Cloud Platform</b> account</p>
+            <p className="lead text-light">Welcome back<br></br> Sign In with your <b className="text-primary ">SMLC Cloud Platform</b> account</p>
             <div className="col-md-10 mx-auto">
                 <Button 
                     onClick={this.signInWithGoogle} 
@@ -172,15 +197,15 @@ class LoginForm extends React.Component {
                             <div className="input-group-icon">
                                 <AccountCircleIcon color="primary" />
                             </div>
-                            <TextField                                   
-                            id="login1-name"
-                            name="email"
-                            label="Email"
-                            type="email"
-                            fullWidth
-                            autoComplete="off"
-                            placeholder="Your email address"
-                            required
+                            <LoginTextField                                   
+                                id="login1-name"
+                                name="email"
+                                label="Email"
+                                type="email"
+                                fullWidth
+                                autoComplete="off"
+                                placeholder="Your email address"
+                                required
                             />
                         </div>
                     </div>
@@ -189,31 +214,31 @@ class LoginForm extends React.Component {
                             <div className="input-group-icon">
                                 <LockIcon color="primary" />
                             </div>
-                            <TextField                                    
-                            id="login1-password"
-                            label="Password"
-                            name="pass"
-                            type="password"
-                            fullWidth
-                            autoComplete="off"
-                            placeholder="Your password account"
-                            required
+                            <LoginTextField                                    
+                                id="login1-password"
+                                label="Password"
+                                name="pass"
+                                type="password"
+                                fullWidth
+                                autoComplete="off"
+                                placeholder="Your password account"
+                                required
                             />
                         </div>
                     </div>
                     <div className="form-group">
                         <Button disabled={this.state.loading ? true : false} variant="contained" size="medium" color="primary" type="submit" className="btn-cta btn-block">
-                            {this.state.loading ? <Loading /> : 'Log In'}
+                            {this.state.loading ? <Loading /> : 'Sign In'}
                         </Button>
                     </div>
                 </form>
             </div>
         
-            <p className="additional-info text-dark">Don't have an account yet? <Link to="/user/signup">Sign up</Link></p>
-            <p className="additional-info text-dark">Forgot your username or password? <Link to="/user/reset">Reset password</Link></p>
+            <p className="additional-info text-light">Don't have an account yet? <Link className="text-light" to="/user/signup">Sign up</Link></p>
+            <p className="additional-info text-light">Forgot your username or password? <Link className="text-light" to="/user/reset">Reset password</Link></p>
         </section>
-    );
+    )
   }
 }
 
-export default withAuth(LoginForm);
+export default withAuth(LoginForm)
