@@ -1,4 +1,4 @@
-<h1>SEA Cloud Platform (v0.3.1)</h1>
+<h1>SEA Cloud Platform (v0.4.1)</h1>
 
 > **Desc :** This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
 
@@ -114,6 +114,18 @@ $ npm run start
 <hr>
 
 # Version Log
+
+## Version Change Log (v0.4.1)
+- Modify register, login and reset layout and UI
+- Change authentication methode to firebase auth
+- Add signin with email firebase
+- Add signin with google firebase
+- Add register data to realtime database firebase
+- Fix profile bug issue (Not showing profile like name or photo at the fisrt time login)
+
+## Version Change Log (v0.3.2)
+- Add event on in controller feature
+- Fix any bug in controller
 
 ## Version Change Log (v0.3.1)
 - Fix socket io device status
