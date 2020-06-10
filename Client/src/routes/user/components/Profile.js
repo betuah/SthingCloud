@@ -46,9 +46,9 @@ class Profile extends Component {
                     <div className="row">
                         <div className="col-lg-3">
                             <article className="profile-card-v2 border-0 mdc-elevation--z2 h-auto">
-                                <img src={profile.avatar} alt="avatar"/>
-                                <h4>{profileData.name}</h4>
-                                <span>{profile.title}</span>
+                                <img src={profileData.photoUrl ? profileData.photoUrl : 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'} />
+                                <h4>{profileData.fullName}</h4>
+                                <span>{profileData.title} Network Enggineer</span>
                                 <p>{`+62 813 83073355 ${profileData.email} `}</p>
                             </article>
                         </div>

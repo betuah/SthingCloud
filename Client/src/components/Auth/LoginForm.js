@@ -99,7 +99,7 @@ class LoginForm extends React.Component {
                         })
                     }).catch(err => {
                         this.handleLoading('loading', false)
-                        notif('error', 'Error 500!' , 'Server Error! ' + err + 'Please contact your Administrator')
+                        notif('error', 'Error 500!' , `Server Error! ${err} Please contact your Administrator`)
                     })
                 }).catch(err => {
                     notif('error', 'Error 500!' , 'An error occurred while sending new data! Please contact your Administrator')
@@ -117,7 +117,7 @@ class LoginForm extends React.Component {
                     })
                 }).catch(err => {
                     this.handleLoading('loading', false)
-                    notif('error', 'Error 500!' , 'Server Error! ' + err + 'Please contact your Administrator')
+                    notif('error', 'Error 500!' , `Server Error! ${err} Please contact your Administrator`)
                 })
             }
         }).catch(err => {
@@ -149,7 +149,7 @@ class LoginForm extends React.Component {
                     })
                 }).catch(err => {
                     this.handleLoading('loading', false)
-                    notif('error', 'Error 500!' , 'Server Error! ' + err + 'Please contact your Administrator')
+                    notif('error', 'Error 500!' , `Server Error! ${err} Please contact your Administrator`)
                 })
             } else {
                 this.handleLoading('loading', false)
@@ -162,83 +162,83 @@ class LoginForm extends React.Component {
         })
     }
 
-  render() {
+    render() {
 
-    if(this.props.isLoggedIn)
-        return <Redirect push to='/app/dashboard' />
-    
-    return (
-        <section className="form-v1-container full-width">
-            <h2 style={{color: ''}} className="text-primary">Login to Continue</h2>
-            <p className="lead text-light">Welcome back<br></br> Sign In with your <b className="text-primary ">SMLC Cloud Platform</b> account</p>
-            <div className="col-md-10 mx-auto">
-                <Button 
-                    onClick={this.signInWithGoogle} 
-                    disabled={this.state.googleLoading ? true : false} 
-                    className="btn-cta btn-block text-white" 
-                    variant="contained" startIcon={this.state.googleLoading ? false : <GoogleOutlined />} 
-                    style={this.state.googleLoading ? {backgroundColor: '#EF9A9A'} : {backgroundColor: '#DD2C00'}}
-                >
-                    {this.state.googleLoading ? <Loading /> : 'SignIn With Google'}
-                </Button>
-                <Button 
-                    className="btn-cta btn-block text-white" 
-                    variant="contained" startIcon={<GithubOutlined />} 
-                    style={{backgroundColor: '#212121'}}
-                >
-                    SignIn With GitHub
-                </Button>
-                
-                <div className="divider divider-with-content text-primary my-4"><span className="divider-inner-content">OR</span></div>
-
-                <form onSubmit={this.handleSubmit} className="form-v1">
-                    <div className="form-group">
-                        <div className="input-group-v1">
-                            <div className="input-group-icon">
-                                <AccountCircleIcon color="primary" />
-                            </div>
-                            <LoginTextField                                   
-                                id="login1-name"
-                                name="email"
-                                label="Email"
-                                type="email"
-                                fullWidth
-                                autoComplete="off"
-                                placeholder="Your email address"
-                                required
-                            />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <div className="input-group-v1">
-                            <div className="input-group-icon">
-                                <LockIcon color="primary" />
-                            </div>
-                            <LoginTextField                                    
-                                id="login1-password"
-                                label="Password"
-                                name="pass"
-                                type="password"
-                                fullWidth
-                                autoComplete="off"
-                                placeholder="Your password account"
-                                required
-                            />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <Button disabled={this.state.loading ? true : false} variant="contained" size="medium" color="primary" type="submit" className="btn-cta btn-block">
-                            {this.state.loading ? <Loading /> : 'Sign In'}
-                        </Button>
-                    </div>
-                </form>
-            </div>
+        if(this.props.isLoggedIn)
+            return <Redirect push to='/app/dashboard' />
         
-            <p className="additional-info text-light">Don't have an account yet? <Link className="text-light" to="/user/signup">Sign up</Link></p>
-            <p className="additional-info text-light">Forgot your username or password? <Link className="text-light" to="/user/reset">Reset password</Link></p>
-        </section>
-    )
-  }
+        return (
+            <section className="form-v1-container full-width">
+                <h2 style={{color: ''}} className="text-primary">Login to Continue</h2>
+                <p className="lead text-light">Welcome back<br></br> Sign In with your <b className="text-primary ">SMLC Cloud Platform</b> account</p>
+                <div className="col-md-10 mx-auto">
+                    <Button 
+                        onClick={this.signInWithGoogle} 
+                        disabled={this.state.googleLoading ? true : false} 
+                        className="btn-cta btn-block text-white" 
+                        variant="contained" startIcon={this.state.googleLoading ? false : <GoogleOutlined />} 
+                        style={this.state.googleLoading ? {backgroundColor: '#EF9A9A'} : {backgroundColor: '#DD2C00'}}
+                    >
+                        {this.state.googleLoading ? <Loading /> : 'SignIn With Google'}
+                    </Button>
+                    <Button 
+                        className="btn-cta btn-block text-white" 
+                        variant="contained" startIcon={<GithubOutlined />} 
+                        style={{backgroundColor: '#212121'}}
+                    >
+                        SignIn With GitHub
+                    </Button>
+                    
+                    <div className="divider divider-with-content text-primary my-4"><span className="divider-inner-content">OR</span></div>
+
+                    <form onSubmit={this.handleSubmit} className="form-v1">
+                        <div className="form-group">
+                            <div className="input-group-v1">
+                                <div className="input-group-icon">
+                                    <AccountCircleIcon color="primary" />
+                                </div>
+                                <LoginTextField                                   
+                                    id="login1-name"
+                                    name="email"
+                                    label="Email"
+                                    type="email"
+                                    fullWidth
+                                    autoComplete="off"
+                                    placeholder="Your email address"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <div className="input-group-v1">
+                                <div className="input-group-icon">
+                                    <LockIcon color="primary" />
+                                </div>
+                                <LoginTextField                                    
+                                    id="login1-password"
+                                    label="Password"
+                                    name="pass"
+                                    type="password"
+                                    fullWidth
+                                    autoComplete="off"
+                                    placeholder="Your password account"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <Button disabled={this.state.loading ? true : false} variant="contained" size="medium" color="primary" type="submit" className="btn-cta btn-block">
+                                {this.state.loading ? <Loading /> : 'Sign In'}
+                            </Button>
+                        </div>
+                    </form>
+                </div>
+            
+                <p className="additional-info text-light">Don't have an account yet? <Link className="text-light" to="/user/signup">Sign up</Link></p>
+                <p className="additional-info text-light">Forgot your username or password? <Link className="text-light" to="/user/reset">Reset password</Link></p>
+            </section>
+        )
+    }
 }
 
 export default withAuth(LoginForm)

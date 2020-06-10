@@ -24,7 +24,8 @@ class AppHeader extends React.Component {
     this.state = {
       anchorEl: null,
       profileData: JSON.parse(localStorage.getItem('profileData')) ? JSON.parse(localStorage.getItem('profileData')) : false,
-      badge: 5
+      badge: 5,
+      account: true,
     }
 
     this.handleSignOut = this.handleSignOut.bind(this)
@@ -113,7 +114,7 @@ class AppHeader extends React.Component {
                   aria-haspopup="true"
                   onClick={this.handleClick}
                 >
-                  <img src={profileData.photoUrl ? profileData.photoUrl : "assets/images-demo/g1-sm.jpg"} alt="avatar" className="avatar-img" />
+                  <img src={profileData.photoUrl ? profileData.photoUrl : "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light"} alt="avatar" className="avatar-img" />
                   <span className="avatar-text d-none d-md-inline">{this.state.profileData.fullName ? this.state.profileData.fullName : ''}</span>
                 </div>
                 <Menu
