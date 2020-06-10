@@ -6,7 +6,22 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+# Server .gitignore
 Server/config/serviceAccountKey.json
+Server/*.env
+Server/package-lock.json
+
+# SocketIO .gitignore
+SocketIO/*.env
+SocketIO/package-lock.json
+
+# API .gitignore
+API/*.env
+API/package-lock.json
+
+# Client .gitignore
+Client/*.env
+Client/package-lock.json
 
 # Node Modules
 .node_modules/
