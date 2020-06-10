@@ -39,7 +39,7 @@ MONGO_HOST=YOUR_MONGODB_HOST
 MONGO_PORT=YOUR_MONGODB_PORT
 ```
 ##### Server serviceAccountKey (For Firebase Admin Config)
-Create file with name serviceAccountKey in 'Server/config' directory and add as bellow
+Create json file with name serviceAccountKey.json in 'Server/config' directory and add as bellow
 ```sh
 {
   "type": "service_account",
