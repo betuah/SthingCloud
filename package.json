@@ -14,7 +14,10 @@
     "start": "concurrently \"npm run server\" \"npm run socket\" \"npm run api\" "
   },
   "devDependencies": {
-    "concurrently": "^5.1.0"
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "concurrently": "^5.1.0",
+    "mocha": "^8.0.1"
   },
   "dependencies": {
     "core-js": "^3.6.4"
