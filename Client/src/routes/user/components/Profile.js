@@ -53,7 +53,7 @@ class Profile extends Component {
                                 <img alt={profileData.fullName} src={profileData.photoUrl ? profileData.photoUrl : 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'} />
                                 <h4>{profileData.fullName}</h4>
                                 <span>{profileData.profession ? profileData.profession : '---'}</span>
-                                <p>{profileData.organization ? profileData.organization : ''} <br /> {profileData.email ? profileData.email : ''}</p>
+                                <p>{profileData.email ? profileData.email : ''} <br /> {profileData.organization ? profileData.organization : ''}</p>
                             </article>
                         </div>
                         <div className="col-xs-12 col-lg-9 col-md-9">
