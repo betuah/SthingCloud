@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import MaterialIcon from 'components/MaterialIcon'
 import { TextField, Button, Radio, FormLabel, FormControlLabel } from '@material-ui/core'
+import { FireDatabase } from 'config/Firebase'
 
 class Profile extends Component {
     constructor(props) {
@@ -14,7 +15,8 @@ class Profile extends Component {
                 gender: 'male',
                 address: '',
                 organization: '',
-                profession: ''
+                profession: '',
+                photoUrl: false
             }
         }
 
@@ -23,7 +25,9 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        const { profileData } = this.props
+        const { profileData, initUser } = this.props
+
+        initUser()
 
         this.setState({
             data: {
@@ -33,7 +37,8 @@ class Profile extends Component {
                 gender: profileData.gender === '' ? 'male' : profileData.gender,
                 address: profileData.address,
                 organization: profileData.organization,
-                profession: profileData.profession
+                profession: profileData.profession,
+                photoUrl: profileData.photoUrl
             }
         })
     }
@@ -48,8 +53,13 @@ class Profile extends Component {
         })
     }
 
-    handleOk = () => {
-        
+    handleOk = async () => {
+        const { uid } = this.props.profileData
+        const user = FireDatabase.ref(`users/${uid}/personalData`)
+
+        user.update({
+            ...this.state.data
+        })
     }
 
     render() {
@@ -142,8 +152,7 @@ class Profile extends Component {
                                             type="text"
                                             fullWidth
                                             autoComplete="off"
-                                            onChange={this.handleChange}
-                                            required
+                                            onChange={this.handleChange}                                            
                                             placeholder="ex: Software Engineering, IoT Developer, Data Scientist and etc"
                                             value={data.profession}
                                             InputLabelProps={{
@@ -164,10 +173,9 @@ class Profile extends Component {
                                             type="text"
                                             fullWidth
                                             autoComplete="off"
-                                            onChange={this.handleChange}
-                                            required
+                                            onChange={this.handleChange}                                            
                                             placeholder="Your organization name"
-                                            value={data.profession}
+                                            value={data.organization}
                                             InputLabelProps={{
                                                 shrink: true,
                                             }}
@@ -185,8 +193,7 @@ class Profile extends Component {
                                             maxrows="4"
                                             fullWidth
                                             autoComplete="off"
-                                            onChange={this.handleChange}
-                                            required
+                                            onChange={this.handleChange}                                            
                                             placeholder="Your home or organization address"
                                             value={data.address}
                                             InputLabelProps={{
