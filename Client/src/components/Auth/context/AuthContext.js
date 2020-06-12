@@ -80,7 +80,7 @@ export class AuthContextProvider extends Component {
                     const err = { status: 'Error', code: 404, msg: 'User not SignIn' }
                       return reject(err)
                     }
-                });                
+                })
             })
             .catch(error => {
                 if(error.response) {

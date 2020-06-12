@@ -168,9 +168,11 @@ class LoginForm extends React.Component {
             return <Redirect push to='/app/dashboard' />
         
         return (
-            <section className="form-v1-container full-width">
-                <h2 style={{color: ''}} className="text-primary">Login to Continue</h2>
-                <p className="lead text-light">Welcome back<br></br> Sign In with your <b className="text-primary ">SMLC Cloud Platform</b> account</p>
+            <section className="form-v1-container">
+                <div className="col-md-12 mx-auto">
+                    <h2 style={{color: ''}} className="text-primary">Login to Continue</h2>
+                    <p className="lead text-light">Welcome back<br></br> Sign In with your <b className="text-primary ">SMLC Cloud Platform</b> account</p>
+                </div>
                 <div className="col-md-10 mx-auto">
                     <Button 
                         onClick={this.signInWithGoogle} 
@@ -232,10 +234,11 @@ class LoginForm extends React.Component {
                             </Button>
                         </div>
                     </form>
+
+                    <p className="additional-info text-light">Don't have an account yet? <Link className="text-light" to="/user/signup">Sign up</Link></p>
+                    <p className="additional-info text-light">Forgot your username or password? <Link className="text-light" to="/user/reset">Reset password</Link></p>
+                
                 </div>
-            
-                <p className="additional-info text-light">Don't have an account yet? <Link className="text-light" to="/user/signup">Sign up</Link></p>
-                <p className="additional-info text-light">Forgot your username or password? <Link className="text-light" to="/user/reset">Reset password</Link></p>
             </section>
         )
     }

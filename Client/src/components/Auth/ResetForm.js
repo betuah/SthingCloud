@@ -80,31 +80,33 @@ class ResetForm extends React.Component {
     render() {
         return (
             <section className="form-v1-container full-width">
-                <h2 style={{color: ''}} className="text-primary">Forgot Password?</h2>
-                <p className="additional-info col-lg-10 mx-lg-auto mb-3 text-light">Enter the email address you used when you joined and we’ll send you instructions for reset the password.</p>
+                <div className="col-md-12 mx-auto">
+                    <h2 style={{color: ''}} className="text-primary">Forgot Password?</h2>
+                    <p className="additional-info col-lg-10 mx-lg-auto mb-3 text-light">Enter the email address you used when you joined and we’ll send you instructions for reset the password.</p>
+                </div>
                 <div className="col-md-10 mx-auto">
-                <form onSubmit={this.handleSubmit} className="form-v1">
-                    <div className="form-group">
-                        <div className="input-group-v1">
-                        <div className="input-group-icon">
-                            <EmailIcon color="primary" />
+                    <form onSubmit={this.handleSubmit} className="form-v1">
+                        <div className="form-group">
+                            <div className="input-group-v1">
+                            <div className="input-group-icon">
+                                <EmailIcon color="primary" />
+                            </div>
+                            <LoginTextField
+                                id="resetpassword1-email"
+                                label="Email"
+                                name="email"
+                                fullWidth
+                                autoComplete="off"
+                                placeholder="Enter your email address"
+                                type="email"
+                            />
+                            </div>
                         </div>
-                        <LoginTextField
-                            id="resetpassword1-email"
-                            label="Email"
-                            name="email"
-                            fullWidth
-                            autoComplete="off"
-                            placeholder="Enter your email address"
-                            type="email"
-                        />
+                        <div className="form-group">
+                            <Button disabled={this.state.loading ? true : false} variant="contained" size="medium" color="primary" type="submit" className="btn-cta btn-block">
+                                {this.state.loading ? <Loading /> : 'Send Reset Instructions'}
+                            </Button>
                         </div>
-                    </div>
-                    <div className="form-group">
-                        <Button disabled={this.state.loading ? true : false} variant="contained" size="medium" color="primary" type="submit" className="btn-cta btn-block">
-                            {this.state.loading ? <Loading /> : 'Send Reset Instructions'}
-                        </Button>
-                    </div>
                     </form>
                     <p className="additional-info text-light">Go back to Sign In ? <Link className="text-light" to="/user/signin">Login</Link></p>
                 </div>

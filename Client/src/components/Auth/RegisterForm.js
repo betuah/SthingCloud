@@ -101,8 +101,10 @@ class RegisterForm extends Component {
   render() {
     return (
         <section className="form-v1-container full-width">
-            <h2 className="text-primary">Create an Account</h2>
-            <p className="lead text-light">Discovering and connecting your things around the globe.</p>
+            <div className="col-md-12 mx-auto">
+                <h2 className="text-primary">Create an Account</h2>
+                <p className="lead text-light">Discovering and connecting your things around the globe.</p>
+            </div>
             <div className="col-md-10 mx-auto">
             <form onSubmit={this.handleSubmit} className="form-v1">
                 <div className="form-group">
