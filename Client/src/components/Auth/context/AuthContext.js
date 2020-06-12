@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from "axios"
 import socketOpen from 'socket.io-client'
-import { FireAuth } from 'config/Firebase'
+import { FireAuth, FireDatabase } from 'config/Firebase'
 
 const server_url    = `${process.env.REACT_APP_SERVER_DOMAIN ? process.env.REACT_APP_SERVER_DOMAIN :'http://localhost:8000'}` 
 const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}` 
@@ -34,12 +34,13 @@ export class AuthContextProvider extends Component {
             }
 
             this.checkToken             = this.checkToken.bind(this)
-            this.initUser               = this.initUser.bind(this)
+            this.initSocket             = this.initSocket.bind(this)
             this.signIn                 = this.signIn.bind(this)
             this.signOut                = this.signOut.bind(this)
             this.setIsLoggin            = this.setIsLoggin.bind(this)
             this.userUpdateProfile      = this.userUpdateProfile.bind(this)
             this.sendEmailVerification  = this.sendEmailVerification.bind(this)
+            this.initUser               = this.initUser.bind(this)
     }
 
     checkToken () {
@@ -50,7 +51,35 @@ export class AuthContextProvider extends Component {
             })
     }
 
-    initUser = async () => {
+    initUser = () => {
+        const { uid } = this.state.profileData
+        const user = FireDatabase.ref(`users/${uid}/personalData`)
+
+        user.on('value', res => {
+            const snap = res.val()
+
+            const userData = {
+                uid: uid,
+                fullName: snap.fullName,
+                email: snap.email,
+                gender: snap.gender,
+                address: snap.address,
+                organization: snap.organization,
+                profession: snap.profession,
+                photoUrl: snap.photoUrl
+            }
+            
+            this.setState({
+                profileData: {
+                    ...userData
+                }
+            })
+
+            localStorage.setItem("profileData", JSON.stringify(userData))
+        })
+    }
+
+    initSocket = () => {
         const profileData = JSON.parse(localStorage.getItem('profileData'))
         return socket.emit('join_room', profileData.uid )
     }
@@ -158,6 +187,7 @@ export class AuthContextProvider extends Component {
                         setIsLoggin: this.setIsLoggin,
                         userUpdateProfile: this.userUpdateProfile,
                         signOut: this.signOut,
+                        initSocket: this.initSocket,
                         initUser: this.initUser,
                         checkToken: this.checkToken,
                         socket: socket,
