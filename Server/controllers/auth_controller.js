@@ -26,7 +26,11 @@ exports.signIn = async (req, res) => {
                         uid: decodedToken.uid,
                         fullName: getPerson.fullName,
                         email: getPerson.email,
-                        photoUrl: getPerson.photoUrl
+                        photoUrl: getPerson.photoUrl,
+                        gender: getPerson.gender,
+                        profession: getPerson.profession,
+                        organization: getPerson.organization,
+                        address: getPerson.address
                     }
                 }
                 res.status(200).json(userData);
@@ -48,7 +52,11 @@ exports.signUp = async (req, res) => {
             personalData : {
                 fullName: req.body.fullName,
                 email: req.body.email,
-                photoUrl: req.body.photoUrl
+                photoUrl: req.body.photoUrl,
+                gender: '',
+                profession: '',
+                organization: '',
+                address: ''
             },
             roles : {
                 id: 1,
