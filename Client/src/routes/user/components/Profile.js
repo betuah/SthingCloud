@@ -50,7 +50,7 @@ class Profile extends Component {
                     <div className="row">
                         <div className="col-lg-3">
                             <article className="profile-card-v2 border-0 mdc-elevation--z2 h-auto">
-                                <img alt={profileData.fullName} src={profileData.photoUrl ? profileData.photoUrl : 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'} />
+                                <img alt={profileData.fullName} src={profileData.photoUrl ? profileData.photoUrl : (profileData.gender === 'male' || profileData.gender === '' ? 'assets/avatars/male-avatar.png' : 'assets/avatars/female-avatar.png')} />
                                 <h4>{profileData.fullName}</h4>
                                 <span>{profileData.profession ? profileData.profession : '---'}</span>
                                 <p>{profileData.email ? profileData.email : ''} <br /> {profileData.organization ? profileData.organization : ''}</p>
