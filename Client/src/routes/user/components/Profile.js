@@ -1,9 +1,14 @@
 import React, { Component, Fragment } from 'react'
+import loadable from 'react-loadable'
+import LoadingComponent from 'components/Loading'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import DEMO from 'constants/demoData'
 import { Tabs, Tab } from '@material-ui/core'
 import SwipeableViews from 'react-swipeable-views'
 
+let PersonalForm = loadable({
+    loader: () => import('./PersonalForm'),
+    loading: LoadingComponent
+})
 class Profile extends Component {
     constructor(props) {
         super(props)
@@ -29,13 +34,12 @@ class Profile extends Component {
     };
 
     render() {
-        const profile = DEMO.profiles[2];
         const { profileData } = this.props
         const { tabIndexValues } = this.state
 
         return (
             <Fragment>
-                <div className="text-center text-body-reverse" style={{position: 'relative', paddingTop: '50px', paddingBottom: '50px'}}>
+                <div className="text-center text-body-reverse" style={{position: 'relative', paddingTop: '20px', paddingBottom: '20px'}}>
                     <div className="hero-bg-img" style={{backgroundColor: '#424242'}}></div>
                     <div className="hero-bg-img" style={{opacity: 0.6, backgroundImage: 'url(assets/flat-images/nature_flat_03.jpg)'}}></div>
                     <div style={{position: 'relative'}}>
@@ -46,7 +50,7 @@ class Profile extends Component {
                     <div className="row">
                         <div className="col-lg-3">
                             <article className="profile-card-v2 border-0 mdc-elevation--z2 h-auto">
-                                <img src={profileData.photoUrl ? profileData.photoUrl : 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'} />
+                                <img alt={profileData.fullName} src={profileData.photoUrl ? profileData.photoUrl : 'https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light'} />
                                 <h4>{profileData.fullName}</h4>
                                 <span>{profileData.title} Network Enggineer</span>
                                 <p>{`+62 813 83073355 ${profileData.email} `}</p>
@@ -66,7 +70,7 @@ class Profile extends Component {
                                         index={tabIndexValues}
                                         onChangeIndex={this.handleChangeIndex}
                                     >
-                                        <h1>Tab 1</h1>
+                                        <PersonalForm />
                                         <h1>Tab 2</h1>
                                         <h1>Tab 3</h1>
                                     </SwipeableViews> 
