@@ -164,7 +164,7 @@ class Profile extends Component {
                                         label="Address"
                                         type="text"
                                         multiline
-                                        maxRows="4"
+                                        maxrows="4"
                                         fullWidth
                                         autoComplete="off"
                                         onChange={this.handleChange}
