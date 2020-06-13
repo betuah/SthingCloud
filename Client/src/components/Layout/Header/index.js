@@ -23,7 +23,6 @@ class AppHeader extends React.Component {
     this._isMounted = true
     this.state = {
       anchorEl: null,
-      profileData: JSON.parse(localStorage.getItem('profileData')) ? JSON.parse(localStorage.getItem('profileData')) : false,
       badge: 5,
       account: true,
     }
@@ -46,9 +45,9 @@ class AppHeader extends React.Component {
   }
 
   componentDidMount() {
-    const { initUser, socket } = this.props
-
-    initUser();
+    const { initSocket, socket } = this.props
+    
+    initSocket()
 
     socket.on('event', data => {
       this._isMounted && data.statusChange === 1 ? notif('info', 'New Device Connected!', `${data.device} is connected!`) : notif('error', 'New Device Disconnected!', `${data.device} is disconnected!`)
@@ -70,8 +69,9 @@ class AppHeader extends React.Component {
   }
 
   render() {
-    const { headerShadow, colorOption, showLogo } = this.props;
-    const { anchorEl, profileData } = this.state
+    const { headerShadow, colorOption, showLogo  } = this.props;
+    const { anchorEl } = this.state
+    const profileData = JSON.parse(localStorage.getItem('profileData'))
 
     return (
       <Header className={classnames('app-header', {
@@ -115,7 +115,7 @@ class AppHeader extends React.Component {
                   onClick={this.handleClick}
                 >
                   <img src={profileData.photoUrl ? profileData.photoUrl : "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light"} alt="avatar" className="avatar-img" />
-                  <span className="avatar-text d-none d-md-inline">{this.state.profileData.fullName ? this.state.profileData.fullName : ''}</span>
+                  <span className="avatar-text d-none d-md-inline">{profileData.fullName ? profileData.fullName : ''}</span>
                 </div>
                 <Menu
                   id="app-header-menu"
@@ -124,7 +124,7 @@ class AppHeader extends React.Component {
                   open={Boolean(anchorEl)}
                   onClose={this.handleClose}
                 >
-                  <MenuItem onClick={this.handleClose} className="d-block d-md-none"> <div>Signed in as <strong>{this.state.profileData.fullName ? this.state.profileData.fullName : ''}</strong></div> </MenuItem>
+                  <MenuItem onClick={this.handleClose} className="d-block d-md-none"> <div>Signed in as <strong>{profileData.fullName ? profileData.fullName : ''}</strong></div> </MenuItem>
                   <div className="divider divider-solid my-1 d-block d-md-none"></div>
                   <MenuItem onClick={this.handleClose}> <Link to={'/app/user/profile'}><MaterialIcon icon="account_circle" />Account</Link> </MenuItem>
                   <MenuItem onClick={this.handleClose}> <Link to={'/app/user/settings'}><MaterialIcon icon="settings" />Settings</Link> </MenuItem>
