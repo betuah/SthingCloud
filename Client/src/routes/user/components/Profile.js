@@ -22,19 +22,19 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        this.props.checkToken();
+        this.props.checkToken()
     }
 
     handleChangeTabs = (event, tabIndexValues) => {
-        this.setState({ tabIndexValues });
+        this.setState({ tabIndexValues })
     };
     
     handleChangeIndex = index => {
-        this.setState({ tabIndexValues: index });
+        this.setState({ tabIndexValues: index })
     };
 
     render() {
-        const { profileData } = this.props
+        const profileData = JSON.parse(localStorage.getItem('profileData'))
         const { tabIndexValues } = this.state
 
         return (
