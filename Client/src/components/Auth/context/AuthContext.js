@@ -52,7 +52,7 @@ export class AuthContextProvider extends Component {
     }
 
     initUser = () => {
-        const { uid } = this.state.profileData
+        const { uid } = JSON.parse(localStorage.getItem('profileData'))
         const user = FireDatabase.ref(`users/${uid}/personalData`)
 
         user.on('value', res => {
@@ -164,7 +164,8 @@ export class AuthContextProvider extends Component {
             axiosReq.post(`${server_url}/api/signout`)
             .then(res => {
                 this.setState({
-                    isLoggedIn: false
+                    isLoggedIn: false,
+                    profileData: false
                 })
         
                 localStorage.removeItem('token')
