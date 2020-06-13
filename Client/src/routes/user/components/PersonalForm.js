@@ -3,12 +3,14 @@ import { withAuth } from 'components/Auth/context/AuthContext'
 import MaterialIcon from 'components/MaterialIcon'
 import { TextField, Button, Radio, FormLabel, FormControlLabel } from '@material-ui/core'
 import { FireDatabase } from 'config/Firebase'
+import notif from 'components/NotificationPopUp/notif'
 
 class Profile extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
+            uid: false,
             data: {
                 fullName: '',
                 email: '',
@@ -24,21 +26,23 @@ class Profile extends Component {
         this.handleOk = this.handleOk.bind(this)
     }
 
-    componentDidMount() {
-        const { profileData, initUser } = this.props
+    componentDidMount = async () => {
+        const { initUser } = this.props
+        const profile = JSON.parse(localStorage.getItem('profileData'))
 
         initUser()
 
         this.setState({
+            uid: profile.uid,
             data: {
                 ...this.state.data,
-                fullName: profileData.fullName,
-                email: profileData.email,
-                gender: profileData.gender === '' ? 'male' : profileData.gender,
-                address: profileData.address,
-                organization: profileData.organization,
-                profession: profileData.profession,
-                photoUrl: profileData.photoUrl
+                fullName: profile.fullName,
+                email: profile.email,
+                gender: profile.gender === '' ? 'male' : profile.gender,
+                address: profile.address,
+                organization: profile.organization,
+                profession: profile.profession,
+                photoUrl: profile.photoUrl
             }
         })
     }
@@ -54,11 +58,15 @@ class Profile extends Component {
     }
 
     handleOk = async () => {
-        const { uid } = this.props.profileData
+        const { uid, data } = this.state
         const user = FireDatabase.ref(`users/${uid}/personalData`)
 
         user.update({
-            ...this.state.data
+            ...data
+        }).then(res => {
+            notif('success', 'Success!' , 'Your data changes have been saved.')
+        }).catch(err => {
+            notif('error', 'Failed!' , 'Failed saving data.')
         })
     }
 
