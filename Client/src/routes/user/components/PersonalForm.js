@@ -5,20 +5,24 @@ import { TextField, Button, Radio, FormLabel, FormControlLabel } from '@material
 import { FireDatabase } from 'config/Firebase'
 import notif from 'components/NotificationPopUp/notif'
 
-class Profile extends Component {
+class PersonalForm extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
             uid: false,
+            email: '',
             data: {
                 fullName: '',
-                email: '',
                 gender: 'male',
                 address: '',
                 organization: '',
                 profession: '',
                 photoUrl: false
+            },
+            modalForm: {
+                password: '',
+                confirmPassword: ''
             }
         }
 
@@ -34,10 +38,10 @@ class Profile extends Component {
 
         this.setState({
             uid: profile.uid,
+            email: profile.email,
             data: {
                 ...this.state.data,
                 fullName: profile.fullName,
-                email: profile.email,
                 gender: profile.gender === '' ? 'male' : profile.gender,
                 address: profile.address,
                 organization: profile.organization,
@@ -49,19 +53,31 @@ class Profile extends Component {
 
     handleChange = (e) => {
         const { name, value } = e.target;
-        this.setState({
-            data: {
-                ...this.state.data,
-                [name]: value
-            }
-        })
+
+        if(name === 'password' || name === 'confirmPassword') {
+            this.setState({
+                modalForm: {
+                    ...this.state.modalForm,
+                    [name]: value
+                }
+            })
+        } else {
+            this.setState({
+                data: {
+                    ...this.state.data,
+                    [name]: value
+                }
+            })
+        }
     }
 
-    handleOk = async () => {
-        const { uid, data } = this.state
-        const user = FireDatabase.ref(`users/${uid}/personalData`)
+    handleOk = (e) => {
+        e.preventDefault()
 
-        user.update({
+        const { uid, data } = this.state
+        const userDb = FireDatabase.ref(`users/${uid}/personalData`)
+
+        userDb.update({
             ...data
         }).then(res => {
             notif('success', 'Success!' , 'Your data changes have been saved.')
@@ -71,148 +87,152 @@ class Profile extends Component {
     }
 
     render() {
-        const { data } = this.state
+        const { email, data } = this.state
 
         return (
             <Fragment>
-                <div className="container-fluid full-width">
+                <div className="container">
                     <div className="row">
-                        <div className="col-md-12">
-                            <form className="form-v1 col-md-8 mx-auto">
-                                <div className="form-group">
-                                    <div className="input-group-v1">
-                                        <div className="input-group-icon">
-                                            <MaterialIcon icon="assignment_ind" style={{color: '#00BCD4'}} />
-                                        </div>
-                                        <TextField                                   
-                                            id="fullName"
-                                            name="fullName"
-                                            label="Full Name"
-                                            type="text"
-                                            fullWidth
-                                            autoComplete="off"
-                                            onChange={this.handleChange}
-                                            required
-                                            placeholder="Your full name"
-                                            value={data.fullName}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="form-group">
-                                    <div className="input-group-v1">
-                                        <div className="input-group-icon">
-                                            <MaterialIcon icon="email" style={{color: '#00BCD4'}} />
-                                        </div>
-                                        <TextField                                   
-                                            id="email"
-                                            name="email"
-                                            label="Email"
-                                            type="email"
-                                            fullWidth
-                                            autoComplete="off"
-                                            onChange={this.handleChange}
-                                            required
-                                            placeholder="Your email address"
-                                            value={data.email}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className="form-group">
-                                    <div className="input-group-v1">
-                                        <FormLabel component="legend">Gender</FormLabel>
-                                        <FormControlLabel value="male" control={
-                                            <Radio
-                                                checked={data.gender === 'male'}
+                        <div className="col-xs-12 col-md-12">
+                            <div className="row justify-content-center">
+                                <form onSubmit={this.handleOk} className="form-v1 col-xs-12 col-md-8">
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <div className="input-group-icon">
+                                                <MaterialIcon icon="assignment_ind" style={{color: '#00BCD4'}} />
+                                            </div>
+                                            <TextField                                   
+                                                id="fullName"
+                                                name="fullName"
+                                                label="Full Name"
+                                                type="text"
+                                                fullWidth
+                                                autoComplete="off"
                                                 onChange={this.handleChange}
-                                                value="male"
-                                                name="gender"
-                                                aria-label="Male"
-                                                color="primary"
+                                                required
+                                                placeholder="Your full name"
+                                                value={data.fullName}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
                                             />
-                                        } label="Male" />
-                                        <FormControlLabel value="female" control={
-                                            <Radio
-                                                checked={data.gender === 'female'}
-                                                onChange={this.handleChange}
-                                                value="female"
-                                                name="gender"
-                                                aria-label="Female"
-                                                color="primary"
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <div className="input-group-icon">
+                                                <MaterialIcon icon="email" style={{color: '#00BCD4'}} />
+                                            </div>
+                                            <TextField                                   
+                                                id="email"
+                                                name="email"
+                                                label="Email"
+                                                type="email"
+                                                fullWidth
+                                                autoComplete="off"
+                                                required
+                                                placeholder="Your email address"
+                                                value={email}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                disabled
                                             />
-                                        } label="Female" />
-                                    </div>
-                                </div>
-                                <div className="form-group">
-                                    <div className="input-group-v1">
-                                        <div className="input-group-icon">
-                                            <MaterialIcon icon="engineering" style={{color: '#00BCD4'}} />
                                         </div>
-                                        <TextField                                   
-                                            id="profession"
-                                            name="profession"
-                                            label="Profession"
-                                            type="text"
-                                            fullWidth
-                                            autoComplete="off"
-                                            onChange={this.handleChange}                                            
-                                            placeholder="ex: Software Engineering, IoT Developer, Data Scientist and etc"
-                                            value={data.profession}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                        />
                                     </div>
-                                </div>
-                                <div className="form-group">
-                                    <div className="input-group-v1">
-                                        <div className="input-group-icon">
-                                            <MaterialIcon icon="apartment" style={{color: '#00BCD4'}} />
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <FormLabel component="legend">Gender</FormLabel>
+                                            <FormControlLabel value="male" control={
+                                                <Radio
+                                                    checked={data.gender === 'male'}
+                                                    onChange={this.handleChange}
+                                                    value="male"
+                                                    name="gender"
+                                                    aria-label="Male"
+                                                    color="primary"
+                                                />
+                                            } label="Male" />
+                                            <FormControlLabel value="female" control={
+                                                <Radio
+                                                    checked={data.gender === 'female'}
+                                                    onChange={this.handleChange}
+                                                    value="female"
+                                                    name="gender"
+                                                    aria-label="Female"
+                                                    color="primary"
+                                                />
+                                            } label="Female" />
                                         </div>
-                                        <TextField                                   
-                                            id="organization"
-                                            name="organization"
-                                            label="Organization"
-                                            type="text"
-                                            fullWidth
-                                            autoComplete="off"
-                                            onChange={this.handleChange}                                            
-                                            placeholder="Your organization name"
-                                            value={data.organization}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                        />
                                     </div>
-                                </div>
-                                <div className="form-group">
-                                    <div className="input-group-v1">
-                                        <TextField                                   
-                                            id="address"
-                                            name="address"
-                                            label="Address"
-                                            type="text"
-                                            multiline
-                                            maxrows="4"
-                                            fullWidth
-                                            autoComplete="off"
-                                            onChange={this.handleChange}                                            
-                                            placeholder="Your home or organization address"
-                                            value={data.address}
-                                            InputLabelProps={{
-                                                shrink: true,
-                                            }}
-                                        />
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <div className="input-group-icon">
+                                                <MaterialIcon icon="engineering" style={{color: '#00BCD4'}} />
+                                            </div>
+                                            <TextField                                   
+                                                id="profession"
+                                                name="profession"
+                                                label="Profession"
+                                                type="text"
+                                                fullWidth
+                                                autoComplete="off"
+                                                onChange={this.handleChange}                                            
+                                                placeholder="ex: Software Engineering, IoT Developer, Data Scientist and etc"
+                                                value={data.profession}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <div className="input-group-icon">
+                                                <MaterialIcon icon="apartment" style={{color: '#00BCD4'}} />
+                                            </div>
+                                            <TextField                                   
+                                                id="organization"
+                                                name="organization"
+                                                label="Organization"
+                                                type="text"
+                                                fullWidth
+                                                autoComplete="off"
+                                                onChange={this.handleChange}                                            
+                                                placeholder="Your organization name"
+                                                value={data.organization}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <TextField                                   
+                                                id="address"
+                                                name="address"
+                                                label="Address"
+                                                type="text"
+                                                multiline
+                                                maxrows="4"
+                                                fullWidth
+                                                autoComplete="off"
+                                                onChange={this.handleChange}                                            
+                                                placeholder="Your home or organization address"
+                                                value={data.address}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-group d-flex justify-content-center">
+                                        <Button className="col-md-4" variant="contained" color="primary" type="submit"> Save Change </Button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <Button className="col-md-2 mx-auto" variant="contained" color="primary" onClick={this.handleOk}> Save Change </Button>
                     </div>
                 </div>
             </Fragment>
@@ -220,4 +240,4 @@ class Profile extends Component {
     }
 }
 
-export default withAuth(Profile)
+export default withAuth(PersonalForm)
