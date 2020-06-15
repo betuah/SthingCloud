@@ -114,7 +114,7 @@ class AppHeader extends React.Component {
                   aria-haspopup="true"
                   onClick={this.handleClick}
                 >
-                  <img src={profileData.photoUrl ? profileData.photoUrl : "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Blank&hairColor=BrownDark&facialHairType=Blank&clotheType=BlazerShirt&eyeType=Default&eyebrowType=Default&mouthType=Default&skinColor=Light"} alt="avatar" className="avatar-img" />
+                  <img src={profileData.photoUrl ? profileData.photoUrl : (profileData.gender === 'male' || profileData.gender === '' ? 'assets/avatars/male-avatar.png' : 'assets/avatars/female-avatar.png')} alt="avatar" className="avatar-img" />
                   <span className="avatar-text d-none d-md-inline">{profileData.fullName ? profileData.fullName : ''}</span>
                 </div>
                 <Menu
