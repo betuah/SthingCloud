@@ -1,7 +1,7 @@
-import React from 'react';
-import MaterialIcon from 'components/MaterialIcon';
-import Button from '@material-ui/core/Button';
-import { notification } from 'antd';
+import React from 'react'
+import MaterialIcon from 'components/MaterialIcon'
+import Button from '@material-ui/core/Button'
+import { notification } from 'antd'
 
 const notif = (type, title, desc) => {
     let icon = null;
@@ -23,19 +23,19 @@ const notif = (type, title, desc) => {
         message: title,
         description: desc,
         icon: icon
-    });
-};
+    })
+}
 
 export const deleteConfirm = (callback) => {
     const key = `open${Date.now()}`;
     const btnCencel = function () {
         notification.close(key);
         callback(false)
-    };
+    }
     const btnConfirm = function () {
         notification.destroy()
         callback(true)
-    };
+    }
     const btn = (
         <div>
         <Button color="primary" onClick={btnCencel}>
@@ -45,14 +45,44 @@ export const deleteConfirm = (callback) => {
             Confirm
         </Button>
         </div>
-    );
+    )
     notification.open({
         message: 'Delete confirmation!',
         description: 'Are you sure to delete this data ?',
         icon: <MaterialIcon icon="error" className="text-danger" />,
         btn,
         key
-    });
-};
+    })
+}
+
+export const notifConfirm = (data, callback) => {
+    const key = `open${Date.now()}`;
+    const btnCencel = function () {
+        notification.close(key);
+        callback(false)
+    }
+    const btnConfirm = function () {
+        notification.destroy()
+        callback(true)
+    }
+
+    const btn = (
+        <div>
+        <Button color="primary" onClick={btnCencel}>
+            Cencel
+        </Button>
+        <Button color="default" onClick={btnConfirm}>
+            Confirm
+        </Button>
+        </div>
+    )
+    notification.open({
+        message: data.title,
+        description: data.msg,
+        icon: <MaterialIcon icon="error" className="text-warning" />,
+        btn,
+        key
+    })
+}
 
 export default notif;
