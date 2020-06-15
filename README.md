@@ -122,6 +122,7 @@ $ npm run start
 - Add signin with google firebase
 - Add register data to realtime database firebase
 - Fix profile bug issue (Not showing profile like name or photo at the fisrt time login)
+- Add Profile commpoent with Personal Information, Change Photo Profile and Change Password
 
 ## Version Change Log (v0.3.2)
 - Add event on in controller feature
