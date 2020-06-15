@@ -9,6 +9,11 @@ let PersonalForm = loadable({
     loader: () => import('./PersonalForm'),
     loading: LoadingComponent
 })
+
+let PasswordForm = loadable({
+    loader: () => import('./PasswordForm'),
+    loading: LoadingComponent
+})
 class Profile extends Component {
     constructor(props) {
         super(props)
@@ -48,7 +53,7 @@ class Profile extends Component {
                 </div>
                 <div className="container-fluid mt-4 mb-3">
                     <div className="row">
-                        <div className="col-lg-3">
+                        <div className="col-lg-3 mb-3">
                             <article className="profile-card-v2 border-0 mdc-elevation--z2 h-auto">
                                 <img alt={profileData.fullName} src={profileData.photoUrl ? profileData.photoUrl : (profileData.gender === 'male' || profileData.gender === '' ? 'assets/avatars/male-avatar.png' : 'assets/avatars/female-avatar.png')} />
                                 <h4>{profileData.fullName}</h4>
@@ -56,7 +61,7 @@ class Profile extends Component {
                                 <p>{profileData.email ? profileData.email : ''} <br /> {profileData.organization ? profileData.organization : ''}</p>
                             </article>
                         </div>
-                        <div className="col-xs-12 col-lg-9 col-md-9">
+                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-9 ">
                             <div className="box box-default mdc-elevation--z2 mb-3">
                                 <div className="box-header">
                                     <Tabs value={tabIndexValues} onChange={this.handleChangeTabs} variant="fullWidth">
@@ -72,7 +77,7 @@ class Profile extends Component {
                                     >
                                         <PersonalForm />
                                         <h1>Tab 2</h1>
-                                        <h1>Tab 3</h1>
+                                        <PasswordForm />
                                     </SwipeableViews> 
                                 </div>
                             </div>
