@@ -9,6 +9,7 @@ lerna-debug.log*
 # Server .gitignore
 Server/config/serviceAccountKey.json
 Server/*.env
+Server/public/avatars/*
 Server/package-lock.json
 
 # SocketIO .gitignore
