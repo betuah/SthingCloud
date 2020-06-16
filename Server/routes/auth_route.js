@@ -1,5 +1,5 @@
-const authMiddleware = require('../middlewares/auth_middleware');
-const Auth = require('../controllers/auth_controller');
+const authMiddleware = require('../middlewares/auth_middleware')
+const Auth = require('../controllers/auth_controller')
 
 module.exports = (app) => {
     
@@ -10,11 +10,11 @@ module.exports = (app) => {
         .post(Auth.signUp);
 
     app.route('/api/signout')
-        .post(authMiddleware, Auth.signOut);
+        .post(authMiddleware, Auth.signOut)
     
     app.route('/api/tokenverify')
-        .get(authMiddleware, Auth.tokenVerify);
+        .get(authMiddleware, Auth.tokenVerify)
     
     app.route('/api/profile')
-        .get(authMiddleware, Auth.profile);
-};
+        .get(authMiddleware, Auth.profile)
+}
