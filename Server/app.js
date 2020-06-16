@@ -24,6 +24,7 @@ const options = {
     }
 }
 
+app.use('/public', express.static(__dirname + '/public'))
 app.use(cors(options))
 /* End Dynamic CORS */
 
