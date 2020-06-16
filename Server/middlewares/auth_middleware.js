@@ -11,18 +11,6 @@ const authMiddleware = async (req, res, next) => {
         const token     = req.header('Authorization').replace('Bearer ','')
         const decoded   = jwt.verify(token, secret)     
 
-        /* verify firebase token to get result user login or not */
-        // firebaseAuth.verifyIdToken(decoded.refresh_token, true).then(() => {
-        //     req.token   = token
-        //     req.id_user = decoded.uid
-        //     req.role    = decoded.roles
-        //     req.uid     = decoded.uid
-
-        //     next()
-        // }).catch(err => {
-        //     res.status(401).json({ status: 'UNAUTHORIZED!', code: 406, msg: "You'are not authorized to access this content!"})
-        // })
-
         req.token   = token
         req.id_user = decoded.uid
         req.role    = decoded.roles
