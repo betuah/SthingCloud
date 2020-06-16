@@ -47,7 +47,7 @@ class Profile extends Component {
                 <div className="text-center text-body-reverse" style={{position: 'relative', paddingTop: '20px', paddingBottom: '20px'}}>
                     <div className="hero-bg-img" style={{backgroundColor: '#424242'}}></div>
                     <div className="hero-bg-img" style={{opacity: 0.6, backgroundImage: 'url(assets/flat-images/nature_flat_03.jpg)'}}></div>
-                    <div style={{position: 'relative'}}>
+                    <div className="custom-modal-title" style={{position: 'relative'}}>
                         <h3>User Profile</h3>
                     </div>
                 </div>
