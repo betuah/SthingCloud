@@ -105,6 +105,7 @@ const SignInModal = (props) => {
                                 className="mb-2 col-md-9" 
                                 variant="contained" color="primary" 
                                 type="submit"
+                                disabled={props.signinLoading ? true : false}
                             >
                                 {props.signinLoading ? <Loading /> : 'SignIn'}
                             </Button>
