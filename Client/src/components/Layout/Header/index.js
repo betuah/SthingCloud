@@ -69,7 +69,7 @@ class AppHeader extends React.Component {
   }
 
   render() {
-    const { headerShadow, colorOption, showLogo  } = this.props;
+    const { headerShadow, colorOption, showLogo, server_url } = this.props;
     const { anchorEl } = this.state
     const profileData = JSON.parse(localStorage.getItem('profileData'))
 
@@ -114,7 +114,11 @@ class AppHeader extends React.Component {
                   aria-haspopup="true"
                   onClick={this.handleClick}
                 >
-                  <img src={profileData.photoUrl ? profileData.photoUrl : (profileData.gender === 'male' || profileData.gender === '' ? 'assets/avatars/male-avatar.png' : 'assets/avatars/female-avatar.png')} alt="avatar" className="avatar-img" />
+                  <img 
+                    src={profileData.photoUrl ? (profileData.photoUrl.sourceId === 'api' ? `${server_url}/public/avatars/${profileData.photoUrl.url}` : profileData.photoUrl.url) : (profileData.gender === 'male' || profileData.gender === '' ? 'assets/avatars/male-avatar.png' : 'assets/avatars/female-avatar.png')} 
+                    alt="avatar" 
+                    className="avatar-img" 
+                  />
                   <span className="avatar-text d-none d-md-inline">{profileData.fullName ? profileData.fullName : ''}</span>
                 </div>
                 <Menu
