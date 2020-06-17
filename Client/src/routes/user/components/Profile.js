@@ -14,6 +14,11 @@ let PasswordForm = loadable({
     loader: () => import('./PasswordForm'),
     loading: LoadingComponent
 })
+
+let UploadPhoto = loadable({
+    loader: () => import('./UploadPhoto'),
+    loading: LoadingComponent
+})
 class Profile extends Component {
     constructor(props) {
         super(props)
@@ -41,6 +46,7 @@ class Profile extends Component {
     render() {
         const profileData = JSON.parse(localStorage.getItem('profileData'))
         const { tabIndexValues } = this.state
+        const { server_url } = this.props
 
         return (
             <Fragment>
@@ -55,7 +61,10 @@ class Profile extends Component {
                     <div className="row">
                         <div className="col-lg-3 mb-3">
                             <article className="profile-card-v2 border-0 mdc-elevation--z2 h-auto">
-                                <img alt={profileData.fullName} src={profileData.photoUrl ? profileData.photoUrl : (profileData.gender === 'male' || profileData.gender === '' ? 'assets/avatars/male-avatar.png' : 'assets/avatars/female-avatar.png')} />
+                                <img 
+                                    alt={profileData.fullName} 
+                                    src={profileData.photoUrl ? (profileData.photoUrl.sourceId === 'api' ? `${server_url}/public/avatars/${profileData.photoUrl.url}` : profileData.photoUrl.url) : (profileData.gender === 'male' || profileData.gender === '' ? 'assets/avatars/male-avatar.png' : 'assets/avatars/female-avatar.png')} 
+                                />
                                 <h4>{profileData.fullName}</h4>
                                 <span>{profileData.profession ? profileData.profession : '---'}</span>
                                 <p>{profileData.email ? profileData.email : ''} <br /> {profileData.organization ? profileData.organization : ''}</p>
@@ -76,7 +85,7 @@ class Profile extends Component {
                                         onChangeIndex={this.handleChangeIndex}
                                     >
                                         <PersonalForm />
-                                        <h1>Tab 2</h1>
+                                        <UploadPhoto />
                                         <PasswordForm />
                                     </SwipeableViews> 
                                 </div>
