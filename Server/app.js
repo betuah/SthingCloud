@@ -14,11 +14,11 @@ app.use(bodyParser.json());
 const whitelist = ['http://localhost:8000', 'http://localhost:3000', 'http://localhost:8080', 'http://114.4.109.110:8000', 'http://114.4.109.110:3000']
 
 const options = {
-    origin: function (origin, callback) {
+    origin: (origin, callback) => {
         if (whitelist.indexOf(origin) !== -1) {
             callback(null, true)
         } else {
-            callback("Not allowed by SEA Cloud Platform API'S");
+            callback("CORS Not allowed by SEA Cloud Platform SERVER API'S");
             // console.log(callback(new Error("Not allowed by SEA Cloud Platform API'S")));
         }
     }
