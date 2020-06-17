@@ -83,7 +83,10 @@ class LoginForm extends React.Component {
                     uid: res.user.uid,
                     fullName: profile.name,
                     email: profile.email,
-                    photoUrl: profile.picture
+                    photoUrl: {
+                        sourceId: 'google',
+                        url: profile.picture
+                    }
                 }
 
                 props.userUpdateProfile(profileData)
