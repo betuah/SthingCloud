@@ -162,7 +162,7 @@ class PasswordForm extends Component {
         user.updatePassword(data.newPassword).then(() => {
             notif('success', 'Success!' , `Password was updated.`) // Notif if password updated
             this.handleCloseModal() // Reset password and signin form
-            this.handleLoading('all', true) // set off for all loading
+            this.handleLoading('all', false) // set off for all loading
         }).catch(error => {
             // Error handling for update password
             notif('error', 'Failed update Password!' , `Some thing wrong from the server. Please contact Administrator to fix this.`)

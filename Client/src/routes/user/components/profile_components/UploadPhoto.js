@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Upload } from 'antd'
+import ImgCrop from 'antd-img-crop'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import notif from 'components/NotificationPopUp/notif'
@@ -10,6 +11,23 @@ const UploadPhoto = props => {
     const { axios, server_url } = props
 
     const [fileList, setFileList] = useState([])
+
+    const beforeCrop = file => {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpeg'
+        const isLt5M = file.size / 1024 / 1024 < 5
+
+        if (!isJpgOrPng) {
+            notif('warning', 'Bad Format!' , 'You can only upload JPG/PNG/JPEG file format!')
+            return false
+        }
+        
+        if (!isLt5M) {
+            notif('warning', 'File Size!' , 'Image must smaller than 5MB!')
+            return false
+        }
+        // return true
+        return isJpgOrPng && isLt5M
+    }
 
     const customDraggerProps = {
         name: 'file',
@@ -35,6 +53,7 @@ const UploadPhoto = props => {
             })
             
         },
+        beforeUpload: beforeCrop,
         onChange(info) {
             const status = info.file.status
             let fileList = [...info.fileList]
@@ -59,13 +78,15 @@ const UploadPhoto = props => {
 
     return(
         <div className="h-50">
-            <Dragger {...customDraggerProps}>
-                <p className="ant-upload-drag-icon">
-                    <MaterialIcon icon="inbox" style={{fontSize: '50px'}} />
-                </p>
-                <p className="ant-upload-text">Click or drag your photo picture to this area to upload</p>
-                <p className="ant-upload-hint">Notes: Format support .jpeg .jpg .png</p>
-            </Dragger>
+            <ImgCrop rotate beforeCrop={beforeCrop}>
+                <Dragger {...customDraggerProps}>
+                    <p className="ant-upload-drag-icon">
+                        <MaterialIcon icon="inbox" style={{fontSize: '50px'}} />
+                    </p>
+                    <p className="ant-upload-text">Click or drag your photo picture to this area to upload</p>
+                    <p className="ant-upload-hint">Notes: Format support .jpeg .jpg .png and must smaller than 5 mb</p>
+                </Dragger>
+            </ImgCrop>
         </div>
     )
 }
