@@ -79,18 +79,10 @@ export const USER = [
   {
     name: 'Settings',
     path: '/app/user/settings'
-  },
-  {
-    name: 'Account Upgrade',
-    path: '/app/user/upgrade'
   }
 ]
 
 export const RESOURCES = [
-  {
-    name: 'Shop',
-    path: '/resource/shop'
-  },
   {
     name: 'Documentation',
     path: 'https://seamolec.org'

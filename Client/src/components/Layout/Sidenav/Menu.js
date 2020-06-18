@@ -145,7 +145,7 @@ class AppMenu extends React.Component {
             <span className="nav-text">Controller</span>
           </Button>
         </Menu.Item>
-        <Menu.Item key="/app/databucket">
+        <Menu.Item className="d-none" key="/app/databucket">
           <Button className="nav-item" href="#/app/databucket">
             <MaterialIcon icon="storage" style={{color: '#9C27B0'}} />
             <span className="nav-text">Data Bucket</span>
