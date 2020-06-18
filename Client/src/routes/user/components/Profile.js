@@ -6,17 +6,17 @@ import { Tabs, Tab } from '@material-ui/core'
 import SwipeableViews from 'react-swipeable-views'
 
 let PersonalForm = loadable({
-    loader: () => import('./profile_components/PersonalForm'),
+    loader: () => import('./PersonalForm'),
     loading: LoadingComponent
 })
 
 let PasswordForm = loadable({
-    loader: () => import('./profile_components/PasswordForm'),
+    loader: () => import('./PasswordForm'),
     loading: LoadingComponent
 })
 
 let UploadPhoto = loadable({
-    loader: () => import('./profile_components/UploadPhoto'),
+    loader: () => import('./UploadPhoto'),
     loading: LoadingComponent
 })
 class Profile extends Component {
