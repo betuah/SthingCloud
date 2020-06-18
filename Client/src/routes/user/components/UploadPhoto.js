@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Upload } from 'antd'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
@@ -9,10 +9,17 @@ const Dragger = Upload.Dragger
 const UploadPhoto = props => {
     const { axios, server_url } = props
 
+    const [fileList, setFileList] = useState([])
+
     const customDraggerProps = {
         name: 'file',
         multiple: false,
+        fileList: fileList,
+        accept: '.png,.jpeg,.jpg,image/png,image/jpeg,image/jpg',
         action: `${server_url}/api/user/avatar/upload`,
+        showUploadList: {
+            showRemoveIcon: false
+        },
         customRequest: (options) => {
             const data= new FormData()
             data.append('file', options.file)
@@ -23,13 +30,25 @@ const UploadPhoto = props => {
             }
             axios.post(options.action, data, config).then(res => {
                 options.onSuccess(res.data.url, options.file)
-            }).catch((err: Error) => {
-                console.log(err)
+            }).catch(err => {
+                notif('warning', 'Upload Failed!' , 'Maybe the image file format you entered is incorrect or the image file is corrupt.')
             })
             
         },
         onChange(info) {
             const status = info.file.status
+            let fileList = [...info.fileList]
+
+            fileList = fileList.slice(-1)
+            fileList = fileList.map(file => {
+                if (file.response) {
+                    file.url = file.response.url;
+                }
+                return file;
+            })            
+            
+            setFileList(fileList)
+            
             if (status === 'done') {
                 notif('success', 'Upload Finish!' , 'Uploaded photo picture successfully.')
             } else if (status === 'error') {
