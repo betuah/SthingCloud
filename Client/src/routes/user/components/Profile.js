@@ -6,17 +6,17 @@ import { Tabs, Tab } from '@material-ui/core'
 import SwipeableViews from 'react-swipeable-views'
 
 let PersonalForm = loadable({
-    loader: () => import('./PersonalForm'),
+    loader: () => import('./profile_components/PersonalForm'),
     loading: LoadingComponent
 })
 
 let PasswordForm = loadable({
-    loader: () => import('./PasswordForm'),
+    loader: () => import('./profile_components/PasswordForm'),
     loading: LoadingComponent
 })
 
 let UploadPhoto = loadable({
-    loader: () => import('./UploadPhoto'),
+    loader: () => import('./profile_components/UploadPhoto'),
     loading: LoadingComponent
 })
 class Profile extends Component {
@@ -50,13 +50,6 @@ class Profile extends Component {
 
         return (
             <Fragment>
-                <div className="text-center text-body-reverse" style={{position: 'relative', paddingTop: '20px', paddingBottom: '20px'}}>
-                    <div className="hero-bg-img" style={{backgroundColor: '#424242'}}></div>
-                    <div className="hero-bg-img" style={{opacity: 0.6, backgroundImage: 'url(assets/flat-images/nature_flat_03.jpg)'}}></div>
-                    <div className="custom-modal-title" style={{position: 'relative'}}>
-                        <h3>User Profile</h3>
-                    </div>
-                </div>
                 <div className="container-fluid mt-4 mb-3">
                     <div className="row">
                         <div className="col-lg-3 mb-3">
