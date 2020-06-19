@@ -3,10 +3,12 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
 import Logo from 'components/Logo';
-import APPCONFIG from 'constants/appConfig';
 import { toggleCollapsedNav, toggleOffCanvasNav } from 'actions/settingsActions';
 import MaterialIcon from 'components/MaterialIcon';
 import AppMenu from './Menu';
+
+import './brand-Logo.scss';
+
 const { Sider } = Layout;
 
 class AppSidenav extends React.Component {
@@ -39,7 +41,8 @@ class AppSidenav extends React.Component {
             'bg-danger': ['16', '26', '36'].indexOf(colorOption) >= 0 })}
         >
           <Logo />
-          <a href="#/" className="brand">{APPCONFIG.logoBrand}</a>
+          
+          <a href="#/" className="brand"><img className="logo-bg-img" src="assets/logo/Logo-Name.png" alt="logo" /></a>
         </section>
 
         <div className="sidenav-content" ref="sidenavContent">

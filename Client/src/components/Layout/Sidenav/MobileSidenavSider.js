@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Layout, Icon } from 'antd';
 import Logo from 'components/Logo';
-import APPCONFIG from 'constants/appConfig';
 import DEMO from 'constants/demoData';
 import AppMenu from './Menu';
 const { Sider } = Layout;
@@ -32,7 +31,7 @@ class AppSidenav extends React.Component {
             'bg-danger': ['16', '26', '36'].indexOf(colorOption) >= 0 })}
         >
           <Logo />
-          <a href="#/" className="brand">{APPCONFIG.brand}</a>
+          <a href="#/" className="brand"><img className="logo-bg-img" src="assets/logo/Logo-Name.png" alt="logo" /></a>
         </section>
 
         <div className="sidenav-content" ref="sidenavContent">

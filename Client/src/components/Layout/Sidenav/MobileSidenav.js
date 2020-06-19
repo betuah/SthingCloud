@@ -4,6 +4,8 @@ import MobileSidenavSider from './MobileSidenavSider';
 import { Drawer } from 'antd';
 import { toggleOffCanvasMobileNav } from 'actions/settingsActions';
 
+import './brand-Logo.scss';
+
 class AppSidenav extends React.Component {
 
   render() {
