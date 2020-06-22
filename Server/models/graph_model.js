@@ -4,6 +4,7 @@ const Schema    = mongoose.Schema;
 const DataSchema = new Schema({
     type: {
         type: String,
+        index: true,
         trim: true,
     },
     value: {
@@ -20,13 +21,14 @@ const WidgetSchema = new Schema({
     widgetTitle: {
         type: String,
         trim: true,
-    },    
+    },
     resourceType: {
         type: String,
         trim: true,
     },
     resourceId: {
         type: String,
+        index: true,
         trim: true,
     },
     widgetChart: {
@@ -45,6 +47,7 @@ const graphDataSchema = new Schema({
     userId      : { 
         type: String, 
         trim: true,
+        index: true,
         required: true 
     },
     graph      : { 

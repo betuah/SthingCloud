@@ -8,6 +8,7 @@ const WidgetSchema = new Schema({
     },
     resourceId: {
         type: String,
+        index: true,
         trim: true,
     },
     widgetDisplay: {
@@ -17,6 +18,9 @@ const WidgetSchema = new Schema({
     dataId: {
         type: String,
         trim: true,
+        index: true,
+        unique: true,
+        required: true
     },
     dataValue: {
         type: Number,
@@ -30,11 +34,12 @@ const controllerDataSchema = new Schema({
     _id         : { 
         type: String, 
         trim: true,
-        required: true 
+        required: true
     }, 
     userId      : { 
         type: String, 
         trim: true,
+        index: true,
         required: true 
     },
     controller  : { 

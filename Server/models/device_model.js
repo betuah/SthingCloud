@@ -4,6 +4,7 @@ const Schema    = mongoose.Schema;
 const ActionSchema = new Schema({
     type: {
         type: String,
+        index: true,
         trim: true,
     },
     value: {
@@ -19,6 +20,7 @@ const ActionSchema = new Schema({
 const DataSchema = new Schema({
     type: {
         type: String,
+        index: true,
         trim: true,
     },
     value: {
@@ -40,11 +42,13 @@ const deviceDataSchema = new Schema({
     _idUsers    : { 
         type: String, 
         trim: true,
+        index: true,
         required: true 
     },
     device      : { 
         type: String, 
         trim: true,
+        index: true,
         required: true 
     }, 
     desc        : { 
