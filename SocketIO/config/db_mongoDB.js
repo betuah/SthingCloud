@@ -1,6 +1,5 @@
-const mongoose  = require('mongoose');
-const env       = require('../env');
-const conn      = mongoose.connection;
+const mongoose  = require('mongoose')
+const env       = require('../env')
 
 const mongoConn = mongoose.connect(`mongodb://${env.db_mongoDB.host}:${env.db_mongoDB.port}/${env.db_mongoDB.database}`, {
     auth: { "authSource": "admin" },
@@ -11,7 +10,6 @@ const mongoConn = mongoose.connect(`mongodb://${env.db_mongoDB.host}:${env.db_mo
     useCreateIndex: true,
     useFindAndModify: false
 }).then(() => {
-    console.log("MongoDB is Connected!")
     return true
 }).catch((e) => {
     console.log(e)

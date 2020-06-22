@@ -11,7 +11,6 @@ const mongoConn = mongoose.connect(`mongodb://${env.db_mongoDB.host}:${env.db_mo
     useCreateIndex: true,
     useFindAndModify: false
 }).then(() => {
-    console.log("MongoDB is Connected!")
     return true
 }).catch((e) => {
     console.log(e)

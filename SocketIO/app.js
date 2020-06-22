@@ -2,22 +2,26 @@ const   express         = require("express"),
         http            = require("http"),
         socketIo        = require("socket.io"),
         moment          = require('moment'),
-        iotDeviceModel  = require('./models/device_model');
-
-/* Setting Up environment */
-require('dotenv').config();
+        tz              = require('moment-timezone'),
+        env             = require('./env'),
+        iotDeviceModel  = require('./models/device_model')
 
 /* Setting up express and adding socketIo middleware */
 const app       = express()
 const server    = http.createServer(app)
 const io        = socketIo(server)
-const url       = 'http://localhost'
-const port      = process.env.PORT || 4001 //Port from environment variable or default - 4001
+const port      = env.port || 4000 //Port from environment variable or default - 4000
 
 /* Socket IO */
+const whitelist = [`${env.api_domain}`, `${env.client_domain}`]
+io.origins((origin, callback) => {
+    if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true)
+    } else {
+        return callback('Origin not allowed from socket!', false)
+    }
+})
 
-// Allow origins
-// io.origins([`${process.env.CLIENT_DOMAIN}`,`${process.env.SERVER_DOMAIN}`,`${process.env.API_DOMAIN}`])
 
 /* Array device */
 let tmp = []
@@ -35,6 +39,8 @@ io.on("connection", socket => {
     });
 
     socket.on("graph_data", data => {
+        // console.log(data)
+        console.log(data)
         io.sockets.in(data.idUser).emit(`${data.idDevice}-${data.type}`, {
             value: data.value
         });
@@ -80,7 +86,7 @@ io.on("connection", socket => {
     })
 
     /* Check each second for get device time out infomation */
-    setInterval(function(){ 
+    setInterval(() => { 
         const intervalCurentTime = moment() // Set current time
         
         tmp.forEach((item, index) => { // Check every index in array
@@ -109,21 +115,21 @@ io.on("connection", socket => {
                 });   
                 
                 /* Remove offline device from array */
-                tmp.splice(index, 1);
+                tmp.splice(index, 1)
             }
         })
-    }, 1000);
+    }, 1000)
 
     /* A special namespace "disconnect" for when a client disconnects */
-    socket.on("disconnect", () => console.log("Client disconnected"));
+    socket.on("disconnect", () => console.log("Client disconnected"))
 });
 
 /* MongoDB Connection Check */
 const conn = require('./config/db_mongoDB')
 
 if(conn) {
-    server.listen(port, () => console.log(`Socket IO Server listen on port ${port}`));
+    server.listen(port, () => console.log(`Socket IO listen on ${env.domain}:${env.port}`))
 } else {
-    console.log("MongoDB Not Connected!")
+    console.log(`${env.domain}:${env.port} cannot connect to MongoDB!`)
 }
 /* End MongoDB Connection Check */
