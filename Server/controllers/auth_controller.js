@@ -1,5 +1,6 @@
 const jwt                   = require('jsonwebtoken')
 const env                   = require('../env')
+const bcrypt                = require('bcrypt')
 const firebaseAdmin         = require('../config/firebaseAdminConfig')
 const firebaseAuth          = firebaseAdmin.auth()
 const firebaseDatabaseAdmin = firebaseAdmin.database()
@@ -19,7 +20,12 @@ exports.signIn = async (req, res) => {
             databaseRef.once('value').then(snapshot => {
                 const getPerson = snapshot.val().personalData
                 const getRoles  = snapshot.val().roles
-                const token     = jwt.sign({ uid: decodedToken.uid, roles: `${getRoles.id}`, refresh_token: req.body.token}, secret, { expiresIn: '2h' });
+
+                const saltRounds    = 10
+                const salt          = bcrypt.genSaltSync(saltRounds)
+                const rolesHash     = bcrypt.hashSync(`${getRoles.id}`, salt)
+
+                const token     = jwt.sign({ uid: decodedToken.uid, roles: `${rolesHash}`, refresh_token: req.body.token}, secret, { expiresIn: '2h' });
                 const userData  = {
                     token: token,
                     dataProfile: {
