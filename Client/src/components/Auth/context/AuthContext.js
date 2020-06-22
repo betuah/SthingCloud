@@ -3,10 +3,10 @@ import axios from "axios"
 import socketOpen from 'socket.io-client'
 import { FireAuth, FireDatabase } from 'config/Firebase'
 
-const server_url    = `${process.env.REACT_APP_SERVER_DOMAIN ? process.env.REACT_APP_SERVER_DOMAIN :'http://localhost:8000'}` 
-const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}` 
-const client_url    = `${process.env.REACT_APP_CLIENT_DOMAIN ? process.env.REACT_APP_CLIENT_DOMAIN :'http://localhost:3000'}`
-const api_url       = `${process.env.REACT_APP_API_DOMAIN ? process.env.REACT_APP_API_DOMAIN :'http://localhost:4000'}` 
+const server_url    = `${process.env.REACT_APP_SERVER_DOMAIN}`
+const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN}` 
+const client_url    = `${process.env.REACT_APP_CLIENT_DOMAIN}`
+const api_url       = `${process.env.REACT_APP_API_DOMAIN}` 
 const axiosReq      = axios.create()
 const AuthContext   = React.createContext()
 
@@ -17,7 +17,7 @@ axiosReq.interceptors.request.use((config)=>{
     return config
 })
 
-let socket = socketOpen(`${`${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}`}`)
+let socket = socketOpen(`${socket_url}`)
 
 export class AuthContextProvider extends Component {
 
@@ -41,6 +41,7 @@ export class AuthContextProvider extends Component {
             this.userUpdateProfile      = this.userUpdateProfile.bind(this)
             this.sendEmailVerification  = this.sendEmailVerification.bind(this)
             this.initUser               = this.initUser.bind(this)
+            this.initTimeZoneList       = this.initTimeZoneList.bind(this)
     }
 
     checkToken () {
@@ -84,6 +85,12 @@ export class AuthContextProvider extends Component {
         return socket.emit('join_room', profileData.uid )
     }
 
+    initTimeZoneList = async () => {
+        return await axios.get(`http://worldtimeapi.org/api/timezone`).then(res => {
+            localStorage.setItem('timeZoneList', JSON.stringify(res.data))
+        })
+    }
+
     setIsLoggin (stats) {
         this.setState({
             isLoggedIn: stats,
@@ -117,7 +124,7 @@ export class AuthContextProvider extends Component {
                     const resMsg = { status: 'Error', code: res.code === '406' ? res.code : 400, msg: res.msg }  
                     return reject(resMsg)
                 } else {
-                    const resMsg = { status: 'Error', code: 500, msg: 'Internal Server Error'}         
+                    const resMsg = { status: 'Error', code: 500, msg: error}         
                     return reject(resMsg)
                 }
             })
@@ -191,6 +198,7 @@ export class AuthContextProvider extends Component {
                         initSocket: this.initSocket,
                         initUser: this.initUser,
                         checkToken: this.checkToken,
+                        initTimeZoneList: this.initTimeZoneList,
                         socket: socket,
                         axios: axiosReq,
                         ...this.state

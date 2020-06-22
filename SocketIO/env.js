@@ -1,6 +1,8 @@
 require('dotenv').config();
 
 const env = {
+    port: process.env.PORT,
+    domain: process.env.DOMAIN,
     client_domain:process.env.CLIENT_DOMAIN,
     server_domain:process.env.SERVER_DOMAIN,
     api_domain:process.env.API_DOMAIN,

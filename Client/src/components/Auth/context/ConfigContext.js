@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import axios from "axios"
 import socketOpen from 'socket.io-client';
 
-const server_url    = `${process.env.REACT_APP_SERVER_DOMAIN ? process.env.REACT_APP_SERVER_DOMAIN :'http://localhost:8000'}` 
-const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}` 
-const client_url    = `${process.env.REACT_APP_CLIENT_DOMAIN ? process.env.REACT_APP_CLIENT_DOMAIN :'http://localhost:3000'}`
-const api_url       = `${process.env.REACT_APP_API_DOMAIN ? process.env.REACT_APP_API_DOMAIN :'http://localhost:4000'}` 
+const server_url    = `${process.env.REACT_APP_SERVER_DOMAIN}`
+const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN}` 
+const client_url    = `${process.env.REACT_APP_CLIENT_DOMAIN}`
+const api_url       = `${process.env.REACT_APP_API_DOMAIN}`  
 const ConfigContext = React.createContext()
 
-let socket = socketOpen(`${`${process.env.REACT_APP_SOCKET_DOMAIN ? process.env.REACT_APP_SOCKET_DOMAIN :'http://localhost:4001'}`}`)
+let socket = socketOpen(`${socket_url}`)
 
 export class ConfigContextProvider extends Component {
 
