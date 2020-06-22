@@ -1,10 +1,24 @@
 // const iotData   = require('../models/iotData_model');
 const controlModel = require('../models/control_model')
 const env          = require('../env')
-let socket         = require('socket.io-client')(`${env.socket_domain}`)
+const moment       = require('moment')
+const tz           = require('moment-timezone')
+let socket         = require('socket.io-client')(`${env.socket_domain}`, {extraHeaders: {origin: `${env.domain}:${env.port}`}})
+
+const curentTime = moment()
+let dataTmp = []
+
+// setInterval(() => {
+//     // const curentTime = moment()
+
+//     dataTmp.map((item, index) => {
+//         console.log(item)
+//     })
+    
+// }, 2000)
 
 exports.index = (req, res) => {
-    res.send('Holla')
+    res.send('Iot API @ SEAMOLEC Cloud Platform')
 }
 
 exports.getData = async (req, res) => {
@@ -38,10 +52,19 @@ exports.data = async (req, res) => {
                 deviceName : req.deviceName,
                 ...req.body
             }
-    
+
+            const dataIndex = dataTmp.findIndex(e => e.idUser === data.idUser & e.idDevice === data.idDevice & e.type === data.type) // Get index of device in array
+
+            if ( dataIndex !== -1 ) {
+                const e = dataTmp[dataIndex]
+                dataTmp[dataIndex] = {...data, curentTime: curentTime}
+            } else {
+                dataTmp.push({...data, curentTime: curentTime})
+            }
+
             socket.emit('device_connect', data);
             socket.emit('graph_data', data);
-            res.send('terkirim')
+            res.send('Data received!')
         } else {
             res.status(400).json({
                 status: 'Bad Request',

@@ -27,11 +27,10 @@ $ npm install
 
 #### Server .env file
 ```sh
-HTTP_PORT=8000
-HTTPS_PORT=8443
+PORT=8000
+DOMAIN=http://localhost
 TOKEN_SECRET=YOUR_SECRET_TOKEN_PASSWORD
-CLIENT_DOMAIN=http://YOUR_CLIENT_DOMAIN:3000
-SERVER_DOMAIN=http://YOUR_SERVER_DOMAIN:8000
+CLIENT_DOMAIN=http://localhost:3000
 MONGO_DB=db_cloud_platform
 MONGO_USERNAME=YOUR_MONGODB_USERNAME
 MONGO_PASSWORD=YOUR_MONGODB_PASSWORD
@@ -59,10 +58,11 @@ Create json file with name serviceAccountKey.json in 'Server/config' directory a
 #### Client .env file
 ```sh
 NODE_PATH=src/
+NODE_ENV=production
 REACT_APP_CLIENT_DOMAIN=http://localhost:3000
 REACT_APP_SERVER_DOMAIN=http://localhost:8000
-REACT_APP_API_DOMAIN=http://localhost:4000
-REACT_APP_SOCKET_DOMAIN=http://localhost:4001
+REACT_APP_API_DOMAIN=http://localhost:5000
+REACT_APP_SOCKET_DOMAIN=http://localhost:4000
 REACT_APP_FIREBASE_APIKEY='YOUR_FIREBASE_APIKEY'
 REACT_APP_FIREBASE_AUTH_DOMAIN='YOUR_FIREBASE_AUTH_DOMAIN'
 REACT_APP_FIREBASE_DATABASE_URL='YOUR_FIREBASE_DATABASE_URL'
@@ -75,11 +75,10 @@ REACT_APP_FIREBASE_MEASUREMENT_ID='YOUR_FIREBASE_MEASUREMENT_ID'
 
 #### API .env file
 ```sh
-HTTP_PORT=4000
-HTTPS_PORT=4443
+PORT=5000
+DOMAIN=http://localhost
+SOCKET_DOMAIN=http://localhost:4000
 TOKEN_SECRET=YOUR_SECRET_TOKEN_PASSWORD
-CLIENT_DOMAIN=http://YOUR_CLIENT_DOMAIN:3000
-SERVER_DOMAIN=http://YOUR_SERVER_DOMAIN:8000
 MONGO_DB=db_cloud_platform
 MONGO_USERNAME=YOUR_MONGODB_USERNAME
 MONGO_PASSWORD=YOUR_MONGODB_PASSWORD
@@ -89,12 +88,12 @@ MONGO_PORT=YOUR_MONGODB_PORT
 
 #### SocketIO .env file
 ```sh
-HTTP_PORT=4001
-HTTPS_PORT=4443
+PORT=4000
+DOMAIN=http://localhost
 TOKEN_SECRET=YOUR_SECRET_TOKEN_PASSWORD
 CLIENT_DOMAIN=http://localhost:3000
 SERVER_DOMAIN=http://localhost:8000
-API_DOMAIN=http://localhost:4000
+API_DOMAIN=http://localhost:5000
 URL_DOMAIN=http://localhost
 MONGO_DB=db_cloud_platform
 MONGO_USERNAME=YOUR_MONGODB_USERNAME
@@ -114,6 +113,17 @@ $ npm run start
 <hr>
 
 # Version Log
+
+## Version Change Log (STHING_v05)
+- Add New logo brand
+- Adding Setting Component
+- Encrypt roles id Auth_controller
+- Update .env file in Server, Client, socket, and API
+- Change port Socket to 4000 and API to 5000
+- Decrypt roles id in middleware
+- Adding user settings model
+- Adding user settings route for API end point
+- Adding indexes in all collection of mongodb
 
 ## Version Change Log (v0.4.1)
 - Modify register, login and reset layout and UI

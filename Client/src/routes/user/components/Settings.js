@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import MaterialIcon from 'components/MaterialIcon'
-import { TextField, Button } from '@material-ui/core'
-import { FireDatabase } from 'config/Firebase'
+import { TextField, Button, Radio, FormLabel, FormControlLabel } from '@material-ui/core'
+import Autocomplete from '@material-ui/lab/Autocomplete'
 import notif from 'components/NotificationPopUp/notif'
 
 class Settings extends Component {
@@ -10,59 +10,55 @@ class Settings extends Component {
         super(props)
 
         this.state = {
-            uid: false,
-            email: '',
             data: {
-                fullName: '',
-                gender: 'male',
-                address: '',
-                organization: '',
-                profession: '',
-                photoUrl: false
-            },
-            modalForm: {
+                timeZone: '',
+                host: '',
+                port: '',
+                secure: '1',
+                tls: '1',
+                username: '',
                 password: '',
-                confirmPassword: ''
-            }
+                oldPassword: ''
+            },
+            timeZoneList: [...JSON.parse(localStorage.getItem('timeZoneList'))]
         }
 
         this.handleChange = this.handleChange.bind(this)
         this.handleOk = this.handleOk.bind(this)
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.props.checkToken()
+        const { axios, server_url } = this.props
 
-        const { initUser } = this.props
-        const profile = JSON.parse(localStorage.getItem('profileData'))
-
-        initUser()
-
-        this.setState({
-            uid: profile.uid,
-            email: profile.email,
-            data: {
-                ...this.state.data,
-                fullName: profile.fullName,
-                gender: profile.gender === '' ? 'male' : profile.gender,
-                address: profile.address,
-                organization: profile.organization,
-                profession: profile.profession,
-                photoUrl: profile.photoUrl
-            }
+        axios.get(`${server_url}/api/user/settings`).then(res => {
+            this.setState({
+                data: {
+                    timeZone: res.data.timeZone,
+                    host: res.data.smtp.host,
+                    port: res.data.smtp.port,
+                    secure: res.data.smtp.secure,
+                    tls: res.data.smtp.tls,
+                    username: res.data.smtp.username,
+                    password: '',
+                    oldPassword: res.data.smtp.password
+                }
+            })
+        }).catch(err => {
+            console.log(err)
         })
     }
 
-    handleChange = (e) => {
+    handleChange = (e, val) => {
         const { name, value } = e.target;
 
-        if(name === 'password' || name === 'confirmPassword') {
+        if(val) {
             this.setState({
-                modalForm: {
-                    ...this.state.modalForm,
-                    [name]: value
+                data: {
+                    ...this.state.data,
+                    timeZone : val
                 }
-            })
+            })            
         } else {
             this.setState({
                 data: {
@@ -75,21 +71,18 @@ class Settings extends Component {
 
     handleOk = (e) => {
         e.preventDefault()
-
-        const { uid, data } = this.state
-        const userDb = FireDatabase.ref(`users/${uid}/personalData`)
-
-        userDb.update({
-            ...data
-        }).then(res => {
-            notif('success', 'Success!' , 'Your data changes have been saved.')
+        const { axios, server_url } = this.props
+        const { data } = this.state
+        
+        axios.post(`${server_url}/api/user/settings`, data).then(res => {
+            notif('success', 'Success!' , 'Your data has been updated.')
         }).catch(err => {
-            notif('error', 'Failed!' , 'Failed saving data.')
+            notif('error', 'Failed!' , 'Failed saving your data.')
         })
     }
 
     render() {
-        const { data } = this.state
+        const { data, timeZoneList } = this.state
 
         return (
             <Fragment>
@@ -98,24 +91,152 @@ class Settings extends Component {
                         <div className="box box-default pt-5 pb-3 mdc-elevation--z2 col-xs-12 col-md-8">
                             <form onSubmit={this.handleOk} className="form-v1 row justify-content-center">
                                 <div className="col-xs-12 col-md-8">
-                                    <h5 className="text-grey">SMTP Setup</h5>
+                                    <h6 className="text-grey">Time Zone Settings</h6>
+                                    <hr></hr>
+                                    <div className="form-group">
+                                        <Autocomplete
+                                            options={timeZoneList.map((option) => option)}
+                                            value={data.timeZone}
+                                            name="timeZone"
+                                            onChange={this.handleChange}
+                                            renderInput={(params) => 
+                                                <TextField 
+                                                    {...params}
+                                                    label="Time Zone"
+                                                />
+                                            }
+                                        />
+                                    </div>
+                                    <h6 className="text-grey mt-5">SMTP Settings</h6>
                                     <hr></hr>
                                     <div className="form-group">
                                         <div className="input-group-v1">
                                             <div className="input-group-icon">
-                                                <MaterialIcon icon="assignment_ind" style={{color: '#00BCD4'}} />
+                                                <MaterialIcon icon="local_post_office" style={{color: '#00BCD4'}} />
                                             </div>
                                             <TextField                                   
-                                                id="fullName"
-                                                name="fullName"
-                                                label="Full Name"
+                                                id="host"
+                                                name="host"
+                                                label="HOST"
                                                 type="text"
                                                 fullWidth
                                                 autoComplete="off"
-                                                onChange={this.handleChange}
-                                                required
-                                                placeholder="Your full name"
-                                                value={data.fullName}
+                                                onChange={this.handleChange}                                            
+                                                placeholder="ex: smtp.gmail.com"
+                                                value={data.host}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <div className="input-group-icon">
+                                                <MaterialIcon icon="cloud" style={{color: '#00BCD4'}} />
+                                            </div>
+                                            <TextField                                   
+                                                id="port"
+                                                name="port"
+                                                label="PORT"
+                                                type="number"
+                                                fullWidth
+                                                autoComplete="off"
+                                                onChange={this.handleChange}                                            
+                                                placeholder="ex: 465"
+                                                value={data.port}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <FormLabel component="legend">Secure</FormLabel>
+                                            <FormControlLabel value={"1"} control={
+                                                <Radio
+                                                    checked={data.secure === "1"}
+                                                    onChange={this.handleChange}
+                                                    value={"1"}
+                                                    name="secure"
+                                                    aria-label="secure"
+                                                    color="primary"
+                                                />
+                                            } label="True" />
+                                            <FormControlLabel value={"2"} control={
+                                                <Radio
+                                                    checked={data.secure === "2"}
+                                                    onChange={this.handleChange}
+                                                    value={"2"}
+                                                    name="secure"
+                                                    aria-label="secure"
+                                                    color="primary"
+                                                />
+                                            } label="False" />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <FormLabel component="legend">TLS</FormLabel>
+                                            <FormControlLabel value="1" control={
+                                                <Radio
+                                                    checked={data.tls === "1"}
+                                                    onChange={this.handleChange}
+                                                    value={"1"}
+                                                    name="tls"
+                                                    aria-label="tls"
+                                                    color="primary"
+                                                />
+                                            } label="True" />
+                                            <FormControlLabel value={"0"} control={
+                                                <Radio
+                                                    checked={data.tls === "0"}
+                                                    onChange={this.handleChange}
+                                                    value={"0"}
+                                                    name="tls"
+                                                    aria-label="tls"
+                                                    color="primary"
+                                                />
+                                            } label="False" />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <div className="input-group-icon">
+                                                <MaterialIcon icon="account_box" style={{color: '#00BCD4'}} />
+                                            </div>
+                                            <TextField                                   
+                                                id="username"
+                                                name="username"
+                                                label="User Name"
+                                                type="email"
+                                                fullWidth
+                                                autoComplete="off"
+                                                onChange={this.handleChange}                                            
+                                                placeholder="ex: sthing@gmail.com"
+                                                value={data.username}
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <div className="input-group-v1">
+                                            <div className="input-group-icon">
+                                                <MaterialIcon icon="lock" style={{color: '#00BCD4'}} />
+                                            </div>
+                                            <TextField                                   
+                                                id="password"
+                                                name="password"
+                                                label="Password"
+                                                type="password"
+                                                fullWidth
+                                                autoComplete="off"
+                                                onChange={this.handleChange}                                            
+                                                placeholder="Your password"
+                                                value={data.password}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
@@ -123,7 +244,7 @@ class Settings extends Component {
                                         </div>
                                     </div>
                                     <div className="form-group d-flex justify-content-center">
-                                        <Button className="col-md-4" variant="contained" color="primary" type="submit"> Save Change </Button>
+                                        <Button className="col-md-4" variant="contained" color="primary" type="submit"> Save </Button>
                                     </div>
                                 </div>
                             </form>

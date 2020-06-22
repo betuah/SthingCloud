@@ -45,9 +45,10 @@ class AppHeader extends React.Component {
   }
 
   componentDidMount() {
-    const { initSocket, socket } = this.props
+    const { initSocket, initTimeZoneList, socket } = this.props
     
     initSocket()
+    initTimeZoneList()
 
     socket.on('event', data => {
       this._isMounted && data.statusChange === 1 ? notif('info', 'New Device Connected!', `${data.device} is connected!`) : notif('error', 'New Device Disconnected!', `${data.device} is disconnected!`)
