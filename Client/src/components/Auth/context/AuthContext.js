@@ -86,8 +86,12 @@ export class AuthContextProvider extends Component {
     }
 
     initTimeZoneList = async () => {
-        return await axios.get(`http://worldtimeapi.org/api/timezone`).then(res => {
+        await axios.get(`http://worldtimeapi.org/api/timezone`).then(res => {
             localStorage.setItem('timeZoneList', JSON.stringify(res.data))
+        })
+
+        return await axiosReq.get(`${server_url}/api/user/settings`).then(res => {
+            localStorage.setItem('timeZone', res.data.timeZone)
         })
     }
 
@@ -104,7 +108,7 @@ export class AuthContextProvider extends Component {
                 const { token, dataProfile } =  response.data
                 const profileData = JSON.stringify(dataProfile);
 
-                FireAuth.onAuthStateChanged(user => {
+                FireAuth.onAuthStateChanged(async user => {
                     if (user) {
                         localStorage.setItem("token", token)
                         localStorage.setItem("profileData", profileData)
@@ -175,8 +179,9 @@ export class AuthContextProvider extends Component {
                     profileData: false
                 })
         
-                localStorage.removeItem('token')
-                localStorage.removeItem('profileData')
+                // localStorage.removeItem('token')
+                // localStorage.removeItem('profileData')
+                localStorage.clear();
 
                 return true
             }).catch(err => {
