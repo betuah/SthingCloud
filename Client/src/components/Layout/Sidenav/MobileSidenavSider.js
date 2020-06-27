@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Layout, Icon } from 'antd';
 import Logo from 'components/Logo';
 import DEMO from 'constants/demoData';
+import MaterialIcon from 'components/MaterialIcon';
 import AppMenu from './Menu';
 const { Sider } = Layout;
 
@@ -40,7 +41,7 @@ class AppSidenav extends React.Component {
 
         <div className="sidenav-footer">
           <a rel="_blank" href={DEMO.productLink}>
-            <Icon type="question-circle" />
+            <MaterialIcon icon="help" className="nav-icon" />
             <span className="nav-text"><span>Help</span> & <span>Support</span></span>
           </a>
         </div>
