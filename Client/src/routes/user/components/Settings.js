@@ -9,6 +9,8 @@ class Settings extends Component {
     constructor(props) {
         super(props)
 
+        const tzData = JSON.parse(localStorage.getItem('timeZoneList')) ? JSON.parse(localStorage.getItem('timeZoneList')) : []
+
         this.state = {
             data: {
                 timeZone: '',
@@ -20,7 +22,7 @@ class Settings extends Component {
                 password: '',
                 oldPassword: ''
             },
-            timeZoneList: [...JSON.parse(localStorage.getItem('timeZoneList'))]
+            timeZoneList: [...tzData]
         }
 
         this.handleChange = this.handleChange.bind(this)
@@ -75,6 +77,7 @@ class Settings extends Component {
         const { data } = this.state
         
         axios.post(`${server_url}/api/user/settings`, data).then(res => {
+            localStorage.setItem('timeZone', data.timeZone)
             notif('success', 'Success!' , 'Your data has been updated.')
         }).catch(err => {
             notif('error', 'Failed!' , 'Failed saving your data.')
@@ -92,7 +95,7 @@ class Settings extends Component {
                             <form onSubmit={this.handleOk} className="form-v1 row justify-content-center">
                                 <div className="col-xs-12 col-md-8">
                                     <h6 className="text-grey">Time Zone Settings</h6>
-                                    <hr></hr>
+                                    <div className="col-12 divider divider-dotted"></div>
                                     <div className="form-group">
                                         <Autocomplete
                                             options={timeZoneList.map((option) => option)}
@@ -108,7 +111,7 @@ class Settings extends Component {
                                         />
                                     </div>
                                     <h6 className="text-grey mt-5">SMTP Settings</h6>
-                                    <hr></hr>
+                                    <div className="col-12 divider divider-dotted"></div>
                                     <div className="form-group">
                                         <div className="input-group-v1">
                                             <div className="input-group-icon">
@@ -243,6 +246,10 @@ class Settings extends Component {
                                             />
                                         </div>
                                     </div>
+                                    <div className="form-group d-flex justify-content-center">
+                                        <Button className="col-md-4" variant="contained" color="danger"> Send Test Mail </Button>
+                                    </div>
+                                    <div className="col-12 divider divider-dotted"></div>
                                     <div className="form-group d-flex justify-content-center">
                                         <Button className="col-md-4" variant="contained" color="primary" type="submit"> Save </Button>
                                     </div>
