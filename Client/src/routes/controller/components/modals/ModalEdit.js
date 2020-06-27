@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react'
 import notif from 'components/NotificationPopUp/notif'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { TextField, Button} from '@material-ui/core'
+import { TextField, Button, FormControlLabel, Switch} from '@material-ui/core'
 import {  Modal } from 'antd'
 
 const Content = props => {
@@ -55,6 +55,33 @@ const Content = props => {
                                 }}
                             />
                         </div>
+                    </div>
+                    <div className="form-group">
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={props.Editable}
+                                    onChange={props.editableWidget}
+                                    value={props.Editable ? '1' : '0'}
+                                    color="primary"
+                                    name='editable'
+                                />
+                            }
+                            label="Editable Widget"
+                        />
+
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={props.Dragable}
+                                    onChange={props.dragableWidget}
+                                    value={props.Dragable ? '1' : '0'}
+                                    color="primary"
+                                    name='Dragble'
+                                />
+                            }
+                            label="Dragable Widget"
+                        />
                     </div>
                 </form>                  
             </div>
@@ -140,7 +167,7 @@ class ModalEditContent extends Component {
                         <Button key="submit" variant="contained" color="primary" onClick={this.handleOk}> Save </Button>,
                     ]}
                 >
-                    <Content onChange={this.handleChange} {...this.state} />
+                    <Content {...this.props} onChange={this.handleChange} {...this.state} />
                 </Modal> 
             </Fragment>
         )

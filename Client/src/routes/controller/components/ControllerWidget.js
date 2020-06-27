@@ -28,6 +28,8 @@ class ControllerWidget extends Component {
         this.state = {
             ModalWidget: false,
             ModalEdit: false,
+            Editable: false,
+            Dragable: false,
             data: '',
             input: '',
             err_data: 0
@@ -38,6 +40,8 @@ class ControllerWidget extends Component {
         this.closeEditModal     = this.closeEditModal.bind(this)
         this.showWidgetModal    = this.showWidgetModal.bind(this)
         this.closeWidgetModal   = this.closeWidgetModal.bind(this)
+        this.editableWidget     = this.editableWidget.bind(this)
+        this.dragableWidget     = this.dragableWidget.bind(this)
     }
 
     updateData() {
@@ -73,8 +77,19 @@ class ControllerWidget extends Component {
         this.setState({ ModalWidget: false })
     }
 
+    editableWidget() {
+        this.setState({
+            Editable: !this.state.Editable
+        })
+    }
+
+    dragableWidget() {
+        this.setState({
+            Dragable: !this.state.Dragable
+        })
+    }
+
     render() {
-        // const { location } = this.props
         const { data, err_data } = this.state
         const { match } = this.props
 
@@ -86,7 +101,7 @@ class ControllerWidget extends Component {
 
         return (
             <Fragment>
-                <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>
+                <ModalEdit {...this.state} updateData={this.updateData} dragableWidget={this.dragableWidget} editableWidget={this.editableWidget} closeEditModal={this.closeEditModal}/>
                 <ModalWidget {...this.state} updateData={this.updateData} closeWidgetModal={this.closeWidgetModal}/>      
                 
                 <div className="container-fluid">
@@ -119,7 +134,7 @@ class ControllerWidget extends Component {
                         </div>
                         <div className="col-12 divider divider-dotted"></div>
                         <div className="col-xs-12 col-md-12">
-                            <ChartTemplate layouts={this.state.data.layouts} widgetData={data.controller_widget} controllerId={match.params.controllerId} updateData={this.updateData} />
+                            <ChartTemplate {...this.state} controllerId={match.params.controllerId} updateData={this.updateData} />
                         </div>
                     </div>
                 </div>              

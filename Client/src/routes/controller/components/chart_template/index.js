@@ -49,9 +49,9 @@ class Chart_template extends Component {
     }
 
     componentDidMount() {
-        const { checkToken, layouts, controllerId } = this.props
+        const { checkToken, data, controllerId } = this.props
         checkToken();
-        this._isMounted && this.setState({ layouts: layouts, controllerId: controllerId });
+        this._isMounted && this.setState({ layouts: data.layouts, controllerId: controllerId });
     }
 
     showEditModal(id) {
@@ -96,7 +96,8 @@ class Chart_template extends Component {
     }
     
     render() {
-        const { widgetData, controllerId, updateData } = this.props
+        const { controllerId, updateData, data, Dragable } = this.props
+        const widgetData = data.controller_widget
         
         return (
             <div>
@@ -107,7 +108,7 @@ class Chart_template extends Component {
                 <ReactGridLayout 
                     margin={[0, 0]}
                     containerPadding={[0, 0]}
-                    isDraggable={true}
+                    isDraggable={Dragable}
                     isResizable={false}
                     items={5}
                     rowHeight={42}
@@ -131,19 +132,19 @@ class Chart_template extends Component {
                                 case 'BTN': 
                                     template =                                         
                                         <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 2, h: 3}} >
-                                            <ButtonTemplate {...e} controllerId={controllerId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                            <ButtonTemplate {...e} {...this.props} controllerId={controllerId} updateData={updateData} showEditModal={this.showEditModal}/>
                                         </div>
                                 break;
                                 case 'BTN_FLT': 
                                     template =                                         
                                         <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 2, h: 3}} >
-                                            <ButtonFloat {...e} controllerId={controllerId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                            <ButtonFloat {...e} {...this.props} controllerId={controllerId} updateData={updateData} showEditModal={this.showEditModal}/>
                                         </div>
                                 break;
                                 case 'SW': 
                                     template =                                         
                                         <div key={i} data-grid={{ x: sumbuX, y: sumbuY, w: 2, h: 3}} >
-                                            <SwitchBtn {...e} controllerId={controllerId} updateData={updateData} widgetData={widgetData} showEditModal={this.showEditModal}/>
+                                            <SwitchBtn {...e} {...this.props} controllerId={controllerId} updateData={updateData} showEditModal={this.showEditModal}/>
                                         </div>
                                 break;
                                 default: template = <div key={i}></div>
