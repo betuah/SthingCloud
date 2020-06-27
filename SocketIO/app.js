@@ -2,7 +2,6 @@ const   express         = require("express"),
         http            = require("http"),
         socketIo        = require("socket.io"),
         moment          = require('moment'),
-        tz              = require('moment-timezone'),
         env             = require('./env'),
         iotDeviceModel  = require('./models/device_model')
 
