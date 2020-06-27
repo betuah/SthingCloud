@@ -1,4 +1,4 @@
-<h1>SEA Cloud Platform (v0.4.2)</h1>
+<h1>SEA Cloud Platform - SThing (v0.5)</h1>
 
 > **Desc :** This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
 
@@ -114,6 +114,8 @@ $ npm run start
 
 # Version Log
 
+## Versin CHange log (STHING_v06)
+
 ## Version Change Log (STHING_v05)
 - Add New logo brand
 - Adding Setting Component
@@ -124,6 +126,18 @@ $ npm run start
 - Adding user settings model
 - Adding user settings route for API end point
 - Adding indexes in all collection of mongodb
+- Fix timeZone settings
+- Set timeZone for Device
+- Add Action Max/Min feature in visualization
+- Add Draggable feature in edit modal visualization
+- Change Main and graph widget Layout in visualization component
+- Change Main and controller widget Layput in visualization component
+- Change Device Component layout
+- Fix top and bottom margin in controller list and device list component
+- Change graph model (Adding settings field)
+- Change controller model (Adding _id and insert with random string from uuid)
+- Add initTimeZoneList function (call API from worldtime API)
+- Load timeZone list from header (Call function initTimeZoneList from Auth Context)
 
 ## Version Change Log (v0.4.1)
 - Modify register, login and reset layout and UI
