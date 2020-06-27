@@ -107,8 +107,7 @@ exports.edit = async (req, res) => {
         } else {
             const dataBody  = { 
                 controller  : controller, 
-                desc        : desc,
-                share       : share
+                desc        : desc
             }
             
             controlModel.findByIdAndUpdate({ _id: req.params.id }, 
@@ -207,6 +206,7 @@ exports.widget_create = async (req, res) => {
     try {
 
         const bodyData = {
+            _id : uuid.generate(),
             widgetTitle : req.body.widgetTitle,
             resourceId : req.body.resourceId,
             widgetDisplay : req.body.widgetDisplay,

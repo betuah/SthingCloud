@@ -231,6 +231,7 @@ exports.widget_create = async (req, res) => {
     try {
 
         const bodyData = {
+            _id: uuid.generate(),
             widgetTitle : req.body.widgetTitle,
             resourceType : req.body.resourceType,
             resourceId : req.body.resourceId,
@@ -238,7 +239,25 @@ exports.widget_create = async (req, res) => {
             data: [{
                 type: req.body.dataId,
                 value: 0
-            }]            
+            }],
+            settings: {
+                triggerMax: {
+                    value: '',
+                    notif: '0',
+                    mail: '0',
+                    mailList: '',
+                    actionOn: [],
+                    actionOff: []
+                },
+                triggerMin: {
+                    value: '',
+                    notif: '0',
+                    mail: '0',
+                    mailList: '',
+                    actionOn: [],
+                    actionOff: []
+                }
+            }    
         }
 
         graphModel.findOneAndUpdate({ _id: req.params.graphId }, { 
@@ -273,14 +292,31 @@ exports.widget_update = async (req, res) => {
             data: [{
                 type: req.body.dataId,
                 value: req.body.dataValue
-            }]
+            }],
+            settings: {
+                triggerMax: {
+                    value: req.body.triggerMaxVal,
+                    notif: req.body.notifMax,
+                    mail: req.body.sendMailMax,
+                    mailList: req.body.mailListMax,
+                    actionOn: req.body.triggerMaxActionOn,
+                    actionOff: req.body.triggerMaxActionOff
+                },
+                triggerMin: {
+                    value: req.body.triggerMinVal,
+                    notif: req.body.notifMin,
+                    mail: req.body.sendMailMin,
+                    mailList: req.body.mailListMin,
+                    actionOn: req.body.triggerMinActionOn,
+                    actionOff: req.body.triggerMinActionOff
+                }
+            }
         }
-
-        console.log(req.params.widgetId)
 
         graphModel.findOneAndUpdate({ _id: req.params.graphId, 'graph_widget._id': req.params.widgetId  }, { 
             $set: { 'graph_widget.$' : {
-                ...bodyData
+                ...bodyData,
+                _id: req.params.widgetId
             }}
         })
         .then((cb) => {
