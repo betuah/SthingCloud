@@ -14,7 +14,8 @@ class Doughnut extends Component {
 
         this.state = {
             widgetTitle: '',
-            dataValue: 0
+            dataValue: 0,
+            maxValue: 100
         }
 
         this.deleteWidget = this.deleteWidget.bind(this)
@@ -124,7 +125,7 @@ class Doughnut extends Component {
                     },
                     data: [
                         {value: this.state.dataValue > 100 ? 100 : this.state.dataValue, name: 'Value'},
-                        {value: 100 - this.state.dataValue, name: 'Remaining'},
+                        {value: this.state.maxValue - this.state.dataValue, name: 'Remaining'},
                     ]
                 }
             ]

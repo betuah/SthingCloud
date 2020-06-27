@@ -57,20 +57,31 @@ const Content = props => {
                         </div>
                     </div>
                     <div className="form-group">
-                        <div className="input-group-v1">
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        checked={props.Editable}
-                                        onChange={props.editableWidget}
-                                        value={props.Editable ? '1' : '0'}
-                                        color="primary"
-                                        name='editable'
-                                    />
-                                }
-                                label="Editable Widget"
-                            />
-                        </div>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={props.Editable}
+                                    onChange={props.editableWidget}
+                                    value={props.Editable ? '1' : '0'}
+                                    color="primary"
+                                    name='editable'
+                                />
+                            }
+                            label="Editable Widget"
+                        />
+
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={props.Dragable}
+                                    onChange={props.dragableWidget}
+                                    value={props.Dragable ? '1' : '0'}
+                                    color="primary"
+                                    name='Dragble'
+                                />
+                            }
+                            label="Dragable Widget"
+                        />
                     </div>
                     <div className="form-group">
                         <div className="input-group-v1">
@@ -202,7 +213,7 @@ class ModalEditContent extends Component {
                         <Button key="submit" variant="contained" color="primary" onClick={this.handleOk}> Save </Button>,
                     ]}
                 >
-                    <Content onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} editable={this.props.Editable} editableWidget={this.props.editableWidget} />
+                    <Content onChange={this.handleChange} onSwitch={this.handleSwitch} {...this.state} editable={this.props.Editable} editableWidget={this.props.editableWidget} dragable={this.props.Dragable} dragableWidget={this.props.dragableWidget} />
                 </Modal> 
             </Fragment>
         )

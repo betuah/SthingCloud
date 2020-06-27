@@ -5,6 +5,7 @@ import MaterialIcon from 'components/MaterialIcon'
 import { Link } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import { IconButton, Tooltip, LinearProgress } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
 
 
 let ModalEdit = loadable({
@@ -30,6 +31,7 @@ class Graph extends Component {
             ModalWidget: false,
             ModalEdit: false,
             Editable: false,
+            Dragable: false,
             data: '',
             input: '',
             err_data: 0
@@ -41,6 +43,7 @@ class Graph extends Component {
         this.showWidgetModal    = this.showWidgetModal.bind(this)
         this.closeWidgetModal   = this.closeWidgetModal.bind(this)
         this.editableWidget     = this.editableWidget.bind(this)
+        this.dragableWidget     = this.dragableWidget.bind(this)
     }
 
     updateData() {
@@ -82,6 +85,12 @@ class Graph extends Component {
         })
     }
 
+    dragableWidget() {
+        this.setState({
+            Dragable: !this.state.Dragable
+        })
+    }
+
     render() {
         const { match } = this.props
         const { data, err_data } = this.state
@@ -94,38 +103,43 @@ class Graph extends Component {
 
         return (
             <Fragment>
-                <ModalEdit {...this.state} editableWidget={this.editableWidget} updateData={this.updateData} closeEditModal={this.closeEditModal}/>
-                <ModalWidget {...this.state} updateData={this.updateData} closeWidgetModal={this.closeWidgetModal}/>      
+                <ModalEdit {...this.state} editableWidget={this.editableWidget} dragableWidget={this.dragableWidget} updateData={this.updateData} closeEditModal={this.closeEditModal}/>
+                <ModalWidget {...this.state} updateData={this.updateData} closeWidgetModal={this.closeWidgetModal}/>  
                 
-                <div className="container-fluid mt-4">
-                    <div className="row">
-                        <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start">
-                            <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF9800'}}><MaterialIcon icon="bubble_chart" style={{color: '#FFFFFF'}} /> {data.graph}</span></b></h5>
-                        </div>
-                        <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-end">
-                            <Tooltip title="Add Widget">
-                                <IconButton aria-label="Add Widget" size="medium" onClick={this.showWidgetModal}>
-                                    <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
-                                </IconButton>
-                            </Tooltip>
-                            <Link to="/app/visualization/#show" >
-                                <Tooltip title="Graph List">
-                                    <IconButton aria-label="Graph List" size="medium">
-                                        <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
+                <div className="container-fluid">
+                    <div className="row align-items-center">
+                        <div className="col-12 d-flex mt-3 justify-content-between align-items-center">
+                            <div>
+                                <Typography variant="h5">
+                                    <span className="ui-highlight font-weight-bold" style={{backgroundColor: '#FF9800'}}><MaterialIcon icon="bubble_chart" style={{color: '#FFFFFF'}} /> {data.graph}</span>
+                                </Typography>
+                            </div>
+                            <div>
+                                <Tooltip title="Add Widget">
+                                    <IconButton aria-label="Add Widget" size="medium" onClick={this.showWidgetModal}>
+                                        <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
                                     </IconButton>
                                 </Tooltip>
-                            </Link>
-                            <Tooltip title="Settings">
-                                <IconButton aria-label="Settings" size="medium" onClick={this.showEditModal}>
-                                    <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
-                                </IconButton>
-                            </Tooltip>
+                                <Link to="/app/visualization/#show" >
+                                    <Tooltip title="Graph List">
+                                        <IconButton aria-label="Graph List" size="medium">
+                                            <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
+                                        </IconButton>
+                                    </Tooltip>
+                                </Link>
+                                <Tooltip title="Settings">
+                                    <IconButton aria-label="Settings" size="medium" onClick={this.showEditModal}>
+                                        <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
                         </div>
-                        <div className="col-xs-12 col-md-12">
-                            <ChartTemplate layouts={this.state.data.layouts} widgetData={this.state.data.graph_widget} graphId={match.params.graphId} updateData={this.updateData} Editable={this.state.Editable} />
+                        <div className="col-12 divider divider-dotted"></div>
+                        <div className="col-12">
+                            <ChartTemplate {...this.state} graphId={match.params.graphId} updateData={this.updateData} />
                         </div>
                     </div>
-                </div>              
+                </div>
             </Fragment>         
         )
     }
