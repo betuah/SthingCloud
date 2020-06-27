@@ -1,4 +1,4 @@
-<h1>SEA Cloud Platform - SThing (v0.5)</h1>
+<h1>SEA Cloud Platform - SThing (v0.6)</h1>
 
 > **Desc :** This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
 
