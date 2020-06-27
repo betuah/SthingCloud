@@ -258,7 +258,7 @@ class EnhancedTable extends React.Component {
         // createData()
       ],
       page: 0,
-      rowsPerPage: 5,
+      rowsPerPage: 10,
     };
 
     this.handleData     = this.handleData.bind(this)
