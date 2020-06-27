@@ -114,7 +114,8 @@ $ npm run start
 
 # Version Log
 
-## Versin CHange log (STHING_v06)
+## Versin Change log (STHING_v06)
+- Add editable and dragable widget setting in edit widget modal
 
 ## Version Change Log (STHING_v05)
 - Add New logo brand
