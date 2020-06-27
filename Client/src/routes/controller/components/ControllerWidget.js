@@ -4,7 +4,7 @@ import LoadingComponent from 'components/Loading'
 import MaterialIcon from 'components/MaterialIcon'
 import { Link } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { IconButton, Tooltip, LinearProgress } from '@material-ui/core'
+import { IconButton, Tooltip, LinearProgress, Typography } from '@material-ui/core'
 
 let ModalEdit = loadable({
     loader:() => import('./modals/ModalEdit'),
@@ -89,30 +89,35 @@ class ControllerWidget extends Component {
                 <ModalEdit {...this.state} updateData={this.updateData} closeEditModal={this.closeEditModal}/>
                 <ModalWidget {...this.state} updateData={this.updateData} closeWidgetModal={this.closeWidgetModal}/>      
                 
-                <div className="container-fluid mt-4">
-                    <div className="row">
-                        <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start">
-                            <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF5722'}}><MaterialIcon icon="bubble_chart" style={{color: '#FFFFFF'}} /> {data.controller}</span></b></h5>
-                        </div>
-                        <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-end">
-                            <Tooltip title="Add Button">
-                                <IconButton aria-label="Add Widget" size="medium" onClick={this.showWidgetModal}>
-                                    <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
-                                </IconButton>
-                            </Tooltip>
-                            <Link to="/app/controller/#show" >
-                                <Tooltip title="Controller List">
-                                    <IconButton aria-label="Controller List" size="medium">
-                                        <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
+                <div className="container-fluid">
+                    <div className="row align-items-center">
+                        <div className="col-12 d-flex mt-3 justify-content-between align-items-center">
+                            <div>
+                                <Typography variant="h5">
+                                    <span className="ui-highlight font-weight-bold" style={{backgroundColor: '#FF5722'}}><MaterialIcon icon="tune" style={{color: '#FFFFFF'}} /> {data.controller}</span>
+                                </Typography>
+                            </div>
+                            <div>
+                                <Tooltip title="Add Button">
+                                    <IconButton aria-label="Add Widget" size="medium" onClick={this.showWidgetModal}>
+                                        <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
                                     </IconButton>
                                 </Tooltip>
-                            </Link>
-                            <Tooltip title="Settings">
-                                <IconButton aria-label="Settings" size="medium" onClick={this.showEditModal}>
-                                    <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
-                                </IconButton>
-                            </Tooltip>
+                                <Link to="/app/controller/#show" >
+                                    <Tooltip title="Controller List">
+                                        <IconButton aria-label="Controller List" size="medium">
+                                            <MaterialIcon icon="view_list" style={{color: '#4CAF50'}}></MaterialIcon>
+                                        </IconButton>
+                                    </Tooltip>
+                                </Link>
+                                <Tooltip title="Settings">
+                                    <IconButton aria-label="Settings" size="medium" onClick={this.showEditModal}>
+                                        <MaterialIcon icon="settings" style={{color: '#FF9800'}}></MaterialIcon>
+                                    </IconButton>
+                                </Tooltip>
+                            </div>
                         </div>
+                        <div className="col-12 divider divider-dotted"></div>
                         <div className="col-xs-12 col-md-12">
                             <ChartTemplate layouts={this.state.data.layouts} widgetData={data.controller_widget} controllerId={match.params.controllerId} updateData={this.updateData} />
                         </div>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Redirect, Route, Switch } from "react-router-dom"
 import loadable from 'react-loadable'
 import LoadingComponent from 'components/Loading'
@@ -6,6 +6,7 @@ import { withAuth } from 'components/Auth/context/AuthContext'
 import Breadcrumb from 'components/Layout/Breadcrumb'
 import MaterialIcon from 'components/MaterialIcon'
 import ControllerList from './ControllerList'
+import Typography from '@material-ui/core/Typography'
 
 let ControllerWidget = loadable({
     loader: () => import('./ControllerWidget'),
@@ -24,20 +25,23 @@ class Controller extends Component {
             return <Redirect push to='/user/signin' />
 
         return (
-            <div>
+            <Fragment>
                 <Switch>
                     <Route exact path={`${match.url}/:controllerId`} component={ControllerWidget} />
                     <Route exact path={`${match.url}`}>
                         <div className="container-fluid mt-4">
                             <div className="row">
-                                <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start">
-                                    <h5><b><span className="ui-highlight" style={{backgroundColor: '#FF5722'}}><MaterialIcon icon="bar_chart" style={{color: '#FFFFFF'}} />  Controller   </span></b></h5>
-                                </div>
-                                <div className="col-xs-12 col-md-6 d-flex justify-content-md-end">
-                                    <div className="d-none d-sm-block">
+                                <div className="col-12 d-flex justify-content-center justify-content-md-between">
+                                    <div className="align-self-center">
+                                        <Typography variant="h5">
+                                            <span className="ui-highlight font-weight-bold" style={{backgroundColor: '#FF5722'}}><MaterialIcon icon="bar_chart" style={{color: '#FFFFFF'}} /> Controller</span>
+                                        </Typography>
+                                    </div>
+                                    <div className="d-none d-sm-block align-self-center">
                                         <Breadcrumb />
-                                    </div>                                    
+                                    </div>     
                                 </div>
+                                <div className="col-12 divider divider-dotted"></div>
                                 <div className="col-xs-12 col-md-12">
                                     <ControllerList {...this.props} />
                                 </div>
@@ -45,7 +49,7 @@ class Controller extends Component {
                         </div>
                     </Route>
                 </Switch>
-            </div>
+            </Fragment>
         )
     }
 }
