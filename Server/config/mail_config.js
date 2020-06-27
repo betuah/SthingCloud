@@ -1,16 +1,16 @@
 const nodemailer = require('nodemailer')
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+const transporter = (data) => nodemailer.createTransport({
+    host: `${data.host}`,
+    port: data.port,
+    secure: data.secure,
     auth: {
         // ganti dengan akun email mu
-        user: 'seamoleciot@gmail.com',
-        pass: 'admin122'
+        user: data.user,
+        pass: data.password
     },
     tls: {
-        rejectUnauthorized: false
+        rejectUnauthorized: data.tls
     }
 });
 
