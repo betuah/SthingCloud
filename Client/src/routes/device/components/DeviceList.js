@@ -3,6 +3,7 @@ import { withAuth } from 'components/Auth/context/AuthContext'
 import axios from 'axios';
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif';
 import Moment from 'react-moment';
+import 'moment-timezone';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import classNames from 'classnames';
@@ -232,7 +233,8 @@ EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
 const styles = theme => ({
   root: {
     width: '100%',
-    marginTop: theme.spacing() * 3,
+    marginTop: theme.spacing() * 1,
+    marginBottom: theme.spacing() * 3,
   },
   table: {
     minWidth: 1020,
@@ -409,7 +411,7 @@ class EnhancedTable extends React.Component {
                       <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#2196F3'}}>{n.device}</b></TableCell>
                       <TableCell width="20%" style={{ maxWidth: '20px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.desc}</TableCell>
                       <TableCell width="40%" style={{ maxWidth: '40px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.token}</TableCell>
-                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#4CAF50'}}><Moment local format="D MMM YYYY (hh:MM A)">{n.updatedAt}</Moment></b></TableCell>
+                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#4CAF50'}}><Moment tz={localStorage.getItem('timeZone')} format="D MMM YYYY (hh:MM A)">{n.updatedAt}</Moment></b></TableCell>
                       <TableCell width="5%" style={{ whiteSpace: 'normal', wordWrap: 'break-word'}}><span className="ui-highlight" style={n.state === 0 ? {backgroundColor: '#F44336'} : {backgroundColor: '#2196F3'}}>{n.state === 0 ? 'Disconected' : 'Connected'}</span></TableCell>
                     </TableRow>
                   );
