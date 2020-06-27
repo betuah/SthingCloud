@@ -247,7 +247,7 @@ class Settings extends Component {
                                         </div>
                                     </div>
                                     <div className="form-group d-flex justify-content-center">
-                                        <Button className="col-md-4" variant="contained" color="danger"> Send Test Mail </Button>
+                                        <Button className="col-md-4" variant="contained"> Send Test Mail </Button>
                                     </div>
                                     <div className="col-12 divider divider-dotted"></div>
                                     <div className="form-group d-flex justify-content-center">

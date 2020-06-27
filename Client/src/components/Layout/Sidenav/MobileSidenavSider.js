@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { Layout, Icon } from 'antd';
+import { Layout } from 'antd';
 import Logo from 'components/Logo';
 import DEMO from 'constants/demoData';
 import MaterialIcon from 'components/MaterialIcon';
