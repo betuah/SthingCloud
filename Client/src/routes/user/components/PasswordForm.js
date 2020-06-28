@@ -8,6 +8,18 @@ import { Modal } from 'antd' // Antd Library
 
 import SignInModal from './SignInModal' //Import SignIn Modal
 
+import 'styles/loaders/loaders.scss'
+
+const Loading = () => {
+    return(
+        <div className="ball-pulse">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    )
+}
+
 class PasswordForm extends Component {
     constructor(props) {
         super(props)
@@ -22,6 +34,7 @@ class PasswordForm extends Component {
                 googleLoading: false,
                 githubLoading: false,
                 signinLoading: false,
+                btnLoading: false
             },
             modalForm: {                
                 email: '',
@@ -65,6 +78,7 @@ class PasswordForm extends Component {
                     googleLoading: action,
                     githubLoading: action,
                     signinLoading: action,
+                    btnLoading: action,
                 }
             })
         } else { // Request for specified loading
@@ -175,11 +189,15 @@ class PasswordForm extends Component {
         e.preventDefault() // Hold Form for not refresh the page
         const { data } = this.state // Init data value from state
 
+        this.handleLoading('btnLoading', true)
+
         if (data.newPassword.length < 8) {
             // Validate IF Password length less than 8
+            this.handleLoading('btnLoading', false)
             notif('warning', 'Warning!' , 'Minimum password length is 8 characters.')
         } else if (data.newPassword !== data.confirmPassword) {
             // Validate If password and confirm password not match
+            this.handleLoading('btnLoading', false)
             notif('error', 'Password Not Match!' , 'Please type your password again.')
             this.setState({ // If password not match will reset password form value
                 data: {
@@ -198,7 +216,7 @@ class PasswordForm extends Component {
     /* End Function for handle button change password action */
 
     render() {
-        const { data, showModal } = this.state // Init state in render function
+        const { data, showModal, loading } = this.state // Init state in render function
 
         return (
             <Fragment>
@@ -263,7 +281,7 @@ class PasswordForm extends Component {
                                         </div>
                                     </div>
                                     <div className="form-group d-flex justify-content-center">
-                                        <Button className="col-md-4" variant="contained" color="primary" type="submit"> Change Password </Button>
+                                        <Button className="col-md-4" variant="contained" color="primary" type="submit" disabled={loading.btnLoading}>{loading.btnLoading ? <Loading /> : 'Change Password'}</Button>
                                     </div>
                                 </form>
                             </div>

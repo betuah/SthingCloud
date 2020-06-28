@@ -4,7 +4,58 @@ import MaterialIcon from 'components/MaterialIcon'
 import { TextField, Button, Radio, FormLabel, FormControlLabel } from '@material-ui/core'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import notif from 'components/NotificationPopUp/notif'
+import {  Modal } from 'antd'
 
+import 'styles/loaders/loaders.scss'
+
+const Loading = () => {
+    return(
+        <div className="ball-pulse">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    )
+}
+
+const ModalContent = props => {
+    return (
+        <Fragment>
+            <div className="col-md-12 mx-auto">
+                <h4 style={{color: '#00BCD4'}} className="text-center"><b>Send Test Mail</b></h4>
+                <div className="divider divider-dotted"></div>             
+                <form className="form-v1" onSubmit={props.onSubmit}>
+                    <div className="form-group">
+                        <div className="input-group-v1">
+                            <div className="input-group-icon">
+                                <MaterialIcon icon="email" style={{color: '#00BCD4'}} />
+                            </div>
+                            <TextField                                   
+                                id="sendToMail"
+                                name="sendToMail"
+                                label="Send To"
+                                type="email"
+                                fullWidth
+                                autoComplete="off"
+                                onChange={props.onChange}
+                                required
+                                placeholder="Destination email address"
+                                value={props.data.sendToMail}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </div>
+                    </div>
+                    <div className="divider divider-dotted"></div>
+                    <div className="form-group d-flex justify-content-center">
+                        <Button className="col-md-4" variant="contained" color="primary" type="submit" disabled={props.loadingBtnModal}> {props.loadingBtnModal ? <Loading /> : 'Send'} </Button>
+                    </div>
+                </form>                  
+            </div>
+        </Fragment>
+    )
+}
 class Settings extends Component {
     constructor(props) {
         super(props)
@@ -12,7 +63,14 @@ class Settings extends Component {
         const tzData = JSON.parse(localStorage.getItem('timeZoneList')) ? JSON.parse(localStorage.getItem('timeZoneList')) : []
 
         this.state = {
+            loading: {
+                loadingBtnModal: false,
+                loadingBtnSave: false,
+                loadingBtnTestMail: false
+            },
+            modalTestMail: false,
             data: {
+                sendToMail: '',
                 timeZone: '',
                 host: '',
                 port: '',
@@ -25,8 +83,11 @@ class Settings extends Component {
             timeZoneList: [...tzData]
         }
 
-        this.handleChange = this.handleChange.bind(this)
-        this.handleOk = this.handleOk.bind(this)
+        this.handleChange   = this.handleChange.bind(this)
+        this.handleOk       = this.handleOk.bind(this)
+        this.sendTestMail   = this.sendTestMail.bind(this)
+        this.showModal      = this.showModal.bind(this)
+        this.clearState     = this.clearState.bind(this)
     }
 
     async componentDidMount() {
@@ -36,6 +97,7 @@ class Settings extends Component {
         axios.get(`${server_url}/api/user/settings`).then(res => {
             this.setState({
                 data: {
+                    ...this.state.data,
                     timeZone: res.data.timeZone,
                     host: res.data.smtp.host,
                     port: res.data.smtp.port,
@@ -71,24 +133,98 @@ class Settings extends Component {
         }
     }
 
+    handleLoading = (req, action) => {
+        if (req === 'all') { // Reqest for all loading 
+            this.setState({
+                loading: {
+                    loadingBtnModal: false,
+                    loadingBtnSave: false,
+                    loadingBtnTestMail: false
+                }
+            })
+        } else { // Request for specified loading
+            this.setState({
+                loading: {
+                    ...this.state.loading,
+                    [req]: action
+                }            
+            })
+        }
+    }
+
+    showModal = () => {
+        this.handleLoading('loadingBtnTestMail', true)
+        this.setState({ modalTestMail: true })
+    }
+
+    clearState = () => {
+        this.setState({ 
+            ...this.state,
+            modalTestMail: false, 
+            data: {
+                ...this.state.data,
+                sendToMail: ''
+            }
+        })
+    }
+
+    sendTestMail = async (e) => {
+        e.preventDefault()
+        const { axios, server_url } = this.props
+        const { data } = this.state
+
+        this.handleLoading('loadingBtnModal', true)
+        
+        await axios.post(`${server_url}/api/user/sendtestmail`, data).then(res => {
+            const resData = res.data
+
+            this.clearState()
+            this.handleLoading('all', false)
+
+            if (resData.code === 200 ) {
+                notif('success', 'Success!' , `Email was sent to ${resData.data.emailTo}.`)
+            } else {
+                notif('error', 'Failed!' , `${resData.msg ? resData.msg : 'Something is wrong with your settings, please check again!'}`)
+            }
+        }).catch(err => {
+            this.handleLoading('all', false)
+            this.clearState()
+            notif('error', 'Error!' , `Internal Server Error`)
+        })
+    }
+
     handleOk = (e) => {
         e.preventDefault()
         const { axios, server_url } = this.props
         const { data } = this.state
+
+        this.handleLoading('loadingBtnSave', true)
         
         axios.post(`${server_url}/api/user/settings`, data).then(res => {
+            this.handleLoading('loadingBtnSave', false)
             localStorage.setItem('timeZone', data.timeZone)
             notif('success', 'Success!' , 'Your data has been updated.')
         }).catch(err => {
+            this.handleLoading('loadingBtnSave', false)
             notif('error', 'Failed!' , 'Failed saving your data.')
         })
     }
 
     render() {
-        const { data, timeZoneList } = this.state
+        const { data, timeZoneList, modalTestMail, loading } = this.state
 
         return (
             <Fragment>
+                <Modal
+                    visible={modalTestMail}
+                    onOk={this.sendTestMail}
+                    onCancel={this.clearState}
+                    closable={true}
+                    footer={false}
+                >
+                    <ModalContent {...this.state} onSubmit={this.sendTestMail} onChange={this.handleChange} />
+                </Modal>
+
                 <div className="container-fluid mt-5 mb-5">
                     <div className="row justify-content-center">
                         <div className="box box-default pt-5 pb-3 mdc-elevation--z2 col-xs-12 col-md-8">
@@ -247,11 +383,11 @@ class Settings extends Component {
                                         </div>
                                     </div>
                                     <div className="form-group d-flex justify-content-center">
-                                        <Button className="col-md-4" variant="contained"> Send Test Mail </Button>
+                                        <Button className="col-md-4" variant="contained" disabled={loading.loadingBtnTestMail} onClick={this.showModal}>{loading.loadingBtnTestMail ? <Loading /> : 'Send Test Mail'}</Button>
                                     </div>
                                     <div className="col-12 divider divider-dotted"></div>
                                     <div className="form-group d-flex justify-content-center">
-                                        <Button className="col-md-4" variant="contained" color="primary" type="submit"> Save </Button>
+                                        <Button className="col-md-4" variant="contained" color="primary" type="submit" disabled={loading.loadingBtnSave}> {loading.loadingBtnSave ? <Loading /> : 'Send Test Mail'} </Button>
                                     </div>
                                 </div>
                             </form>

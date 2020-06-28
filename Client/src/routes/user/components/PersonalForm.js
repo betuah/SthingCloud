@@ -5,11 +5,23 @@ import { TextField, Button, Radio, FormLabel, FormControlLabel } from '@material
 import { FireDatabase } from 'config/Firebase'
 import notif from 'components/NotificationPopUp/notif'
 
+import 'styles/loaders/loaders.scss'
+
+const Loading = () => {
+    return(
+        <div className="ball-pulse">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    )
+}
 class PersonalForm extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
+            loading: false,
             uid: false,
             email: '',
             data: {
@@ -28,6 +40,7 @@ class PersonalForm extends Component {
 
         this.handleChange = this.handleChange.bind(this)
         this.handleOk = this.handleOk.bind(this)
+        this.handleLoading = this.handleLoading.bind(this)
     }
 
     componentDidMount = async () => {
@@ -71,8 +84,16 @@ class PersonalForm extends Component {
         }
     }
 
+    handleLoading = (action) => {
+        this.setState({
+            loading: action
+        })
+    }
+
     handleOk = (e) => {
         e.preventDefault()
+
+        this.handleLoading(true)
 
         const { uid, data } = this.state
         const userDb = FireDatabase.ref(`users/${uid}/personalData`)
@@ -80,14 +101,16 @@ class PersonalForm extends Component {
         userDb.update({
             ...data
         }).then(res => {
+            this.handleLoading(false)
             notif('success', 'Success!' , 'Your data changes have been saved.')
         }).catch(err => {
+            this.handleLoading(false)
             notif('error', 'Failed!' , 'Failed saving data.')
         })
     }
 
     render() {
-        const { email, data } = this.state
+        const { email, data, loading } = this.state
 
         return (
             <Fragment>
@@ -228,7 +251,7 @@ class PersonalForm extends Component {
                                         </div>
                                     </div>
                                     <div className="form-group d-flex justify-content-center">
-                                        <Button className="col-md-4" variant="contained" color="primary" type="submit"> Save Change </Button>
+                                        <Button className="col-md-4" variant="contained" color="primary" type="submit" disabled={loading}>{loading.loadingBtnSave ? <Loading /> : 'Save Change'}</Button>
                                     </div>
                                 </form>
                             </div>
