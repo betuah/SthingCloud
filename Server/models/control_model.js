@@ -7,7 +7,6 @@ const WidgetSchema = new Schema({
         trim: true,
         required: true,
         unique: true,
-        index: true
     },
     widgetTitle: {
         type: String,

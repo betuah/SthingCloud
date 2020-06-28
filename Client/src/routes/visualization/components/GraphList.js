@@ -400,7 +400,7 @@ class EnhancedTable extends React.Component {
                 .sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .filter(val => {
-                  return val.graph.match(this.state.searchValue.toLowerCase())})
+                  return val.graph.match(this.state.searchValue)})
                 .map(n => {
                   const isSelected = this.isSelected(n._id);
 

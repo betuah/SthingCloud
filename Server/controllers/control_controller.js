@@ -63,6 +63,8 @@ exports.create = async (req, res) => {
                 controller_default  : 0
             }
 
+            console.log(dataBody._id)
+
             controlModel.create(dataBody)
                 .then(data => {
                     res.status(201).json({ status: 'Success', code: 200, 'msg': 'Success to saving data!', data: data})

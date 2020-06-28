@@ -91,7 +91,7 @@ export class AuthContextProvider extends Component {
         })
 
         return await axiosReq.get(`${server_url}/api/user/settings`).then(res => {
-            localStorage.setItem('timeZone', res.data.timeZone)
+            localStorage.setItem('timeZone', res.data !== null ? res.data.timeZone : 'Asia/Jakarta')
         })
     }
 
