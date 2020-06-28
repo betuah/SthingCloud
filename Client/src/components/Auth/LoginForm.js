@@ -116,11 +116,11 @@ class LoginForm extends React.Component {
                     })
                     .catch(err => {
                         this.handleLoading('loading', false)
-                        notif('error', 'Error 500!' , 'Server Error! Please contact your Administrator')
+                        notif('error', 'Error 500!' , 'Server Error! Please contact your Administrator 1')
                     })
                 }).catch(err => {
                     this.handleLoading('loading', false)
-                    notif('error', 'Error 500!' , `Server Error! ${err} Please contact your Administrator`)
+                    notif('error', 'Error 500!' , `Server Error! ${err} Please contact your Administrator 2`)
                 })
             }
         }).catch(err => {
