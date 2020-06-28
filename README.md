@@ -31,6 +31,7 @@ PORT=8000
 DOMAIN=http://localhost
 TOKEN_SECRET=YOUR_SECRET_TOKEN_PASSWORD
 CLIENT_DOMAIN=http://localhost:3000
+API_DOMAIN=http://localhost:5000
 MONGO_DB=db_cloud_platform
 MONGO_USERNAME=YOUR_MONGODB_USERNAME
 MONGO_PASSWORD=YOUR_MONGODB_PASSWORD
@@ -116,6 +117,9 @@ $ npm run start
 
 ## Versin Change log (STHING_v06)
 - Add editable and dragable widget setting in edit widget modal
+- Add api_url in server origin and .env
+- Add Feature test mail
+- Add loading btn in profile and settings component
 
 ## Version Change Log (STHING_v05)
 - Add New logo brand
