@@ -2,6 +2,12 @@ const mongoose  = require('mongoose');
 const Schema    = mongoose.Schema;
 
 const WidgetSchema = new Schema({
+    _id         : { 
+        type: String, 
+        trim: true,
+        required: true,
+        unique: true,
+    },
     widgetTitle: {
         type: String,
         trim: true,
