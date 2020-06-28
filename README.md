@@ -120,6 +120,7 @@ $ npm run start
 - Add api_url in server origin and .env
 - Add Feature test mail
 - Add loading btn in profile and settings component
+- Add send to mail modal in settings component
 
 ## Version Change Log (STHING_v05)
 - Add New logo brand
