@@ -139,12 +139,6 @@ exports.avatarUpload = (req, res) => {
     
 }
 
-exports.sendMail = (req, res) => {
-
-
-    res.send('Welcome :)')
-}
-
 exports.sendTestMail = (req, res) => {
     if ( !req.body.host.trim() || !req.body.port.trim() || !req.body.username.trim() || !req.body.password.trim() ) {
         res.status(200).json({ status: 'ERROR', code: 400, msg: 'Request data cannot be empty. Please check your data!'})

@@ -12,9 +12,6 @@ module.exports = (app) => {
     app.route('/api/user/avatar/upload')
         .post(authMiddleware, UserSetting.avatarUpload)
 
-    app.route('/api/user/sendmail')
-        .post(authMiddleware, UserSetting.sendMail)
-
     app.route('/api/user/sendtestmail')
         .post(authMiddleware, UserSetting.sendTestMail)
 }
