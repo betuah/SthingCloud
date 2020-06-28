@@ -1,6 +1,7 @@
 const multer                = require('multer')
 const env                   = require('../env')
 const bcrypt                = require('bcrypt')
+const transporter           = require('../config/mail_config')
 const firebaseAdmin         = require('../config/firebaseAdminConfig')
 const firebaseDatabaseAdmin = firebaseAdmin.database()
 const fs                    = require('fs')
@@ -51,8 +52,7 @@ exports.update = async (req, res) => {
             res.status(201).json({ status: 'Success', code: 200, 'msg': 'Data is updated!', data: data})
         })
         .catch(err => {
-            console.log('update error',err)
-            res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'failah pokokny!' + err})
+            res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed update data!' + err})
         })
     } catch (error) {
         console.log(error)
@@ -137,4 +137,41 @@ exports.avatarUpload = (req, res) => {
         }
     })
     
+}
+
+exports.sendMail = (req, res) => {
+
+
+    res.send('Welcome :)')
+}
+
+exports.sendTestMail = (req, res) => {
+    if ( !req.body.host.trim() || !req.body.port.trim() || !req.body.username.trim() || !req.body.password.trim() ) {
+        res.status(200).json({ status: 'ERROR', code: 400, msg: 'Request data cannot be empty. Please check your data!'})
+    } else {
+
+        const data = {
+            host: `${req.body.host}`,
+            port: req.body.port,
+            secure: req.body.secure === '1' ? true : false,
+            username: `${req.body.username}`,
+            password: `${req.body.password ? req.body.password : ''}`,
+            tls: req.body.tls === '1' ? true : false
+        }
+
+        var mailOptions = {
+            to: `${req.body.sendToMail}`,
+            subject: 'SThing - Test Mail',
+            html: 'Mantap.. Email udah masuk! <a href="https://teziger.blogspot.com">Aku Sebuah Link</a>'
+        }
+        
+        transporter(data).sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log(err)
+                res.status(200).json({ status: err.code, code: err.responseCode, msg: err.response})
+            } else {
+                res.status(200).json({ status: 'SUCCESS', code: 200, data: { emailTo: info.envelope.to, response: info.response}})
+            }
+        })
+    }
 }

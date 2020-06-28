@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 /* Dynamic CORS */
-const whitelist = [`${env.client_domain}`]
+const whitelist = [`${env.client_domain}`,`${env.api_domain}`]
 
 const options = {
     origin: (origin, callback) => {

@@ -4,6 +4,7 @@ const env = {
     port: process.env.PORT,
     domain: process.env.DOMAIN,
     client_domain: process.env.CLIENT_DOMAIN,
+    api_domain: process.env.API_DOMAIN,
     token_secret: process.env.TOKEN_SECRET,
     db_mysql: {
         database: process.env.MYSQL_DB,

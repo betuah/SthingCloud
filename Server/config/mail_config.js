@@ -5,8 +5,7 @@ const transporter = (data) => nodemailer.createTransport({
     port: data.port,
     secure: data.secure,
     auth: {
-        // ganti dengan akun email mu
-        user: data.user,
+        user: data.username,
         pass: data.password
     },
     tls: {

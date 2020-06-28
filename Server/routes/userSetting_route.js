@@ -13,5 +13,8 @@ module.exports = (app) => {
         .post(authMiddleware, UserSetting.avatarUpload)
 
     app.route('/api/user/sendmail')
-        .post(authMiddleware, UserSetting.update)
+        .post(authMiddleware, UserSetting.sendMail)
+
+    app.route('/api/user/sendtestmail')
+        .post(authMiddleware, UserSetting.sendTestMail)
 }
