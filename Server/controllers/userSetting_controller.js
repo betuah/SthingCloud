@@ -161,8 +161,8 @@ exports.sendTestMail = (req, res) => {
 
         var mailOptions = {
             to: `${req.body.sendToMail}`,
-            subject: 'SThing - Test Mail',
-            html: 'Mantap.. Email udah masuk! <a href="https://teziger.blogspot.com">Aku Sebuah Link</a>'
+            subject: 'SThing Cloud - Test Mail',
+            html: 'Test Mail form SThing Cloud (IoT Cloud Platform) sthing.seamolec.org'
         }
         
         transporter(data).sendMail(mailOptions, (err, info) => {

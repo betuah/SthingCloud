@@ -49,7 +49,7 @@ const ModalContent = props => {
                     </div>
                     <div className="divider divider-dotted"></div>
                     <div className="form-group d-flex justify-content-center">
-                        <Button className="col-md-4" variant="contained" color="primary" type="submit" disabled={props.loadingBtnModal}> {props.loadingBtnModal ? <Loading /> : 'Send'} </Button>
+                        <Button className="col-md-4" variant="contained" color="primary" type="submit" disabled={props.loading.loadingBtnModal}> {props.loading.loadingBtnModal ? <Loading /> : 'Send'} </Button>
                     </div>
                 </form>                  
             </div>
@@ -387,7 +387,7 @@ class Settings extends Component {
                                     </div>
                                     <div className="col-12 divider divider-dotted"></div>
                                     <div className="form-group d-flex justify-content-center">
-                                        <Button className="col-md-4" variant="contained" color="primary" type="submit" disabled={loading.loadingBtnSave}> {loading.loadingBtnSave ? <Loading /> : 'Send Test Mail'} </Button>
+                                        <Button className="col-md-4" variant="contained" color="primary" type="submit" disabled={loading.loadingBtnSave}> {loading.loadingBtnSave ? <Loading /> : 'Save'} </Button>
                                     </div>
                                 </div>
                             </form>
