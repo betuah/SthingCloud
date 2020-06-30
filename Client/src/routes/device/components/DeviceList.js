@@ -41,7 +41,7 @@ function getSorting(order, orderBy) {
 }
 
 const columnData = [
-  
+  { id: '_id', disablePadding: false, label: 'Device ID' },
   { id: 'device', disablePadding: false, label: 'Device' },
   { id: 'desc', disablePadding: false, label: 'Description' },
   { id: 'token', disablePadding: false, label: 'Token' },
@@ -391,7 +391,7 @@ class EnhancedTable extends React.Component {
                 .sort(getSorting(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .filter(val => {
-                  return val.device.match(this.state.searchValue)})
+                  return val.device.toLowerCase().includes(this.state.searchValue.toLowerCase())})
                 .map(n => {
                   const isSelected = this.isSelected(n._id);
 
@@ -408,9 +408,10 @@ class EnhancedTable extends React.Component {
                       <TableCell padding="checkbox" width="5%">
                         <Checkbox checked={isSelected} />
                       </TableCell>
-                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#2196F3'}}>{n.device}</b></TableCell>
+                      <TableCell width="10%" style={{ maxWidth: '10px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#4CAF50'}}>{n._id}</b></TableCell>
+                      <TableCell width="20%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#2196F3'}}>{n.device}</b></TableCell>
                       <TableCell width="20%" style={{ maxWidth: '20px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.desc}</TableCell>
-                      <TableCell width="40%" style={{ maxWidth: '40px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.token}</TableCell>
+                      <TableCell width="30%" style={{ maxWidth: '30px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.token}</TableCell>
                       <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#4CAF50'}}><Moment tz={localStorage.getItem('timeZone')} format="D MMM YYYY (hh:MM A)">{n.updatedAt}</Moment></b></TableCell>
                       <TableCell width="5%" style={{ whiteSpace: 'normal', wordWrap: 'break-word'}}><span className="ui-highlight" style={n.state === 0 ? {backgroundColor: '#F44336'} : {backgroundColor: '#2196F3'}}>{n.state === 0 ? 'Disconected' : 'Connected'}</span></TableCell>
                     </TableRow>
