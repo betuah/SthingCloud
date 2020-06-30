@@ -40,7 +40,7 @@ class Tachometer extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.widgetTitle === this.state.widgetTitle && this.state.dataValue === nextState.dataValue ? ( this.props.Editable === nextProps.Editable ? false : true ) : true
+        return this._isMounted && nextProps.widgetTitle === this.state.widgetTitle && this.state.dataValue === nextState.dataValue ? ( this.props.Editable === nextProps.Editable ? false : true ) : true
     }
 
     componentDidUpdate() {
@@ -95,7 +95,7 @@ class Tachometer extends Component {
                     name: `${this.state.widgetTitle}`,
                     type: 'gauge',
                     detail: {formatter: '{value}'},
-                    data: [{value: this.state.dataValue, name: 'Value'}],
+                    data: [{value: this.state.dataValue > 100 ? 100 : this.state.dataValue, name: 'Value'}],
                     title: {
                         textStyle: {
                                 color: '#898989'
