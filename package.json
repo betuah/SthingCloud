@@ -9,9 +9,8 @@
     "server": "cd Server && npm start",
     "client": "cd Client && npm start",
     "socket": "cd SocketIO && npm start",
-    "api": "cd API && npm start",
-    "app install": "concurrently \"npm run server-install\" \"npm run client-install\" \"npm run socket-install\" \"npm run api-install\" ",
-    "start": "concurrently \"npm run server\" \"npm run socket\" \"npm run api\" "
+    "app install": "concurrently \"npm run server-install\" \"npm run client-install\" \"npm run socket-install\" ",
+    "start": "concurrently \"npm run server\" \"npm run socket\" "
   },
   "devDependencies": {
     "chai": "^4.2.0",
