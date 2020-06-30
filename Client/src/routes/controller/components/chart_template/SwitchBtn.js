@@ -39,9 +39,23 @@ class SwitchBtn extends Component {
     }
 
     handleSwitch = name => e => {
-        this.setState({
-            ...this.state,
-            [name]: e.target.checked
+        const { server_url, axios, controllerId, _id, resourceId } = this.props
+        const checked = e.target.checked
+
+        this._isMounted && axios.get(`${server_url}/api/device/${resourceId}`).then(res => {
+            if(res.data.state === '1' || res.data.state === 1 ) {
+                axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: !this.state.btn_action })
+                .then(res => {
+                    this.setState({
+                        ...this.state,
+                        [name]: checked
+                    })
+                }).catch(err => {
+                    notif('warning', 'Failed', 'An error might have occurred on the internet network!')
+                })
+            } else {
+                notif('error', 'Device Not Connect', 'Your device is not connected!')
+            }
         })
     }
 
@@ -57,10 +71,6 @@ class SwitchBtn extends Component {
     }
 
     componentWillUnmount() {
-        const { server_url, axios, controllerId, _id } = this.props
-
-        this._isMounted && axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: this.state.btn_action })
-
         this._isMounted = false;
     }
 

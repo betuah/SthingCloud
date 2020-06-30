@@ -52,21 +52,26 @@ class ButtonFloat extends Component {
     }
 
     componentWillUnmount() {
-        const { server_url, axios, controllerId, _id } = this.props
-
-        this._isMounted && axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: this.state.btn_action })
-
         this._isMounted = false;
     }
 
     btnClick () {
-        const { server_url, axios, controllerId, _id } = this.props
-
-        this.setState({
-            btn_action: !this.state.btn_action
+        const { server_url, axios, controllerId, _id, resourceId } = this.props
+        
+        this._isMounted && axios.get(`${server_url}/api/device/${resourceId}`).then(res => {
+            if(res.data.state === '1' || res.data.state === 1 ) {
+                axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: !this.state.btn_action })
+                .then(res => {
+                    this._isMounted && this.setState({
+                        btn_action: !this.state.btn_action
+                    })
+                }).catch(err => {
+                    notif('warning', 'Failed', 'An error might have occurred on the internet network!')
+                })
+            } else {
+                notif('error', 'Device Not Connect', 'Your device is not connected!')
+            }
         })
-
-        this._isMounted && axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: !this.state.btn_action })
     }
 
     editWidget() {
