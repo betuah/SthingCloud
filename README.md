@@ -121,6 +121,10 @@ $ npm run start
 - Add Feature test mail
 - Add loading btn in profile and settings component
 - Add send to mail modal in settings component
+- Add MQTT Broker with Aedes
+- Fix search bugs issue when search any sugestion with symbol getting error (Search at device, visualization, & Controller list)
+- Websocket (SockerIO) change function for handle device state, get status from mqtt broker
+- Add Security like authentication and authorization for publisher and subscriber for MQTT Broker (Aedes) 
 
 ## Version Change Log (STHING_v05)
 - Add New logo brand
