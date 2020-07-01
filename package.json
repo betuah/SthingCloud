@@ -5,12 +5,13 @@
     "server-install": "cd Server && npm i",
     "client-install": "cd Client && npm i",
     "socket-install": "cd ScoketIO && npm i",
-    "api-install": "cd API && npm i",
+    "iot-install": "cd IoT_Gateway && npm i",
     "server": "cd Server && npm start",
     "client": "cd Client && npm start",
     "socket": "cd SocketIO && npm start",
-    "app install": "concurrently \"npm run server-install\" \"npm run client-install\" \"npm run socket-install\" ",
-    "start": "concurrently \"npm run server\" \"npm run socket\" "
+    "iot": "cd IoT_Gateway && npm start",
+    "app install": "concurrently \"npm run server-install\" \"npm run client-install\" \"npm run socket-install\" \"npm run iot-install\" ",
+    "start": "concurrently \"npm run server\" \"npm run socket\" \"npm run iot\" "
   },
   "devDependencies": {
     "chai": "^4.2.0",
