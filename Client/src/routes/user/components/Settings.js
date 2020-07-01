@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import MaterialIcon from 'components/MaterialIcon'
 import { TextField, Button, Radio, FormLabel, FormControlLabel } from '@material-ui/core'
+import timeZoneList from 'constants/timeZoneList'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import notif from 'components/NotificationPopUp/notif'
 import {  Modal } from 'antd'
@@ -60,8 +61,6 @@ class Settings extends Component {
     constructor(props) {
         super(props)
 
-        const tzData = JSON.parse(localStorage.getItem('timeZoneList')) ? JSON.parse(localStorage.getItem('timeZoneList')) : []
-
         this.state = {
             loading: {
                 loadingBtnModal: false,
@@ -80,7 +79,7 @@ class Settings extends Component {
                 password: '',
                 oldPassword: ''
             },
-            timeZoneList: [...tzData]
+            timeZoneList: [...timeZoneList]
         }
 
         this.handleChange   = this.handleChange.bind(this)

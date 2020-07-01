@@ -11,7 +11,6 @@ import Notifications from 'routes/layout/routes/header/components/Notifications'
 import MaterialIcon from 'components/MaterialIcon'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import notif from 'components/NotificationPopUp/notif'
 
 import { withAuth } from '../../Auth/context/AuthContext'
 
@@ -20,7 +19,6 @@ const { Header } = Layout;
 class AppHeader extends React.Component {
   constructor(props) {
     super(props) 
-    this._isMounted = true
     this.state = {
       anchorEl: null,
       badge: 5,
@@ -45,18 +43,9 @@ class AppHeader extends React.Component {
   }
 
   componentDidMount() {
-    const { initSocket, initTimeZoneList, socket } = this.props
-    
+    const { initSocket } = this.props
+
     initSocket()
-    initTimeZoneList()
-
-    socket.on('event', data => {
-      this._isMounted && data.statusChange === 1 ? notif('info', 'New Device Connected!', `${data.device} is connected!`) : notif('error', 'New Device Disconnected!', `${data.device} is disconnected!`)
-    });
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 
   onToggleCollapsedNav = () => {

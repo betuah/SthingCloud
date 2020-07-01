@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import axios from "axios"
 import socketOpen from 'socket.io-client';
 
-const server_url    = `${process.env.REACT_APP_SERVER_DOMAIN}`
-const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN}` 
-const client_url    = `${process.env.REACT_APP_CLIENT_DOMAIN}`
-const api_url       = `${process.env.REACT_APP_API_DOMAIN}`  
-const ConfigContext = React.createContext()
+const server_url      = `${process.env.REACT_APP_SERVER_DOMAIN}`
+const socket_url      = `${process.env.REACT_APP_SOCKET_DOMAIN}` 
+const client_url      = `${process.env.REACT_APP_CLIENT_DOMAIN}`
+const iot_gateway_url = `${process.env.REACT_APP_IOT_GATEWAY_DOMAIN}` 
+const ConfigContext   = React.createContext()
 
 let socket = socketOpen(`${socket_url}`)
 
@@ -18,7 +18,7 @@ export class ConfigContextProvider extends Component {
                 server_url: server_url,
                 socket_url: socket_url,
                 client_url: client_url,
-                api_url: api_url
+                iot_gateway_url: iot_gateway_url
             }
     }
 

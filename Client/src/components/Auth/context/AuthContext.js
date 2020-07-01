@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import axios from "axios"
 import socketOpen from 'socket.io-client'
 import { FireAuth, FireDatabase } from 'config/Firebase'
+import notif from 'components/NotificationPopUp/notif'
 
-const server_url    = `${process.env.REACT_APP_SERVER_DOMAIN}`
-const socket_url    = `${process.env.REACT_APP_SOCKET_DOMAIN}` 
-const client_url    = `${process.env.REACT_APP_CLIENT_DOMAIN}`
-const api_url       = `${process.env.REACT_APP_API_DOMAIN}` 
-const axiosReq      = axios.create()
-const AuthContext   = React.createContext()
+const server_url      = `${process.env.REACT_APP_SERVER_DOMAIN}`
+const socket_url      = `${process.env.REACT_APP_SOCKET_DOMAIN}` 
+const client_url      = `${process.env.REACT_APP_CLIENT_DOMAIN}`
+const iot_gateway_url = `${process.env.REACT_APP_IOT_GATEWAY_DOMAIN}` 
+const axiosReq        = axios.create()
+const AuthContext     = React.createContext()
 
 //konfigurasi untuk axios 
 axiosReq.interceptors.request.use((config)=>{
@@ -23,6 +24,11 @@ export class AuthContextProvider extends Component {
 
     constructor() {
         super()
+            socket.on('event', data => {
+              console.log(data)
+              data.statusChange === 1 ? notif('info', 'New Device Connected!', `${data.device} is connected!`) : notif('error', 'New Device Disconnected!', `${data.device} is disconnected!`)
+            });
+
             this.state = {
                 profileData: JSON.parse(localStorage.getItem('profileData')) || false,
                 token: localStorage.getItem('token') || false,
@@ -30,7 +36,7 @@ export class AuthContextProvider extends Component {
                 server_url: server_url,
                 socket_url: socket_url,
                 client_url: client_url,
-                api_url: api_url
+                iot_gateway_url: iot_gateway_url
             }
 
             this.checkToken             = this.checkToken.bind(this)
@@ -41,7 +47,6 @@ export class AuthContextProvider extends Component {
             this.userUpdateProfile      = this.userUpdateProfile.bind(this)
             this.sendEmailVerification  = this.sendEmailVerification.bind(this)
             this.initUser               = this.initUser.bind(this)
-            this.initTimeZoneList       = this.initTimeZoneList.bind(this)
     }
 
     checkToken () {
@@ -83,16 +88,6 @@ export class AuthContextProvider extends Component {
     initSocket = () => {
         const profileData = JSON.parse(localStorage.getItem('profileData'))
         return socket.emit('join_room', profileData.uid )
-    }
-
-    initTimeZoneList = async () => {
-        await axios.get(`http://worldtimeapi.org/api/timezone`).then(res => {
-            localStorage.setItem('timeZoneList', JSON.stringify(res.data))
-        })
-
-        return await axiosReq.get(`${server_url}/api/user/settings`).then(res => {
-            localStorage.setItem('timeZone', res.data !== null ? res.data.timeZone : 'Asia/Jakarta')
-        })
     }
 
     setIsLoggin (stats) {
@@ -179,9 +174,9 @@ export class AuthContextProvider extends Component {
                     profileData: false
                 })
         
-                // localStorage.removeItem('token')
-                // localStorage.removeItem('profileData')
-                localStorage.clear();
+                localStorage.removeItem('token')
+                localStorage.removeItem('profileData')
+                localStorage.removeItem('timeZone')
 
                 return true
             }).catch(err => {
@@ -194,22 +189,22 @@ export class AuthContextProvider extends Component {
 
     render() {
         return (
-                <AuthContext.Provider 
-                    value={{
-                        signIn: this.signIn,
-                        setIsLoggin: this.setIsLoggin,
-                        userUpdateProfile: this.userUpdateProfile,
-                        signOut: this.signOut,
-                        initSocket: this.initSocket,
-                        initUser: this.initUser,
-                        checkToken: this.checkToken,
-                        initTimeZoneList: this.initTimeZoneList,
-                        socket: socket,
-                        axios: axiosReq,
-                        ...this.state
-                    }}>
-                    {this.props.children}
-                </AuthContext.Provider>
+            <AuthContext.Provider 
+                value={{
+                    signIn: this.signIn,
+                    setIsLoggin: this.setIsLoggin,
+                    userUpdateProfile: this.userUpdateProfile,
+                    signOut: this.signOut,
+                    initSocket: this.initSocket,
+                    initUser: this.initUser,
+                    checkToken: this.checkToken,
+                    initTimeZoneList: this.initTimeZoneList,
+                    socket: socket,
+                    axios: axiosReq,
+                    ...this.state
+                }}>
+                {this.props.children}
+            </AuthContext.Provider>
         )
     }
 }
