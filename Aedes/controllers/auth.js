@@ -44,7 +44,15 @@ exports.authorizePublish = (client, packet, callback) => {
     if (client.id.split('.')[0] === admin_user) {
         callback(null, true)
     } else if (client.deviceId == packet.topic.split('/')[0]) {
-        packet.topic = `${client.idUser}/${packet.topic}`
+        const deviceData = {
+            idUser : client.idUser,
+            idDevice : client.deviceId,
+            ...JSON.parse(packet.payload.toString())
+        }
+
+        packet.payload = Buffer.from(JSON.stringify(deviceData).toString())
+
+        packet.topic = `sthing/${packet.topic.split('/')[1]}`
         callback(null, true)
     } else {
         return callback(new Error(`Not authorized to publish!`))
@@ -56,7 +64,10 @@ exports.authorizePublish = (client, packet, callback) => {
     the deviceId from the topic and verifing it is the same of the authorized deviceId
 */
 exports.authorizeSubscribe = (client, sub, callback) => {
-    if (sub.topic.split('/')[0] === client.deviceId) {
+    if (client.id.split('.')[0] === admin_user) {
+        sub.qos = 2
+        callback(null, sub)
+    } else if (sub.topic.split('/')[0] === client.deviceId) {
         // overwrites subscription
         sub.topic = `${client.idUser}/${sub.topic}`
         sub.qos = 2

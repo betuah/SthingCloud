@@ -4,6 +4,7 @@ const env       = require('./env')
 const socket    = require('socket.io-client')(`${env.socket_domain}`, {extraHeaders: {origin: `${env.domain}:${env.port}`}})
 const auth      = require('./controllers/auth')
 const port      = env.port || 1883
+const admin_user = '@dm1n'
 
 Aedes.on('clientReady', client => {
     console.log('Client connected :', client.id)
@@ -11,12 +12,12 @@ Aedes.on('clientReady', client => {
 
 Aedes.on('publish', (packet, client) => {
     if (client) {
-        console.log('Publisher :', client.id, packet.payload)
+        console.log('Publisher :', client.id)
     }
 })
 
 Aedes.on('subscribe', (subscriptions, client) => {
-    if (client) {
+    if (client && client.id.split('.')[0] !== admin_user ) {
         const clientData = {
             idUser : client.id,
             idDevice : client.deviceId,
@@ -31,7 +32,7 @@ Aedes.on('subscribe', (subscriptions, client) => {
 })
 
 Aedes.on('unsubscribe', (unsubscriptions, client) => {
-    if (client) {
+    if (client && client.id.split('.')[0] !== admin_user ) {
         const clientData = {
             idUser : client.id,
             idDevice : client.deviceId,
