@@ -117,7 +117,14 @@ $ npm run start
 
 # Version Log
 
-## Versin Change log (STHING_v06)
+## Version Change log (STHING_v06)
+- Add subscriptions in IoT Gateway controller
+- Set device data in published payload in auth aedes
+- Remote data schema from graph model
+- Fix dataId in graph_data event on socketIO app
+- Fix dataId and dataValue undefine in visualizaition graph
+
+## Version Change log (STHING_v06)
 - Add editable and dragable widget setting in edit widget modal
 - Add api_url in server origin and .env
 - Add Feature test mail
