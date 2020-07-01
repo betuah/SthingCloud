@@ -124,7 +124,11 @@ $ npm run start
 - Add MQTT Broker with Aedes
 - Fix search bugs issue when search any sugestion with symbol getting error (Search at device, visualization, & Controller list)
 - Websocket (SockerIO) change function for handle device state, get status from mqtt broker
-- Add Security like authentication and authorization for publisher and subscriber for MQTT Broker (Aedes) 
+- Add Security like authentication and authorization for publisher and subscriber for MQTT Broker (Aedes)
+- Fix issue triple show notif device status pop up
+- Fix error fetch data from world time zone
+- Change port Aedes to 6000
+- Change API to IoT Gateway
 
 ## Version Change Log (STHING_v05)
 - Add New logo brand
