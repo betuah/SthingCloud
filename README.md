@@ -1,4 +1,4 @@
-<h1>SEA Cloud Platform - SThing (v0.6)</h1>
+<h1>SEA Cloud Platform - SThing (v0.7)</h1>
 
 > **Desc :** This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
 
@@ -31,7 +31,6 @@ PORT=8000
 DOMAIN=http://localhost
 TOKEN_SECRET=YOUR_SECRET_TOKEN_PASSWORD
 CLIENT_DOMAIN=http://localhost:3000
-API_DOMAIN=http://localhost:5000
 MONGO_DB=db_cloud_platform
 MONGO_USERNAME=YOUR_MONGODB_USERNAME
 MONGO_PASSWORD=YOUR_MONGODB_PASSWORD
@@ -59,10 +58,10 @@ Create json file with name serviceAccountKey.json in 'Server/config' directory a
 #### Client .env file
 ```sh
 NODE_PATH=src/
-NODE_ENV=production
+NODE_ENV=development
 REACT_APP_CLIENT_DOMAIN=http://localhost:3000
 REACT_APP_SERVER_DOMAIN=http://localhost:8000
-REACT_APP_API_DOMAIN=http://localhost:5000
+REACT_APP_IOT_GATEWAY_DOMAIN=http://localhost:5000
 REACT_APP_SOCKET_DOMAIN=http://localhost:4000
 REACT_APP_FIREBASE_APIKEY='YOUR_FIREBASE_APIKEY'
 REACT_APP_FIREBASE_AUTH_DOMAIN='YOUR_FIREBASE_AUTH_DOMAIN'
@@ -74,17 +73,20 @@ REACT_APP_FIREBASE_APP_ID='YOUR_FIREBASE_APP_ID'
 REACT_APP_FIREBASE_MEASUREMENT_ID='YOUR_FIREBASE_MEASUREMENT_ID'
 ```
 
-#### API .env file
+#### IoT Gateway .env file
 ```sh
 PORT=5000
 DOMAIN=http://localhost
-SOCKET_DOMAIN=http://localhost:4000
+MQTT_BROKER_DOMAIN=mqtt://localhost:6000
+MQTT_ADMIN_SECRET=YOUR_MQTT_ADMIN_SECRET
 TOKEN_SECRET=YOUR_SECRET_TOKEN_PASSWORD
 MONGO_DB=db_cloud_platform
 MONGO_USERNAME=YOUR_MONGODB_USERNAME
 MONGO_PASSWORD=YOUR_MONGODB_PASSWORD
 MONGO_HOST=YOUR_MONGODB_HOST
 MONGO_PORT=YOUR_MONGODB_PORT
+SOCKET_DOMAIN=http://localhost:4000
+CLIENT_DOMAIN=http://localhost:3000
 ```
 
 #### SocketIO .env file

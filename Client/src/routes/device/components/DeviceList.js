@@ -393,7 +393,7 @@ class EnhancedTable extends React.Component {
                 .filter(val => {
                   return val.device.toLowerCase().includes(this.state.searchValue.toLowerCase())})
                 .map(n => {
-                  const isSelected = this.isSelected(n._id);
+                  const isSelected = this.isSelected(n._id)
 
                   return (
                     <TableRow
@@ -412,7 +412,10 @@ class EnhancedTable extends React.Component {
                       <TableCell width="20%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#2196F3'}}>{n.device}</b></TableCell>
                       <TableCell width="20%" style={{ maxWidth: '20px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.desc}</TableCell>
                       <TableCell width="30%" style={{ maxWidth: '30px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n.token}</TableCell>
-                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}><b style={{color: '#4CAF50'}}><Moment tz={localStorage.getItem('timeZone')} format="D MMM YYYY (hh:MM A)">{n.updatedAt}</Moment></b></TableCell>
+                      <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>
+                        <b style={{color: '#4CAF50'}}>
+                          <Moment tz={localStorage.getItem('timeZone')} format="D MMM YYYY (HH:mm A)">{n.updatedAt}</Moment>
+                        </b></TableCell>
                       <TableCell width="5%" style={{ whiteSpace: 'normal', wordWrap: 'break-word'}}><span className="ui-highlight" style={n.state === 0 ? {backgroundColor: '#F44336'} : {backgroundColor: '#2196F3'}}>{n.state === 0 ? 'Disconected' : 'Connected'}</span></TableCell>
                     </TableRow>
                   );
