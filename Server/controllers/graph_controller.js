@@ -236,10 +236,8 @@ exports.widget_create = async (req, res) => {
             resourceType : req.body.resourceType,
             resourceId : req.body.resourceId,
             widgetChart : req.body.widgetChart,
-            data: [{
-                type: req.body.dataId,
-                value: 0
-            }],
+            dataId: req.body.dataId,
+            dataValue: 0,
             settings: {
                 triggerMax: {
                     value: '',
@@ -289,10 +287,8 @@ exports.widget_update = async (req, res) => {
             resourceType : req.body.resourceType,
             resourceId : req.body.resourceId,
             widgetChart : req.body.widgetChart,
-            data: [{
-                type: req.body.dataId,
-                value: req.body.dataValue
-            }],
+            dataId: req.body.dataId,
+            dataValue: req.body.dataValue,
             settings: {
                 triggerMax: {
                     value: req.body.triggerMaxVal,

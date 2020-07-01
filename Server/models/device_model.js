@@ -34,7 +34,7 @@ const DataSchema = new Schema({
 })
 
 const deviceDataSchema = new Schema({
-    _id         : { 
+    _id : { 
         type: String, 
         trim: true,
         required: true 

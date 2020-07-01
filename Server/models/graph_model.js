@@ -1,22 +1,6 @@
 const mongoose  = require('mongoose');
 const Schema    = mongoose.Schema;
 
-const DataSchema = new Schema({
-    type: {
-        type: String,
-        index: true,
-        trim: true,
-    },
-    value: {
-        type: Number,
-        trim: true,
-    },
-    _dataCreatedAt   : {
-        type: Date,
-        default: Date.now
-    },
-})
-
 const WidgetSchema = new Schema({
     _id         : { 
         type: String, 
@@ -39,6 +23,15 @@ const WidgetSchema = new Schema({
     },
     widgetChart: {
         type: String,
+        trim: true,
+    },
+    dataId: {
+        type: String,
+        index: true,
+        trim: true,
+    },
+    dataValue: {
+        type: Number,
         trim: true,
     },
     settings: {
@@ -82,8 +75,7 @@ const WidgetSchema = new Schema({
             actionOn: [],
             actionOff: [],
         }
-    },
-    data: [DataSchema]
+    }
 })
 
 const graphDataSchema = new Schema({
