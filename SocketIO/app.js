@@ -36,7 +36,7 @@ io.on("connection", socket => {
 
     socket.on("graph_data", data => {
         // console.log(data)
-        io.sockets.in(data.idUser).emit(`${data.idDevice}-${data.type}`, {
+        io.sockets.in(data.idUser).emit(`${data.idDevice}-${data.dataId}`, {
             value: data.value
         })
         // console.log(io.sockets.adapter.rooms)
