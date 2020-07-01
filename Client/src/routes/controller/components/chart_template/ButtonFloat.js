@@ -56,11 +56,11 @@ class ButtonFloat extends Component {
     }
 
     btnClick () {
-        const { server_url, axios, controllerId, _id, resourceId } = this.props
+        const { server_url, iot_gateway_url, axios, controllerId, _id, resourceId } = this.props
         
-        this._isMounted && axios.get(`${server_url}/api/device/${resourceId}`).then(res => {
+        this._isMounted && axios.get(`${server_url}/api/device/state/${resourceId}`).then(res => {
             if(res.data.state === '1' || res.data.state === 1 ) {
-                axios.put(`${server_url}/api/controller/widgetData/${controllerId}/${_id}`, { dataValue: !this.state.btn_action })
+                axios.put(`${iot_gateway_url}/api/iot/controller/${controllerId}/${_id}`, { dataValue: !this.state.btn_action })
                 .then(res => {
                     this._isMounted && this.setState({
                         btn_action: !this.state.btn_action
