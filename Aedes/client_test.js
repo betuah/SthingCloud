@@ -1,6 +1,6 @@
 var mqtt = require('mqtt'),
     host = 'localhost',
-    port = 5000
+    port = 6000
 
 var settings = {
     keepalive: 1000,
