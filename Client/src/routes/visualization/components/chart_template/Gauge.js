@@ -26,13 +26,13 @@ class Chart extends Component {
     }
     
     componentDidMount() {
-        const { widgetTitle, resourceId, data, socket } = this.props
+        const { widgetTitle, resourceId, dataId, dataValue, socket } = this.props
         this._isMounted && this.setState({
             widgetTitle: widgetTitle,
-            dataValue: data[0].value
+            dataValue: dataValue
         })
 
-        socket.on(`${resourceId}-${data[0].type}`, resData => {
+        socket.on(`${resourceId}-${dataId}`, resData => {
             this._isMounted && this.setState({
                 dataValue: resData.value
             })
@@ -51,11 +51,7 @@ class Chart extends Component {
     }
 
     componentWillUnmount() {
-        const { server_url, axios, graphId, _id } = this.props
-
-        this._isMounted && axios.put(`${server_url}/api/graph/widgetData/${graphId}/${_id}`, { value: this.state.dataValue })
-
-        this._isMounted = false;
+        this._isMounted = false
     }
 
     editWidget() {

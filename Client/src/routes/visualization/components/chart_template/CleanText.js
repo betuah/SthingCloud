@@ -25,13 +25,13 @@ class CleanText extends Component {
     }
     
     componentDidMount() {
-        const { widgetTitle, resourceId, data, socket } = this.props
+        const { widgetTitle, resourceId, dataId, dataValue, socket } = this.props
         this._isMounted && this.setState({
             widgetTitle: widgetTitle,
-            dataValue: data[0].value
+            dataValue: dataValue
         })
 
-        socket.on(`${resourceId}-${data[0].type}`, resData => {
+        socket.on(`${resourceId}-${dataId}`, resData => {
             this._isMounted && this.setState({
                 dataValue: resData.value
             })

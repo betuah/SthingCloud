@@ -108,13 +108,13 @@ const Content = props => {
                             <TextField                                   
                                 id="dataId"
                                 name="dataId"
-                                label="Data Type name"
+                                label="Data ID"
                                 type="text"
                                 fullWidth
                                 autoComplete="off"
                                 onChange={props.onChange}
                                 required
-                                placeholder="Your data type name"
+                                placeholder="Data ID. Ex: dataGraph01"
                                 value={props.data.dataId}
                                 InputLabelProps={{
                                     shrink: true,

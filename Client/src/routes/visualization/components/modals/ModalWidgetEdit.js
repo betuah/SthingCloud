@@ -105,13 +105,13 @@ const Content = props => {
                     <TextField                                   
                         id="dataId"
                         name="dataId"
-                        label="Data Type name"
+                        label="Data ID"
                         type="text"
                         fullWidth
                         autoComplete="off"
                         onChange={props.onChange}
                         required
-                        placeholder="Your data type name"
+                        placeholder="Your data ID. Ex: graphData01"
                         value={props.data.dataId}
                         InputLabelProps={{
                             shrink: true,
@@ -612,8 +612,8 @@ class ModalEditWidget extends Component {
                 resourceType: n.resourceType,
                 resourceId: n.resourceId,
                 widgetChart: n.widgetChart,
-                dataId: n.data[0].type,
-                dataValue: n.data[0].value,
+                dataId: n.dataId,
+                dataValue: n.dataValue,
                 notifMax: n.settings.triggerMax.notif,
                 sendMailMax: n.settings.triggerMax.mail,
                 mailListMax: n.settings.triggerMax.mailList,
@@ -684,21 +684,16 @@ class ModalEditWidget extends Component {
         const { server_url, axios, graphId, widgetId } = this.props
         const { widgetTitle, resourceType, resourceId, widgetChart, dataId } = this.state.data 
 
-        this.handleLoading(true)
-
         if (widgetTitle === '' || resourceType === 0 || resourceId === 0 || widgetChart === 0 || dataId === '') {
             notif('warning', 'Warning' , 'Please fill all required fields!')
             console.log('tes')
-            this.handleLoading(false)
         } else {
             axios.put(`${server_url}/api/graph/widget/${graphId}/${widgetId}`, this.state.data)
             .then(res => {
-                this.handleLoading(false)
                 notif('success', res.data.status , 'Success Update Widget.')
                 this.clearState()
             })
             .catch(err => {
-                this.handleLoading(false)
                 if(err.response) {
                     const error = err.response.data;       
                     notif(error.code === 11000 ? 'error' : 'warning', error.code === 11000 ? 'Error' : 'Warning', error.msg)
