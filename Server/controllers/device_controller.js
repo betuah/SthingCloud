@@ -14,7 +14,25 @@ exports.index = async (req, res) => {
         console.log(error)
         res.status(500).send('Internal Server Error')
     }
-};
+}
+
+exports.getDeviceState = async (req, res) => {
+    try {
+        DeviceData.findById({ _id: req.params.id, _idUsers: req.id_user}).then((data) => {
+            if(data) {
+                res.status(202).json( { id: data._id, state: data.state } )
+            } else {
+                res.status(404).json({ status: 'Error', code: 404, msg: 'Device Not Found!'})
+            }            
+        }).catch((err) => {
+            console.log(err)
+            res.status(400).json({ status: 'Error', code: 500, msg: 'Internal Server Error' })
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Internal Server Error')
+    }
+}
 
 exports.generateToken = async (req, res) => {
     try {

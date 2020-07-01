@@ -4,10 +4,7 @@ const env = {
     port: process.env.PORT,
     domain: process.env.DOMAIN,
     client_domain: process.env.CLIENT_DOMAIN,
-    api_domain: process.env.API_DOMAIN,
     token_secret: process.env.TOKEN_SECRET,
-    mqtt_broker_url : process.env.MQTT_BROKER_URL,
-    mqtt_admin_secret : process.env.MQTT_ADMIN_SECRET,
     db_mysql: {
         database: process.env.MYSQL_DB,
         username: process.env.MYSQL_USERNAME,

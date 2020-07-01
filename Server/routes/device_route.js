@@ -14,6 +14,9 @@ module.exports = (app) => {
     
     app.route('/api/device/:id')
         .get(authMiddleware, device.findOne)
+
+    app.route('/api/device/state/:id')
+        .get(authMiddleware, device.getDeviceState)
         
     app.route('/api/device/generatetoken')
         .post(authMiddleware, device.generateToken)

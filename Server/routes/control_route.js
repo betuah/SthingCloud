@@ -32,8 +32,5 @@ module.exports = (app) => {
     
     app.route('/api/controller/widget/:controllerId/:widgetId')
         .delete(authMiddleware, control.widget_delete)
-
-    app.route('/api/controller/widgetData/:controllerId/:widgetId')
-        .put(authMiddleware, control.widgetData_update)
         
 };

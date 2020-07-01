@@ -8,11 +8,13 @@ const express = require('express'),
 
 app.use(helmet())
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+
+app.use('/public', express.static(__dirname + '/public')) // Set public directory
 
 /* Dynamic CORS */
-const whitelist = [`${env.client_domain}`,`${env.api_domain}`]
+const whitelist = [`${env.client_domain}`]
 
 const options = {
     origin: (origin, callback) => {
@@ -24,8 +26,6 @@ const options = {
         }
     }
 }
-
-app.use('/public', express.static(__dirname + '/public'))
 app.use(cors(options))
 /* End Dynamic CORS */
 
