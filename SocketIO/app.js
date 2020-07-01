@@ -12,7 +12,7 @@ const io        = socketIo(server)
 const port      = env.port || 4000 //Port from environment variable or default - 4000
 
 /* Socket IO */
-const whitelist = [`${env.api_domain}`, `${env.client_domain}`]
+const whitelist = [`${env.iot_gateway_domain}`, `${env.client_domain}`,`${env.mqtt_broker_domain}`]
 io.origins((origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
         callback(null, true)
@@ -31,14 +31,14 @@ io.on("connection", socket => {
         socket.join(room);
         io.sockets.in(room).emit('receive_broadcast', {
             message: `You're joined to ${room} room!`
-        });
-    });
+        })
+    })
 
     socket.on("graph_data", data => {
         // console.log(data)
         io.sockets.in(data.idUser).emit(`${data.idDevice}-${data.type}`, {
             value: data.value
-        });
+        })
         // console.log(io.sockets.adapter.rooms)
     })
 
@@ -54,8 +54,6 @@ io.on("connection", socket => {
             err = error // Set error to err variable
             console.log("Something error in device_connect Function SocketIO", error) // Show error log in console
         })
-
-        console.log(data.idUser)
 
         /* Tell client that device status was change */
         io.sockets.in(data.idUser.split('.')[0]).emit('event', {
