@@ -1,7 +1,5 @@
 const controlModel = require('../models/control_model')
 const mqttClient   = require('../config/mqtt_client')
-const env          = require('../env')
-const socket       = require('socket.io-client')(`${env.socket_domain}`, {extraHeaders: {origin: `${env.domain}:${env.port}`}})
 
 exports.index = (req, res) => {
     res.send('Hello world from SThing IoT Gateway :)')

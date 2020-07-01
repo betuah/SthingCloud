@@ -10,12 +10,14 @@ const settings = {
     keepalive: 1000,
     protocolId: 'MQIsdp',
     protocolVersion: 4,
-    clean: false, 
+    clean: true, 
     clientId: '@dm1n',
     username:'@dm1n',
     password:`${mqttTokenAdmin}`
 }
 
 const mqttClient = mqtt.connect(`${env.mqtt_broker_domain}`, settings)
+
+// mqttClient.subscribe('device_data')
 
 module.exports = mqttClient
