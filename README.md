@@ -85,8 +85,16 @@ MONGO_USERNAME=YOUR_MONGODB_USERNAME
 MONGO_PASSWORD=YOUR_MONGODB_PASSWORD
 MONGO_HOST=YOUR_MONGODB_HOST
 MONGO_PORT=YOUR_MONGODB_PORT
+REDIS_HOST=YOUR_REDIS_HOST
+REDIS_PORT=YOUR_REDIS_PORT
+REDIS_PASSWORD=YOUR_REDIS_PASSWORD
 SOCKET_DOMAIN=http://localhost:4000
 CLIENT_DOMAIN=http://localhost:3000
+```
+IoT Gateway also need redis for store temporary data from device, here is we pull and run redis from docker
+```sh
+docker pull redis:alpine
+docker run --name myredis -p 6379:6379 -d redis:alpine
 ```
 
 #### SocketIO .env file
@@ -123,6 +131,12 @@ $ npm run start
 - Remote data schema from graph model
 - Fix dataId in graph_data event on socketIO app
 - Fix dataId and dataValue undefine in visualizaition graph
+- Add iot_deviceData controller in Iot Gateway
+- Change userSettings Model to usersData model
+- Fix userSettings controller
+- Add new event with name notif_event and notification event in socketIO
+- Add notif_event in auth context commponent in client
+- Add redis as data cache form device
 
 ## Version Change log (STHING_v06)
 - Add editable and dragable widget setting in edit widget modal

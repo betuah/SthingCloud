@@ -5,18 +5,18 @@ const transporter           = require('../config/mail_config')
 const firebaseAdmin         = require('../config/firebaseAdminConfig')
 const firebaseDatabaseAdmin = firebaseAdmin.database()
 const fs                    = require('fs')
-const userSettingModel      = require('../models/userSetting_model')
+const usersData      = require('../models/usersData_model')
 
 exports.index = (req, res) => {
     try {
-        userSettingModel.findOne({ userId: req.id_user }).then((data) => {
+        usersData.findOne({ userId: req.id_user }).then((data) => {
             res.status(200).json(data)
         }).catch((err) => {
             console.log(err)
             res.status(500).json({ status: "Error", code: "401", msg: "UNAUTHORIZED!"})
         })
     } catch (error) {
-        console.log(error)
+        console.log(new Error(error))
         res.status(500).send('Internal Server Error')
     }
 }
@@ -42,7 +42,7 @@ exports.update = async (req, res) => {
             }
         }
 
-        userSettingModel.findOneAndUpdate({ userId: req.id_user },
+        usersData.findOneAndUpdate({ userId: req.id_user },
         { 
             $set: { 
                 ...dataBody
@@ -52,10 +52,11 @@ exports.update = async (req, res) => {
             res.status(201).json({ status: 'Success', code: 200, 'msg': 'Data is updated!', data: data})
         })
         .catch(err => {
+            console.log(new Error(err))
             res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed update data!' + err})
         })
     } catch (error) {
-        console.log(error)
+        console.log(new Error(error))
         res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Errorss'})
     }
 }
@@ -120,6 +121,7 @@ exports.avatarUpload = (req, res) => {
 
                 return json
             }).catch(err => {
+                console.log(new Error(err))
                 fs.unlink(`public/avatars/${fileData.filename}s`, err => {
                     console.log('Catch Error update firebase database. ', err)
                 })
@@ -147,10 +149,10 @@ exports.sendTestMail = (req, res) => {
         const data = {
             host: `${req.body.host}`,
             port: req.body.port,
-            secure: req.body.secure === '1' ? true : false,
+            secure: req.body.secure ? true : false,
             username: `${req.body.username}`,
             password: `${req.body.password ? req.body.password : ''}`,
-            tls: req.body.tls === '1' ? true : false
+            tls: req.body.tls ? true : false
         }
 
         var mailOptions = {
@@ -161,7 +163,7 @@ exports.sendTestMail = (req, res) => {
         
         transporter(data).sendMail(mailOptions, (err, info) => {
             if (err) {
-                console.log(err)
+                console.log(new Error(err))
                 res.status(200).json({ status: err.code, code: err.responseCode, msg: err.response})
             } else {
                 res.status(200).json({ status: 'SUCCESS', code: 200, data: { emailTo: info.envelope.to, response: info.response}})

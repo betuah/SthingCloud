@@ -73,8 +73,8 @@ class Settings extends Component {
                 timeZone: '',
                 host: '',
                 port: '',
-                secure: '1',
-                tls: '1',
+                secure: 1,
+                tls: 1,
                 username: '',
                 password: '',
                 oldPassword: ''
@@ -292,21 +292,21 @@ class Settings extends Component {
                                     <div className="form-group">
                                         <div className="input-group-v1">
                                             <FormLabel component="legend">Secure</FormLabel>
-                                            <FormControlLabel value={"1"} control={
+                                            <FormControlLabel value={1} control={
                                                 <Radio
-                                                    checked={data.secure === "1"}
+                                                    checked={Number(data.secure) === 1}
                                                     onChange={this.handleChange}
-                                                    value={"1"}
+                                                    value={1}
                                                     name="secure"
                                                     aria-label="secure"
                                                     color="primary"
                                                 />
                                             } label="True" />
-                                            <FormControlLabel value={"2"} control={
+                                            <FormControlLabel value={2} control={
                                                 <Radio
-                                                    checked={data.secure === "2"}
+                                                    checked={Number(data.secure) === 2}
                                                     onChange={this.handleChange}
-                                                    value={"2"}
+                                                    value={2}
                                                     name="secure"
                                                     aria-label="secure"
                                                     color="primary"
@@ -317,21 +317,21 @@ class Settings extends Component {
                                     <div className="form-group">
                                         <div className="input-group-v1">
                                             <FormLabel component="legend">TLS</FormLabel>
-                                            <FormControlLabel value="1" control={
+                                            <FormControlLabel value={1} control={
                                                 <Radio
-                                                    checked={data.tls === "1"}
+                                                    checked={Number(data.tls) === 1}
                                                     onChange={this.handleChange}
-                                                    value={"1"}
+                                                    value={1}
                                                     name="tls"
                                                     aria-label="tls"
                                                     color="primary"
                                                 />
                                             } label="True" />
-                                            <FormControlLabel value={"0"} control={
+                                            <FormControlLabel value={0} control={
                                                 <Radio
-                                                    checked={data.tls === "0"}
+                                                    checked={Number(data.tls) === 0}
                                                     onChange={this.handleChange}
-                                                    value={"0"}
+                                                    value={0}
                                                     name="tls"
                                                     aria-label="tls"
                                                     color="primary"

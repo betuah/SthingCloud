@@ -16,13 +16,17 @@ var settings = {
 let mqttClient = mqtt.connect(`mqtt://${host}:${port}`, settings)
 
 const data = {
+    graphId: 'IKS4pHm7C',
     dataId: 'test',
-    value: 50
+    value: '31'
 }
 
 mqttClient.subscribe('IF1jvzZsy/controller', err => {
     if (!err) {
-        setInterval(() => mqttClient.publish('IF1jvzZsy/device_data', JSON.stringify(data), { qos: 2 }), 1000)
+        setInterval(() => {
+            console.log('push')
+            mqttClient.publish('IF1jvzZsy/device_data', JSON.stringify(data), { qos: 2 })
+        }, 2000)
         
     }
 })

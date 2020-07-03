@@ -43,6 +43,6 @@ const conn = require('./config/db_mongoDB')
 if(conn) {
     app.listen(port, () => console.log(`IoT Gateway listen on ${env.domain}:${env.port}`));
 } else {
-    console.log(`${env.domain}:${env.port} cannot connect to MongoDB!`)
+    console.log(new Error(`${env.domain}:${env.port} cannot connect to MongoDB!`))
 }
 /* End MongoDB Connection Check */

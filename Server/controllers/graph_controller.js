@@ -12,7 +12,7 @@ exports.index = async (req, res) => {
         console.log(error)
         res.status(500).send('Internal Server Error')
     }
-};
+}
 
 exports.findOne = async (req, res) => {
     try {
@@ -240,6 +240,7 @@ exports.widget_create = async (req, res) => {
             dataValue: 0,
             settings: {
                 triggerMax: {
+                    active: '0',
                     value: '',
                     notif: '0',
                     mail: '0',
@@ -248,6 +249,7 @@ exports.widget_create = async (req, res) => {
                     actionOff: []
                 },
                 triggerMin: {
+                    active: '0',
                     value: '',
                     notif: '0',
                     mail: '0',
@@ -291,6 +293,7 @@ exports.widget_update = async (req, res) => {
             dataValue: req.body.dataValue,
             settings: {
                 triggerMax: {
+                    active: req.body.triggerMaxActive,
                     value: req.body.triggerMaxVal,
                     notif: req.body.notifMax,
                     mail: req.body.sendMailMax,
@@ -299,6 +302,7 @@ exports.widget_update = async (req, res) => {
                     actionOff: req.body.triggerMaxActionOff
                 },
                 triggerMin: {
+                    active: req.body.triggerMinActive,
                     value: req.body.triggerMinVal,
                     notif: req.body.notifMin,
                     mail: req.body.sendMailMin,
@@ -334,7 +338,6 @@ exports.widget_update = async (req, res) => {
 
 exports.widgetData_update = async (req, res) => {
     try {
-
         graphModel.findOneAndUpdate({ _id: req.params.graphId, 'graph_widget._id': req.params.widgetId }, { 
             $set: { 
                 'graph_widget.$.data.0.value': req.body.value
@@ -350,7 +353,7 @@ exports.widgetData_update = async (req, res) => {
         .catch((err) => {
             console.log(err)
             res.status(500).json({ status: 'Error', code: 500, msg: 'Internal Server Error!'})
-        });
+        })
     } catch (error) {
         console.log(error)
         res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})

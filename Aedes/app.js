@@ -19,7 +19,7 @@ Aedes.on('publish', (packet, client) => {
 Aedes.on('subscribe', (subscriptions, client) => {
     if (client && client.id.split('.')[0] !== admin_user ) {
         const clientData = {
-            idUser : client.id,
+            idUser : client.idUser,
             idDevice : client.deviceId,
             deviceName : client.deviceName,
             deviceStatus : 1
@@ -34,7 +34,7 @@ Aedes.on('subscribe', (subscriptions, client) => {
 Aedes.on('unsubscribe', (unsubscriptions, client) => {
     if (client && client.id.split('.')[0] !== admin_user ) {
         const clientData = {
-            idUser : client.id,
+            idUser : client.idUser,
             idDevice : client.deviceId,
             deviceName : client.deviceName,
             deviceStatus : 0

@@ -28,6 +28,7 @@ const WidgetSchema = new Schema({
     dataId: {
         type: String,
         index: true,
+        unique: true,
         trim: true,
     },
     dataValue: {
@@ -36,16 +37,20 @@ const WidgetSchema = new Schema({
     },
     settings: {
         triggerMax: {
+            active: {
+                type: Number,
+                trim: true
+            },
             value: {
                 type: String,
                 trim: true,
             },
             notif: {
-                type: String,
+                type: Number,
                 trim: true,
             },
             mail: {
-                type: String,
+                type: Number,
                 trim: true,
             },
             mailList: {
@@ -56,16 +61,20 @@ const WidgetSchema = new Schema({
             actionOff: [],
         },
         triggerMin: {
+            active: {
+                type: Number,
+                trim: true
+            },
             value: {
                 type: String,
                 trim: true,
             },
             notif: {
-                type: String,
+                type: Number,
                 trim: true,
             },
             mail: {
-                type: String,
+                type: Number,
                 trim: true,
             },
             mailList: {

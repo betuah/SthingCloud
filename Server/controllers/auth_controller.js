@@ -1,3 +1,4 @@
+const userSettingModel      = require('../models/usersData_model')
 const jwt                   = require('jsonwebtoken')
 const env                   = require('../env')
 const bcrypt                = require('bcrypt')
@@ -76,7 +77,7 @@ exports.signUp = async (req, res) => {
             }
             res.status(200).json(msg)
         }).catch(err => {
-            console.log(err)
+            console.log(new Error(err))
             const msg = {
                 status: "INTERNAL_SERVER_ERROR",
                 code: 500,
@@ -84,8 +85,29 @@ exports.signUp = async (req, res) => {
             }
             res.status(500).json(msg)
         })
+
+        const userSetData = {
+            userId   : req.body.uid,
+            timeZone : null,
+            smtp     : {
+                host: '',
+                port: '',
+                secure: 1,
+                tls: 1,
+                username: '',
+                password: ''
+            }
+        }
+
+        userSettingModel.create(userSetData)
+        .then(res => {
+            resolve(res)
+        })
+        .catch(err => {
+            reject(err)
+        })  
     } catch (error) {
-        console.log(error);
+        console.log(new Error(error));
         const data = {
             status: 'ERROR',
             code: 400,
@@ -123,6 +145,7 @@ exports.signOut = async (req, res) => {
     firebaseAuth.revokeRefreshTokens(decoded.uid).then(Response => {
         res.status(200).json({msg: 'Success Revoke Refresh Token!', res: Response})
     }).catch(err => {
+        console.log(new Error(err))
         res.status(500).json({msg: 'Cannot revoke token! '+err})
     })
 }
@@ -134,6 +157,7 @@ exports.profile = async (req, res) => {
         const getPerson = snapshot.val().personalData
         res.status(200).json(getPerson);
     }).catch(err => {
+        console.log(new Error(err))
         res.status(500).send({status: 'INTERNAL_SERVER_ERROR', code: 500, msg: 'Something wrong in the server!'})
     })
 }

@@ -272,9 +272,21 @@ const TriggerMax = props => {
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={props.data.notifMax === '1' ? true : false}
+                            checked={Number(props.data.triggerMaxActive) === 1 ? true : false}
                             onChange={props.onChange}
-                            value={props.data.notifMax === '1' ? '0' : '1'}
+                            value={Number(props.data.triggerMaxActive) === 1 ? 0 : 1}
+                            color="primary"
+                            name='triggerMaxActive'
+                        />
+                    }
+                    label="Activate Max Action"
+                />
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={Number(props.data.notifMax) === 1 ? true : false}
+                            onChange={props.onChange}
+                            value={Number(props.data.notifMax) === 1 ? 0 : 1}
                             color="primary"
                             name='notifMax'
                         />
@@ -284,9 +296,9 @@ const TriggerMax = props => {
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={props.data.sendMailMax === '1' ? true : false}
+                            checked={Number(props.data.sendMailMax) === '1' ? true : false}
                             onChange={props.onChange}
-                            value={props.data.sendMailMax === '1' ? '0' : '1'}
+                            value={Number(props.data.sendMailMax) === '1' ? '0' : '1'}
                             color="primary"
                             name='sendMailMax'
                         />
@@ -294,7 +306,7 @@ const TriggerMax = props => {
                     label="Send Mail"
                 />
             </div>
-            <div className="form-group" style={props.data.sendMailMax === '0' ? { display: 'none' } : { display: 'block' }}>
+            <div className="form-group" style={Number(props.data.sendMailMax) === 0 ? { display: 'none' } : { display: 'block' }}>
                 <div className="input-group-v1">
                     <div className="input-group-icon">
                         <MaterialIcon icon="email" style={{color: '#00BCD4'}} />
@@ -320,7 +332,6 @@ const TriggerMax = props => {
 }
 
 const TriggerMin = props => {
-
     return (
         <form className="form-v1 mt-3 w-100">
             <div className="form-group">
@@ -469,9 +480,21 @@ const TriggerMin = props => {
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={props.data.notifMin === '1' ? true : false}
+                            checked={Number(props.data.triggerMinActive) === 1 ? true : false}
                             onChange={props.onChange}
-                            value={props.data.notifMin === '1' ? '0' : '1'}
+                            value={Number(props.data.triggerMinActive) === 1 ? 0 : 1}
+                            color="primary"
+                            name='triggerMinActive'
+                        />
+                    }
+                    label="Activate Min Action"
+                />
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={Number(props.data.notifMin) === 1 ? true : false}
+                            onChange={props.onChange}
+                            value={Number(props.data.notifMin) === 1 ? 0 : 1}
                             color="primary"
                             name='notifMin'
                         />
@@ -481,9 +504,9 @@ const TriggerMin = props => {
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={props.data.sendMailMin  === '1' ? true : false}
+                            checked={Number(props.data.sendMailMin) === 1 ? true : false}
                             onChange={props.onChange}
-                            value={props.data.sendMailMin === '1' ? '0' : '1'}
+                            value={Number(props.data.sendMailMin) === 1 ? 0 : 1}
                             color="primary"
                             name='sendMailMin'
                         />
@@ -491,7 +514,7 @@ const TriggerMin = props => {
                     label="Mail Me"
                 />
             </div>
-            <div className="form-group" style={props.data.sendMailMin === '0' ? { display: 'none' } : { display: 'block' }}>
+            <div className="form-group" style={Number(props.data.sendMailMin) === 0 ? { display: 'none' } : { display: 'block' }}>
                 <div className="input-group-v1">
                     <div className="input-group-icon">
                         <MaterialIcon icon="email" style={{color: '#00BCD4'}} />
@@ -531,15 +554,17 @@ class ModalEditWidget extends Component {
                 widgetChart: 0,
                 dataId: '',
                 dataValue: '',
-                notifMax: '0',
-                sendMailMax: '0',
+                notifMax: 0,
+                sendMailMax: 0,
                 mailListMax: '',
+                triggerMaxActive: 0,
                 triggerMaxVal: '',
                 triggerMaxActionOn: [],
                 triggerMaxActionOff: [],
-                notifMin: '0',
-                sendMailMin: '0',
+                notifMin: 0,
+                sendMailMin: 0,
                 mailListMin: '',
+                triggerMinActive: 0,
                 triggerMinVal: '',
                 triggerMinActionOn: [],
                 triggerMinActionOff: []
@@ -606,7 +631,7 @@ class ModalEditWidget extends Component {
 
         let data = {}
 
-        widgetData.filter(n => n._id === widgetId).map(n =>             
+        widgetData.filter(n => n._id === widgetId).map(n => 
             data = {
                 widgetTitle: n.widgetTitle,
                 resourceType: n.resourceType,
@@ -617,12 +642,14 @@ class ModalEditWidget extends Component {
                 notifMax: n.settings.triggerMax.notif,
                 sendMailMax: n.settings.triggerMax.mail,
                 mailListMax: n.settings.triggerMax.mailList,
+                triggerMaxActive: n.settings.triggerMax.active,
                 triggerMaxVal: n.settings.triggerMax.value,
                 triggerMaxActionOn: [...n.settings.triggerMax.actionOn],
                 triggerMaxActionOff: [...n.settings.triggerMax.actionOff],
                 notifMin: n.settings.triggerMin.notif,
                 sendMailMin: n.settings.triggerMin.mail,
                 mailListMin: n.settings.triggerMin.mailList,
+                triggerMinActive: n.settings.triggerMin.active,
                 triggerMinVal: n.settings.triggerMin.value,
                 triggerMinActionOn: [...n.settings.triggerMin.actionOn],
                 triggerMinActionOff: [...n.settings.triggerMin.actionOff]

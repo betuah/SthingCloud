@@ -25,8 +25,12 @@ export class AuthContextProvider extends Component {
     constructor() {
         super()
             socket.on('event', data => {
-              data.statusChange === 1 ? notif('info', 'New Device Connected!', `${data.device} is connected!`) : notif('error', 'New Device Disconnected!', `${data.device} is disconnected!`)
-            });
+                data.statusChange === 1 ? notif('info', 'New Device Connected!', `${data.device} is connected!`) : notif('error', 'New Device Disconnected!', `${data.device} is disconnected!`)
+            })
+
+            socket.on('notif_event', data => {
+                notif(data.status ? 'warning' : 'info', data.notif.title, `${data.notif.message}`)
+            })
 
             this.state = {
                 profileData: JSON.parse(localStorage.getItem('profileData')) || false,

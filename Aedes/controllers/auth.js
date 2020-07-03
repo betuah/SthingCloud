@@ -47,6 +47,7 @@ exports.authorizePublish = (client, packet, callback) => {
         const deviceData = {
             idUser : client.idUser,
             idDevice : client.deviceId,
+            deviceName: client.deviceName,
             ...JSON.parse(packet.payload.toString())
         }
 

@@ -1,7 +1,6 @@
 const   express         = require("express"),
         http            = require("http"),
         socketIo        = require("socket.io"),
-        moment          = require('moment'),
         env             = require('./env'),
         iotDeviceModel  = require('./models/device_model')
 
@@ -42,6 +41,14 @@ io.on("connection", socket => {
         // console.log(io.sockets.adapter.rooms)
     })
 
+    socket.on("notification", data => {
+        // console.log('notif', data)
+        io.sockets.in(data.userId).emit('notif_event', {
+            ...data
+        })
+        // console.log(io.sockets.adapter.rooms)
+    })
+
     /* Event to receive data from Mosca Server */
     socket.on("device_connect", data => {
         let err = null
@@ -56,7 +63,7 @@ io.on("connection", socket => {
         })
 
         /* Tell client that device status was change */
-        io.sockets.in(data.idUser.split('.')[0]).emit('event', {
+        io.sockets.in(data.idUser).emit('event', {
             statusChange: data.deviceStatus,
             device: data.deviceName,
             error: err
