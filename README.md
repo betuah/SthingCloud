@@ -125,7 +125,7 @@ $ npm run start
 
 # Version Log
 
-## Version Change log (STHING_v06)
+## Version Change log (STHING_v07)
 - Add subscriptions in IoT Gateway controller
 - Set device data in published payload in auth aedes
 - Remote data schema from graph model
@@ -133,6 +133,7 @@ $ npm run start
 - Fix dataId and dataValue undefine in visualizaition graph
 - Add iot_deviceData controller in Iot Gateway
 - Change userSettings Model to usersData model
+- Create data in usersModel if new user registered
 - Fix userSettings controller
 - Add new event with name notif_event and notification event in socketIO
 - Add notif_event in auth context commponent in client
