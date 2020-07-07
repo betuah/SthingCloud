@@ -138,6 +138,9 @@ $ npm run start
 - Add new event with name notif_event and notification event in socketIO
 - Add notif_event in auth context commponent in client
 - Add redis as data cache form device
+- Add encryption for SMTP Email Password
+- Add sendMail function in iot gateway controller
+- Fix switch tls and secure in setting component
 
 ## Version Change log (STHING_v06)
 - Add editable and dragable widget setting in edit widget modal
