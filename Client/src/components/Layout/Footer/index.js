@@ -8,7 +8,7 @@ const AppFooter = () => (
   <Footer className="app-footer app-footer-custom">
     <div className="footer-inner-v1">
       <span className="small">
-      © <a className="brand link-animated-hover link-hover-v2" rel="_blank" href={'#/'}>{APPCONFIG.brand} {APPCONFIG.year}</a>   
+      © {APPCONFIG.year} <a className="brand link-animated-hover link-hover-v2 text-primary" rel="_blank" href={'#/'}>{APPCONFIG.brand}</a> All Rights Reserved.
       </span>
       <span className="small">
         version: 1.0.1 | Built with Love <SmileOutlined />
