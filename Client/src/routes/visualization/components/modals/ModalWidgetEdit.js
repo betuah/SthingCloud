@@ -296,9 +296,9 @@ const TriggerMax = props => {
                 <FormControlLabel
                     control={
                         <Switch
-                            checked={Number(props.data.sendMailMax) === '1' ? true : false}
+                            checked={Number(props.data.sendMailMax) === 1 ? true : false}
                             onChange={props.onChange}
-                            value={Number(props.data.sendMailMax) === '1' ? '0' : '1'}
+                            value={Number(props.data.sendMailMax) === 1 ? 0 : 1}
                             color="primary"
                             name='sendMailMax'
                         />

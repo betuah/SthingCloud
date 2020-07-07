@@ -76,13 +76,14 @@ class Settings extends Component {
                 secure: 1,
                 tls: 1,
                 username: '',
-                password: '',
+                password: 0,
                 oldPassword: ''
             },
             timeZoneList: [...timeZoneList]
         }
-
+        
         this.handleChange   = this.handleChange.bind(this)
+        this.handleTimeZone = this.handleTimeZone.bind(this)
         this.handleOk       = this.handleOk.bind(this)
         this.sendTestMail   = this.sendTestMail.bind(this)
         this.showModal      = this.showModal.bind(this)
@@ -104,7 +105,7 @@ class Settings extends Component {
                     tls: res.data.smtp.tls,
                     username: res.data.smtp.username,
                     password: '',
-                    oldPassword: res.data.smtp.password
+                    oldPassword: res.data.smtp.password ? 1 : 0
                 }
             })
         }).catch(err => {
@@ -112,24 +113,24 @@ class Settings extends Component {
         })
     }
 
-    handleChange = (e, val) => {
+    handleChange = (e) => {
         const { name, value } = e.target;
+        
+        this.setState({
+            data: {
+                ...this.state.data,
+                [name]: value
+            }
+        })
+    }
 
-        if(val) {
-            this.setState({
-                data: {
-                    ...this.state.data,
-                    timeZone : val
-                }
-            })            
-        } else {
-            this.setState({
-                data: {
-                    ...this.state.data,
-                    [name]: value
-                }
-            })
-        }
+    handleTimeZone = (e, val) => {
+        this.setState({
+            data: {
+                ...this.state.data,
+                timeZone : val
+            }
+        })
     }
 
     handleLoading = (req, action) => {
@@ -236,7 +237,7 @@ class Settings extends Component {
                                             options={timeZoneList.map((option) => option)}
                                             value={data.timeZone}
                                             name="timeZone"
-                                            onChange={this.handleChange}
+                                            onChange={this.handleTimeZone}
                                             renderInput={(params) => 
                                                 <TextField 
                                                     {...params}
@@ -296,17 +297,17 @@ class Settings extends Component {
                                                 <Radio
                                                     checked={Number(data.secure) === 1}
                                                     onChange={this.handleChange}
-                                                    value={1}
+                                                    value={'1'}
                                                     name="secure"
                                                     aria-label="secure"
                                                     color="primary"
                                                 />
                                             } label="True" />
-                                            <FormControlLabel value={2} control={
+                                            <FormControlLabel value={0} control={
                                                 <Radio
-                                                    checked={Number(data.secure) === 2}
+                                                    checked={Number(data.secure) === 0}
                                                     onChange={this.handleChange}
-                                                    value={2}
+                                                    value={'0'}
                                                     name="secure"
                                                     aria-label="secure"
                                                     color="primary"

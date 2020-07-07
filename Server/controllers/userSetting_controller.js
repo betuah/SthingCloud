@@ -1,6 +1,6 @@
 const multer                = require('multer')
 const env                   = require('../env')
-const bcrypt                = require('bcrypt')
+const hash                  = require('../config/hash_config')
 const transporter           = require('../config/mail_config')
 const firebaseAdmin         = require('../config/firebaseAdminConfig')
 const firebaseDatabaseAdmin = firebaseAdmin.database()
@@ -23,11 +23,9 @@ exports.index = (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        const password      = req.body.password === "" || req.body.password === null ? false : req.body.password
-        const oldPassword   = req.body.oldPassword === "" || req.body.password === null ? false : req.body.oldPassword
-        const saltRounds    = 10
-        const salt          = bcrypt.genSaltSync(saltRounds)
-        const passwordHash  = bcrypt.hashSync(password ? password : '', salt)
+        const password      = req.body.password === '' || req.body.password === null ? false : req.body.password
+        const passwordHash  = hash.encrypt(password ? password : '')
+        const passwordData  = password ? { password : passwordHash } : false 
 
         const dataBody  = { 
             userId   : req.id_user,
@@ -38,7 +36,7 @@ exports.update = async (req, res) => {
                 secure: req.body.secure,
                 tls: req.body.tls,
                 username: req.body.username,
-                password: !password && !oldPassword ? "" : (!password && oldPassword  ? oldPassword : passwordHash)
+                ...passwordData
             }
         }
 

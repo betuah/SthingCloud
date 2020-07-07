@@ -1,9 +1,10 @@
 const graphModel    = require('../models/graph_model')
 const usersModel    = require('../models/usersData_model')
+const transporter   = require('../config/mail_config')
 const mqttClient    = require('../config/mqtt_client')
 const redisClient   = require('../config/redis_config')
+const hash          = require('../config/hash_config')
 const env           = require('../env')
-const uuid          = require('shortid')
 const socket        = require('socket.io-client')(`${env.socket_domain}`, {extraHeaders: {origin: `${env.domain}:${env.port}`}})
 
 redisClient.on("connect", () => {
@@ -16,7 +17,7 @@ redisClient.on("connect", () => {
 
 redisClient.on("error", error => {
     if (error)
-        console.log(error)
+        console.log(new Error(error))
         redisCheck = false
 })
 
@@ -29,7 +30,7 @@ mqttClient.on('message', async (topic, message) => {
         const widget = res.graph_widget.find(val => val.dataId === deviceData.dataId)
 
         switch (true) {
-            case deviceData.value > widget.settings.triggerMax.value && widget.settings.triggerMax.active === 1 : {
+            case Number(deviceData.value) > widget.settings.triggerMax.value && widget.settings.triggerMax.active === 1 : {
                     redisClient.get(`${generateId}`, (err, reply) => {
                         if (!reply || reply !== '1') {
                             redisClient.set(`${generateId}`, 1)
@@ -53,7 +54,19 @@ mqttClient.on('message', async (topic, message) => {
                             } 
                             
                             if (widget.settings.triggerMax.mail) {
-                                console.log('mail me max')
+                                findUserData(deviceData.idUser).then(res => {
+                                    sendMail({ 
+                                        ...res.smtp, 
+                                        ...deviceData,
+                                        graphName: widget.widgetTitle,
+                                        status: 1, 
+                                        mailList: widget.settings.triggerMax.mailList
+                                    }).catch(err => {
+                                        console.log(new Error(err))
+                                    })
+                                }).catch(err => {
+                                    console.log(new Error(err))
+                                })
                             }
                         }
                     })
@@ -80,10 +93,22 @@ mqttClient.on('message', async (topic, message) => {
                                 setNotif(notifData).catch(err => {
                                     console.log(new Error(err))
                                 })
-                            } 
+                            }
                             
                             if (widget.settings.triggerMin.mail) {
-                                console.log('mail me min')
+                                findUserData(deviceData.idUser).then(res => {
+                                    sendMail({ 
+                                        ...res.smtp, 
+                                        ...deviceData,
+                                        graphName: widget.widgetTitle,
+                                        status: 2, 
+                                        mailList: widget.settings.triggerMin.mailList
+                                    }).catch(err => {
+                                        console.log(err)
+                                    })
+                                }).catch(err => {
+                                    console.log(new Error(err))
+                                })
                             }
                         }
                     })
@@ -114,7 +139,21 @@ mqttClient.on('message', async (topic, message) => {
                             } 
                             
                             if (widget.settings.triggerMax.mail || widget.settings.triggerMin.mail) {
-                                console.log('mail me normal')
+                                findUserData(deviceData.idUser).then(res => {
+                                    let mailingList = reply === '1' ? widget.settings.triggerMax.mailList : widget.settings.triggerMin.mailList
+                                    
+                                    sendMail({ 
+                                        ...res.smtp, 
+                                        ...deviceData,
+                                        graphName: widget.widgetTitle,
+                                        status: 0, 
+                                        mailList: mailingList
+                                    }).catch(err => {
+                                        console.log(new Error(err))
+                                    })
+                                }).catch(err => {
+                                    console.log(new Error(err))
+                                })
                             }
                         }
                         redisClient.del(`${generateId}`)
@@ -136,6 +175,16 @@ const findGraphData = (data) => new Promise((resolve, reject) => {
     graphModel.findOne({ 
         _id: data.graphId, 
         userId: data.idUser
+    }).then((data) => {
+        return resolve(data)           
+    }).catch((err) => {
+        return reject(new Error(err))
+    })
+})
+
+const findUserData = (idUser) => new Promise((resolve, reject) => {
+    usersModel.findOne({ 
+        userId: idUser
     }).then((data) => {
         return resolve(data)           
     }).catch((err) => {
@@ -180,21 +229,31 @@ const setNotif = (data) => new Promise((resolve, reject) => {
     })
 })
 
-const setLog = (data) => new Promise((resolve, reject) => {
-    usersModel.findOneAndUpdate({ userId: data.userId }, { 
-        $push: { notif: {
-            ...data.log
-        }}
-    })
-    .then((cb) => {
-        if(cb) {
-            resolve(cb)
+const sendMail = (data) => new Promise((resolve, reject) => {
+    const mailSettings = {
+        host: `${data.host}`,
+        port: data.port,
+        secure: data.secure ? true : false,
+        username: `${data.username}`,
+        password: `${data.password ? hash.decrypt(data.password) : ''}`,
+        tls: data.tls ? true : false
+    }
+    
+    let maxContent = `Data values from ${data.deviceName} devices with dataId ${data.dataId} has exceeded the maximum value. Current value is ${data.value}`
+    let minContent = `Data values from ${data.deviceName} devices with dataId ${data.dataId} has exceeded the minimum value. Current value is ${data.value}`
+    let normalContent = `Data values from ${data.deviceName} devices with dataId ${data.dataId} has return to normal. Current value is ${data.value}`
+
+    const mailOptions = {
+        to: `${data.mailList}`,
+        subject: `SThing Cloud - Alert Report ${data.status === 1 ? 'Max Value' : (data.status === 2 ? 'Min Value' : 'Return Normal') } (${data.graphName})`,
+        html: data.status === 1 ? maxContent : (data.status === 2 ? minContent : normalContent)
+    }
+    
+    transporter(mailSettings).sendMail(mailOptions, (err, info) => {
+        if (err) {
+            reject(new Error(err))
         } else {
-            reject(new Error('User not found in setLog'))
+            resolve(true)
         }
-    })
-    .catch((err) => {
-        console.log(new Error(err))
-        reject(err)
     })
 })

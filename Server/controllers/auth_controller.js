@@ -44,9 +44,10 @@ exports.signIn = async (req, res) => {
             })
         }).catch(err => {
             res.status(401).json({status: 'UNAUTHORIZED', code: 401, msg: 'You are not authenticated!'})
-            console.log(err)
+            console.log(new Error(err))
         })
     } catch (error) {
+        console.log(new Error(err))
         res.status(500).send({status: 'INTERNAL_SERVER_ERROR', code: 500, msg: 'Something wrong in the server!'})
     }
 }

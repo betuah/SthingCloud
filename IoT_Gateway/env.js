@@ -8,6 +8,7 @@ const env = {
     socket_domain: process.env.SOCKET_DOMAIN,
     client_domain: process.env.CLIENT_DOMAIN,
     token_secret: process.env.TOKEN_SECRET,
+    encryption_key: process.env.ENCRYPTION_KEY,
     mqtt_broker_domain : process.env.MQTT_BROKER_domain,
     mqtt_admin_secret : process.env.MQTT_ADMIN_SECRET,
     db_mongoDB: {
