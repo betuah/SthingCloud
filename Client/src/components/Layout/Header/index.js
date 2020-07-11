@@ -2,30 +2,33 @@ import React from 'react'
 import { Link } from "react-router-dom"
 import { connect } from 'react-redux'
 import classnames from 'classnames'
-import DEMO from 'constants/demoData'
 import { Layout, Popover } from 'antd'
 import Badge from '@material-ui/core/Badge'
 import Logo from 'components/Logo'
 import { toggleCollapsedNav, toggleOffCanvasMobileNav } from 'actions/settingsActions'
-import Notifications from 'routes/layout/routes/header/components/Notifications'
+import Notifications from 'routes/layouts/notification'
 import MaterialIcon from 'components/MaterialIcon'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import { withAuth } from '../../Auth/context/AuthContext'
+import { withAuth } from 'components/Auth/context/AuthContext'
 
 const { Header } = Layout;
-
+const DEMO = {}
 class AppHeader extends React.Component {
   constructor(props) {
     super(props) 
     this.state = {
       anchorEl: null,
-      badge: 5,
+      badge: null,
       account: true,
+      popover: false,
+      notifList: []
     }
 
     this.handleSignOut = this.handleSignOut.bind(this)
+    this.getNotif      = this.getNotif.bind(this)
+    this.handlePopover = this.handlePopover.bind(this)
   }
 
   handleClick = event => {
@@ -33,7 +36,11 @@ class AppHeader extends React.Component {
   }
 
   handleClose = () => {
-    this.setState({ anchorEl: null });
+    this.setState({ anchorEl: null })
+  }
+
+  handlePopover = req => {
+    this.setState({ popover: Number(req) === 1 ? true : (Number(req) === 2 ? false : !this.state.popover) })
   }
 
   handleSignOut() {
@@ -42,11 +49,32 @@ class AppHeader extends React.Component {
     signOut()
   }
 
-  componentDidMount() {
-    const { initSocket } = this.props
-
+  async componentDidMount() {
+    const { initSocket, socket, signOut } = this.props
     initSocket()
+    await this.getNotif().catch(err => signOut())
+
+    socket.on('notif_event', async data => {
+      await this.getNotif().catch(err => signOut())
+    })
   }
+
+  getNotif = () => new Promise((resolve, reject) => {
+    const { axios, server_url } = this.props
+
+    axios.get(`${server_url}/api/user/settings`).then(res => {
+        const notRead = [...res.data.notif.map(item => item).filter(val => val.read === 0)]
+
+        this.setState({
+          notifList: res.data.notif,
+          badge: notRead.length
+        })
+
+        resolve(true)
+    }).catch(err => {
+        reject(new Error(err))
+    })
+  })
 
   onToggleCollapsedNav = () => {
     const { handleToggleCollapsedNav, collapsedNav } = this.props;
@@ -93,8 +121,8 @@ class AppHeader extends React.Component {
           </div>
 
           <div className="header-right">
-            <div className="list-unstyled list-inline">              
-              <Popover placement="bottomRight" content={<Notifications />} trigger="click" overlayClassName="app-header-popover">
+            <div className="list-unstyled list-inline">
+              <Popover visible={this.state.popover} onClick={this.handlePopover} placement="bottomRight" content={<Notifications {...this.state} handlePopover={this.handlePopover} />} onVisibleChange={this.handlePopover} trigger="click" overlayClassName="app-header-popover">
                 <a href={DEMO.link} className="list-inline-item"><Badge className="header-badge" badgeContent={this.state.badge}><MaterialIcon icon="notifications" className="header-icon-notification" /></Badge></a>
               </Popover>
               <a className="list-inline-item" href={DEMO.link}>
