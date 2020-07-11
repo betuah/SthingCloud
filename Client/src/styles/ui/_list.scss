@@ -28,10 +28,12 @@
   }
 
   .list-item__body {
+    max-width: 100%;
     flex: 1;
   }
 
   .list-item__title {
+    max-width: 100%;
     text-transform: capitalize;
     .ant-tag {
       float: right;
@@ -39,15 +41,19 @@
   }
 
   .list-item__desc {
+    max-width: 100%;
     margin-top: .4rem;
     opacity: $text-secondary;
     font-size: $font-size-sm;
     // white-space: nowrap;
+    // overflow: hidden;
     // text-overflow: ellipsis;
   }
 
   .list-item__datetime {
+    max-width: 100%;
     margin-top: 3px;
+    color: green;
     opacity: $text-secondary;
     font-size: $font-size-sm;
   }
