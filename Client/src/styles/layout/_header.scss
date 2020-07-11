@@ -124,6 +124,7 @@
 
 // 
 .app-header-popover {
+  width: 25rem;
   max-width: 300px;
   @media screen and (min-width: map-get($grid-breakpoints, md)) {
     max-width: none;
