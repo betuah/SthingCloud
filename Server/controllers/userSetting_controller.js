@@ -153,9 +153,15 @@ exports.sendTestMail = (req, res) => {
             tls: req.body.tls ? true : false
         }
 
-        var mailOptions = {
+        const fromObject = {
+            name: 'SThing - IoT Cloud Platform',
+            address: `${req.body.username}`
+        }
+
+        const mailOptions = {
+            from: fromObject,
             to: `${req.body.sendToMail}`,
-            subject: 'SThing Cloud - Test Mail',
+            subject: 'Test Mail',
             html: 'Test Mail form SThing Cloud (IoT Cloud Platform) sthing.seamolec.org'
         }
         
@@ -169,3 +175,26 @@ exports.sendTestMail = (req, res) => {
         })
     }
 }
+
+exports.notifRead = (req, res) => {
+    try {
+        res.send('test')
+    } catch (error) {
+        
+    }
+}
+
+
+// db.getCollection('users_datas').update(
+//     { 
+//         "userId": "MxZDfS2mYjgYRCPZSKX2dqGk6hh1"
+//     },
+//     {
+//         "$set" : { "notif.$[item].read": 1 }
+//     },
+//     {
+//         "arrayFilters": [
+//             { "item._id": ObjectId("5f056bc138f14b18248594d6")}
+//         ]
+//     }
+//  )

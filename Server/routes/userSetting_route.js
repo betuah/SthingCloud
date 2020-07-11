@@ -14,4 +14,7 @@ module.exports = (app) => {
 
     app.route('/api/user/sendtestmail')
         .post(authMiddleware, UserSetting.sendTestMail)
+    
+    app.route('/api/user/notif')
+        .post(authMiddleware, UserSetting.notifRead)
 }
