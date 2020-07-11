@@ -422,7 +422,7 @@ class EnhancedTable extends React.Component {
                 })}
               {emptyRows > 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-secondary">{data.length === 0 && <strong>No Data Available.</strong>}</TableCell>
+                  <TableCell colSpan={7} className="text-center text-secondary">{data.length === 0 && <strong>No Data Available.</strong>}</TableCell>
                 </TableRow>
               )}
             </TableBody>
