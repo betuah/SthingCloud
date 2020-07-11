@@ -83,6 +83,26 @@ DEMO.list = {
       tagColor: 'green',
       title: 'Start public beta test',
       desc: 'Sunt in culpa qui officia deserunt mollit'      
+    },{
+      tag: 'WIP',
+      tagColor: 'cyan',
+      title: 'Publish version 4.0',
+      desc: 'Ullamco laboris nisi ut aliquip ex ea commodo'
+    }, {
+      tag: 'Stopped',
+      tagColor: 'red',
+      title: 'New material design',
+      desc: 'Duis aute irure dolor in reprehenderit in'      
+    }, {
+      tag: 'Waiting',
+      tagColor: '',
+      title: 'Better documentation',
+      desc: 'Cillum dolore eu fugiat nulla pariatur'      
+    }, {
+      tag: 'A week past',
+      tagColor: 'green',
+      title: 'Start public beta test',
+      desc: 'Sunt in culpa qui officia deserunt mollit'      
     }
   ]
 }

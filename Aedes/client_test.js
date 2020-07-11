@@ -18,7 +18,7 @@ let mqttClient = mqtt.connect(`mqtt://${host}:${port}`, settings)
 const data = {
     graphId: 'IKS4pHm7C',
     dataId: 'test',
-    value: '31'
+    value: '21'
 }
 
 mqttClient.subscribe('IF1jvzZsy/controller', err => {

@@ -126,6 +126,16 @@ $ npm run start
 <hr>
 
 # Version Log
+## Version Change log (STHING_v07)
+- Change notif status iot_device controller in IoT Gateway
+- Add Notification component in client
+- Add show single notif component in client
+- Add show all notif component in client
+- Add Checkbox in list item showAllNotif component
+- Add mark as read and delete button in showAllNotif component
+- Scrollbar css custom
+- Add InfiniteScroll and prefect scroll bar
+- Add spinner for loading component
 
 ## Version Change log (STHING_v07)
 - Add subscriptions in IoT Gateway controller
