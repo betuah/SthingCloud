@@ -39,7 +39,7 @@ mqttClient.on('message', async (topic, message) => {
                                 const notifData = {
                                     userId: deviceData.idUser,
                                     notif: {
-                                        status: 0,
+                                        status: 1,
                                         title: `${res.graph} - ${widget.widgetTitle} (Max Alert)`,
                                         message: `Data values from ${deviceData.deviceName} devices with dataId ${deviceData.dataId} has exceeded the maximum value`,
                                         read: 0
@@ -81,7 +81,7 @@ mqttClient.on('message', async (topic, message) => {
                                 const notifData = {
                                     userId: deviceData.idUser,
                                     notif: {
-                                        status: 0,
+                                        status: 2,
                                         title: `${res.graph} - ${widget.widgetTitle} (Min Alert)`,
                                         message: `Data values from ${deviceData.deviceName} devices with dataId ${deviceData.dataId} has exceeded the minimum value`,
                                         read: 0
@@ -124,7 +124,7 @@ mqttClient.on('message', async (topic, message) => {
                                 const notifData = {
                                     userId: deviceData.idUser,
                                     notif: {
-                                        status: 1,
+                                        status: 0,
                                         title: `${res.graph} - ${widget.widgetTitle} (Return Normal)`,
                                         message: `Data values from ${deviceData.deviceName} devices with dataId ${deviceData.dataId} has return to normal`,
                                         read: 0
@@ -243,9 +243,15 @@ const sendMail = (data) => new Promise((resolve, reject) => {
     let minContent = `Data values from ${data.deviceName} devices with dataId ${data.dataId} has exceeded the minimum value. Current value is ${data.value}`
     let normalContent = `Data values from ${data.deviceName} devices with dataId ${data.dataId} has return to normal. Current value is ${data.value}`
 
+    const fromObject = {
+        name: 'SThing - IoT Cloud Platform',
+        address: `${data.username}`
+    }
+
     const mailOptions = {
+        from: fromObject,
         to: `${data.mailList}`,
-        subject: `SThing Cloud - Alert Report ${data.status === 1 ? 'Max Value' : (data.status === 2 ? 'Min Value' : 'Return Normal') } (${data.graphName})`,
+        subject: `Alert Report ${data.status === 1 ? 'Max Value' : (data.status === 2 ? 'Min Value' : 'Return Normal') } (${data.graphName})`,
         html: data.status === 1 ? maxContent : (data.status === 2 ? minContent : normalContent)
     }
     
