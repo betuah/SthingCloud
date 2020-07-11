@@ -1,7 +1,30 @@
 // default light theme
 
 // for boxed-layout
-html,
+html {
+  /* width */
+  ::-webkit-scrollbar {
+      width: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+      background: rgba(133, 133, 133, 0.418);
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background-clip: content-box;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+      background: rgba(156, 156, 156, 0.911);
+  }
+}
 body {
   background-color: $body-bg;
 }
