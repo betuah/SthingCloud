@@ -126,7 +126,7 @@ $ npm run start
 <hr>
 
 # Version Log
-## Version Change log (STHING_v07)
+## Version Change log (STHING_v08)
 - Change notif status iot_device controller in IoT Gateway
 - Add Notification component in client
 - Add show single notif component in client
