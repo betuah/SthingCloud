@@ -105,7 +105,7 @@ exports.signUp = async (req, res) => {
             resolve(res)
         })
         .catch(err => {
-            reject(err)
+            reject(err, true)
         })  
     } catch (error) {
         console.log(new Error(error));

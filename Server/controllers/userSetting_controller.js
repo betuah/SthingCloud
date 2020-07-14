@@ -1,11 +1,13 @@
 const multer                = require('multer')
+const mongoose              = require('mongoose');
 const env                   = require('../env')
 const hash                  = require('../config/hash_config')
 const transporter           = require('../config/mail_config')
 const firebaseAdmin         = require('../config/firebaseAdminConfig')
 const firebaseDatabaseAdmin = firebaseAdmin.database()
 const fs                    = require('fs')
-const usersData      = require('../models/usersData_model')
+const usersData             = require('../models/usersData_model')
+const notifModel            = require('../models/notif_model')
 
 exports.index = (req, res) => {
     try {
@@ -176,25 +178,70 @@ exports.sendTestMail = (req, res) => {
     }
 }
 
-exports.notifRead = (req, res) => {
+exports.notif = (req, res) => {
     try {
-        res.send('test')
+        notifModel.find(
+            { 
+                "userId": `${req.id_user}`
+            }
+        ).then(data => {
+            res.status(201).json({ status: 'Success', code: 200, 'msg': 'Success get notif data!', data: data})
+        })
     } catch (error) {
-        
+        res.status(400).json({ status: 'Failed', code: 400, 'msg' : 'Failed get notif data!'})
+        console.log(new Error(error))
     }
 }
 
+exports.notifReads = (req, res) => {
+    try {
+        notifModel.updateMany(
+            { 
+                "_id": req.body.id,
+                "userId": `${req.id_user}`
+            },
+            {
+                "$set" : { "notif.read": 1 }
+            }
+        ).then(data => {
+            res.status(201).json({ status: 'Success', code: 200, 'msg': 'notif is read!', data: data})
+        })
+    } catch (error) {
+        res.status(400).json({ status: 'Failed', code: 400, 'msg' : 'Failed update notif read!'})
+        console.log(new Error(error))
+    }
+}
 
-// db.getCollection('users_datas').update(
-//     { 
-//         "userId": "MxZDfS2mYjgYRCPZSKX2dqGk6hh1"
-//     },
-//     {
-//         "$set" : { "notif.$[item].read": 1 }
-//     },
-//     {
-//         "arrayFilters": [
-//             { "item._id": ObjectId("5f056bc138f14b18248594d6")}
-//         ]
-//     }
-//  )
+exports.notifUnreads = (req, res) => {
+    try {
+        notifModel.updateMany(
+            { 
+                "_id": req.body.id,
+                "userId": `${req.id_user}`
+            },
+            {
+                "$set" : { "notif.read": 0 }
+            }
+        ).then(data => {
+            res.status(201).json({ status: 'Success', code: 200, 'msg': 'notif is unread!', data: data})
+        })
+    } catch (error) {
+        res.status(400).json({ status: 'Failed', code: 400, 'msg' : 'Failed update notif unread!'})
+        console.log(new Error(error))
+    }
+}
+
+exports.notifDelete = (req, res) => {
+    try {
+        notifModel.deleteMany(
+            { 
+                "_id": req.body.id,
+            }
+        ).then(data => {
+            res.status(201).json({ status: 'Success', code: 200, 'msg': 'Success delete notif!' })
+        })
+    } catch (error) {
+        res.status(400).json({ status: 'Failed', code: 400, 'msg' : 'Failed update notif read!'})
+        console.log(new Error(error))
+    }
+}
