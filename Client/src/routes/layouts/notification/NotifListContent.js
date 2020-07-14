@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import InfiniteScroll from "react-infinite-scroll-component"
+import notif, { deleteConfirm } from 'components/NotificationPopUp/notif';
 import { List, ListItem, ListSubheader, Tooltip, Checkbox }  from '@material-ui/core'
 import MaterialIcon from 'components/MaterialIcon'
 import PerfectScrollbar from 'react-perfect-scrollbar'
@@ -26,7 +27,7 @@ class NotifListContent extends Component {
         super(props)
 
         this.state = {
-            hasMore: true,
+            hasMore: false,
             items: [],
             checked: [],
         }
@@ -47,14 +48,14 @@ class NotifListContent extends Component {
         const { notifList } = this.props
 
         const notifData = notifList.sort((a, b) => {
-            const date1 = (new Date(a._dataCreatedAt))
-            const date2 = (new Date(b._dataCreatedAt))
+            const date1 = (new Date(a.notif._dataCreatedAt))
+            const date2 = (new Date(b.notif._dataCreatedAt))
             return date2 - date1;
         })
 
         this.setState({
             items: [...notifData.slice(0, 6)],
-            hasMore: true,
+            hasMore: notifData.length > 5 ? true : false,
             checked: [],
         })
     }
@@ -62,8 +63,8 @@ class NotifListContent extends Component {
     fetchMoreData () {
         const { notifList } = this.props
         const notifData = notifList.sort((a, b) => {
-            const date1 = new Date(a._dataCreatedAt)
-            const date2 = new Date(b._dataCreatedAt)
+            const date1 = new Date(a.notif._dataCreatedAt)
+            const date2 = new Date(b.notif._dataCreatedAt)
             return date2 - date1;
         })
 
@@ -73,7 +74,6 @@ class NotifListContent extends Component {
         }
 
         setTimeout(() => {
-            
             this.setState({
                 items: notifData.slice(0, this.state.items.length + 3)
             })
@@ -113,11 +113,33 @@ class NotifListContent extends Component {
     }
 
     readNotif() {
-        alert(JSON.stringify(this.state.checked))
+        const { server_url, axios, updateNotif } = this.props
+
+        axios.post(`${server_url}/api/user/notif/read`, { id: this.state.checked}).then(res => {
+            notif('success', 'Success', `Notification Updated!`)
+            updateNotif().then(res => {
+                this.getData()
+            })
+        })
     }
 
     deleteNotif() {
-        alert(JSON.stringify(this.state.checked))
+        const { server_url, axios, updateNotif } = this.props
+
+        deleteConfirm(confirm => {
+            if (confirm)
+                axios
+                .delete(`${server_url}/api/user/notif`, { data: { id: this.state.checked} })
+                .then(res => {
+                    notif('success', 'Success', `Notification deleted!`)
+                    updateNotif().then(res => {
+                        this.getData()
+                    })
+                })
+                .catch(err => {
+                    notif('error', 'Error', 'Failed delete data.')
+                })
+        })
     }
 
     closeModalNotifList() {
@@ -126,7 +148,7 @@ class NotifListContent extends Component {
     }
 
     render() {
-        const { showNotif, showNotifList } = this.props
+        const { showNotifList } = this.props
         const { items } = this.state
 
         return(
@@ -191,11 +213,11 @@ class NotifListContent extends Component {
                                         <div className="col-10 col-md-11 list-style-v1">
                                             <div className="list-item">
                                             <div className="list-item__body">
-                                                <div className={item.read === 0 ? "list-item__title font-weight-bold" : "list-item__title"}>{item.title} 
-                                                    <Tag color={item.status === 0 ? 'green' : 'red'}>{item.status === 1 ? 'Max Alert' : (item.status === 2 ? 'Min Alert' : 'Normal')}</Tag>
+                                                <div className={item.notif.read === 0 ? "list-item__title font-weight-bold" : "list-item__title"}>{item.notif.title} 
+                                                    <Tag color={item.notif.status === 0 ? 'green' : 'red'}>{item.notif.status === 1 ? 'Max Alert' : (item.notif.status === 2 ? 'Min Alert' : 'Normal')}</Tag>
                                                 </div>
-                                                <div className="list-item__desc">{item.message}</div>
-                                                <div className="list-item__datetime"><Moment tz={localStorage.getItem('timeZone')} format="D MMM YYYY (HH:mm A)">{item._dataCreatedAt}</Moment> - <Moment tz={localStorage.getItem('timeZone')} fromNow>{item._dataCreatedAt}</Moment></div>
+                                                <div className="list-item__desc">{item.notif.message}</div>
+                                                <div className="list-item__datetime"><Moment tz={localStorage.getItem('timeZone')} format="D MMM YYYY (HH:mm A)">{item._dataCreatedAt}</Moment> - <Moment tz={localStorage.getItem('timeZone')} fromNow>{item.notif._dataCreatedAt}</Moment></div>
                                             </div>
                                             </div>
                                         </div>

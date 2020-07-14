@@ -29,6 +29,7 @@ class AppHeader extends React.Component {
     this.handleSignOut = this.handleSignOut.bind(this)
     this.getNotif      = this.getNotif.bind(this)
     this.handlePopover = this.handlePopover.bind(this)
+    this.updateNotif   = this.updateNotif.bind(this)
   }
 
   handleClick = event => {
@@ -59,14 +60,18 @@ class AppHeader extends React.Component {
     })
   }
 
+  updateNotif = async () => {
+    await this.getNotif().catch(err => this.signOut())
+  }
+
   getNotif = () => new Promise((resolve, reject) => {
     const { axios, server_url } = this.props
 
-    axios.get(`${server_url}/api/user/settings`).then(res => {
-        const notRead = [...res.data.notif.map(item => item).filter(val => val.read === 0)]
+    axios.get(`${server_url}/api/user/notif`).then(res => {
+        const notRead = [...res.data.data.map(item => item).filter(val => val.notif.read === 0)]
 
         this.setState({
-          notifList: res.data.notif,
+          notifList: res.data.data,
           badge: notRead.length
         })
 
@@ -122,7 +127,7 @@ class AppHeader extends React.Component {
 
           <div className="header-right">
             <div className="list-unstyled list-inline">
-              <Popover visible={this.state.popover} onClick={this.handlePopover} placement="bottomRight" content={<Notifications {...this.state} handlePopover={this.handlePopover} />} onVisibleChange={this.handlePopover} trigger="click" overlayClassName="app-header-popover">
+              <Popover visible={this.state.popover} onClick={this.handlePopover} placement="bottomRight" content={<Notifications {...this.state} handlePopover={this.handlePopover} updateNotif={this.getNotif} />} onVisibleChange={this.handlePopover} trigger="click" overlayClassName="app-header-popover">
                 <a href={DEMO.link} className="list-inline-item"><Badge className="header-badge" badgeContent={this.state.badge}><MaterialIcon icon="notifications" className="header-icon-notification" /></Badge></a>
               </Popover>
               <a className="list-inline-item" href={DEMO.link}>

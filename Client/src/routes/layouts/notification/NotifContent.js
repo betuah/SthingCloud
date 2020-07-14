@@ -13,8 +13,8 @@ const BLANK = {}
 
 const NotifAlert = (props) => {
   const notifData = props.notifList.sort((a, b) => {
-    const date1 = new Date(a._dataCreatedAt)
-    const date2 = new Date(b._dataCreatedAt)
+    const date1 = new Date(a.notif._dataCreatedAt)
+    const date2 = new Date(b.notif._dataCreatedAt)
     return date2 - date1;
   })
 
@@ -36,11 +36,11 @@ const NotifAlert = (props) => {
             <div className="list-style-v1">
               <div className="list-item">
                 <div className="list-item__body">
-                  <div className={item.read === 0 ? "list-item__title font-weight-bold" : "list-item__title"}>{item.title} 
-                    <Tag color={item.status === 0 ? 'green' : 'red'}>{item.status === 1 ? 'Max Alert' : (item.status === 2 ? 'Min Alert' : 'Normal')}</Tag>
+                  <div className={item.notif.read === 0 ? "list-item__title font-weight-bold" : "list-item__title"}>{item.notif.title} 
+                    <Tag color={item.notif.status === 0 ? 'green' : 'red'}>{item.notif.status === 1 ? 'Max Alert' : (item.notif.status === 2 ? 'Min Alert' : 'Normal')}</Tag>
                   </div>
-                  <div className="list-item__desc text-truncate">{item.message}</div>
-                  <div className="list-item__datetime"><Moment tz={localStorage.getItem('timeZone')} format="D MMM YYYY (HH:mm A)">{item._dataCreatedAt}</Moment> - <Moment tz={localStorage.getItem('timeZone')} fromNow>{item._dataCreatedAt}</Moment></div>
+                  <div className="list-item__desc text-truncate">{item.notif.message}</div>
+                  <div className="list-item__datetime"><Moment tz={localStorage.getItem('timeZone')} format="D MMM YYYY (HH:mm A)">{item.notif._dataCreatedAt}</Moment> - <Moment tz={localStorage.getItem('timeZone')} fromNow>{item.notif._dataCreatedAt}</Moment></div>
                 </div>
               </div>
             </div>
@@ -59,7 +59,7 @@ const NotifAlert = (props) => {
 
 const NotifModal = (props) => {
   const tmpData = props.notifList.find(item => item._id === props.showNotifId)
-  const notifData = tmpData ? tmpData : ''
+  const notifData = props.showNotifId !== '' ? tmpData : false
 
   return (
     <Modal
@@ -69,9 +69,9 @@ const NotifModal = (props) => {
         footer={false}
     >
         <div className="col-md-12 mx-auto">
-          <h5 style={{color: '#FF9800'}} className="text-center"><b>{notifData.title}</b></h5>
+          <h5 style={{color: '#FF9800'}} className="text-center"><b>{notifData && notifData.notif.title}</b></h5>
           <div className="divider divider-dotted"></div>
-          <p className="text-center">{notifData.message}</p>
+          <p className="text-center">{notifData && notifData.notif.message}</p>
           <div className="divider divider-dotted"></div>
           <div className="d-flex justify-content-end"><Button key="back" color="primary" onClick={() => props.closeModal('notif')}>Close</Button></div>
         </div>
@@ -101,9 +101,13 @@ class NotifContent extends Component {
   }
 
   showNotif = id => {
-    // const { server_url, axios } = this.props
+    const { server_url, axios, updateNotif } = this.props
 
-    // axios.post(`${server_url}/api/user`)
+    console.log(id)
+
+    axios.post(`${server_url}/api/user/notif/read`, { id: id }).then(res => {
+      updateNotif()
+    })
 
     this.props.handlePopover(2)
     this.setState({
@@ -139,12 +143,12 @@ class NotifContent extends Component {
 
   render() {
     const { value } = this.state
-    const { notifList, badge } = this.props
+    const { badge } = this.props
   
     return(
       <div>
-        <NotifModal {...this.state} notifList={notifList} closeModal={this.closeModal}/>
-        <NotifListContent {...this.state} notifList={notifList} showNotif={this.showNotif} closeModal={this.closeModal}/>
+        <NotifModal {...this.state} {...this.props} closeModal={this.closeModal}/>
+        <NotifListContent {...this.state} {...this.props} showNotif={this.showNotif} closeModal={this.closeModal}/>
 
         <Tabs 
           value={value} 
@@ -158,7 +162,7 @@ class NotifContent extends Component {
             index={value}
             onChangeIndex={this.handleChange}
         >
-            <NotifAlert onChange={this.handleChange} notifList={notifList} showNotif={this.showNotif} showNotifList={this.showNotifList} />
+            <NotifAlert {...this.props} onChange={this.handleChange} showNotif={this.showNotif} showNotifList={this.showNotifList} />
         </SwipeableViews>
       </div>
     );
