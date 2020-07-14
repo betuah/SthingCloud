@@ -1,4 +1,5 @@
 const graphModel    = require('../models/graph_model')
+const notifModel    = require('../models/notif_model')
 const usersModel    = require('../models/usersData_model')
 const transporter   = require('../config/mail_config')
 const mqttClient    = require('../config/mqtt_client')
@@ -77,6 +78,7 @@ mqttClient.on('message', async (topic, message) => {
                     redisClient.get(`${generateId}`, (err, reply) => {
                         if (!reply || reply !== '2') {
                             redisClient.set(`${generateId}`, 2)
+
                             if (widget.settings.triggerMin.notif) {
                                 const notifData = {
                                     userId: deviceData.idUser,
@@ -211,11 +213,7 @@ const setDataValue = (data) => new Promise((resolve, reject) => {
 })
 
 const setNotif = (data) => new Promise((resolve, reject) => {
-    usersModel.findOneAndUpdate({ userId: data.userId }, { 
-        $push: { notif: {
-            ...data.notif
-        }}
-    })
+    notifModel.create(data)
     .then((cb) => {
         if(cb) {
             resolve(cb)
