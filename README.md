@@ -25,6 +25,9 @@ $ npm install
 ## Environment Setup
 > Create .env file in every subfolder like API, Client, Socket and Server
 
+#### Mongo database installation
+docker run --name mydb -v YOUR_LOCAL_DIR_PATH:/data/db -p 27017:27017 -d mongo:latest
+
 #### Server .env file
 ```sh
 PORT=8000
@@ -136,6 +139,8 @@ $ npm run start
 - Scrollbar css custom
 - Add InfiniteScroll and prefect scroll bar
 - Add spinner for loading component
+- Add read notif feature in ShowAllNotif component
+- Add delete notif feature in ShowAllNotif compoent
 
 ## Version Change log (STHING_v07)
 - Add subscriptions in IoT Gateway controller
