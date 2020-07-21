@@ -3,6 +3,7 @@ import axios from "axios"
 import socketOpen from 'socket.io-client'
 import { FireAuth, FireDatabase } from 'config/Firebase'
 import notif from 'components/NotificationPopUp/notif'
+import Cookies from 'js-cookie'
 
 const server_url      = `${process.env.REACT_APP_SERVER_DOMAIN}`
 const socket_url      = `${process.env.REACT_APP_SOCKET_DOMAIN}` 
@@ -12,9 +13,19 @@ const axiosReq        = axios.create()
 const AuthContext     = React.createContext()
 
 //konfigurasi untuk axios 
-axiosReq.interceptors.request.use((config)=>{
-    const token = localStorage.getItem('token')
-    config.headers.Authorization = `Bearer ${token}`
+axiosReq.interceptors.request.use(async config => {
+    const csrf  = Cookies.get('xsrfToken')
+
+    if (!csrf) {
+        const xsrf = await axios.get(`${server_url}/rTsc2@12I/`, { withCredentials: true })
+        if (xsrf)
+            config.headers.common['X-XSRF-TOKEN'] = Cookies.get('xsrfToken')
+    } else {
+        config.headers.common['X-XSRF-TOKEN'] = csrf
+    }
+    
+    config.withCredentials = true
+
     return config
 })
 
@@ -55,7 +66,12 @@ export class AuthContextProvider extends Component {
     checkToken () {
         return axiosReq.get(`${server_url}/api/tokenverify`)
             .catch(err => {
-                this.setState({ isLoggedIn: false });
+                this.setState({
+                    isLoggedIn: false,
+                    profileData: false
+                })
+
+                Cookies.remove('xsrfToken')
                 localStorage.clear()
             })
     }
@@ -101,14 +117,15 @@ export class AuthContextProvider extends Component {
 
     //login
     signIn (credentials) {
-        return new Promise((resolve, reject) => axios.post(`${server_url}/api/signin`, credentials)
+        return new Promise((resolve, reject) => {
+            axiosReq.post(`${server_url}/api/signin`, credentials)
             .then(response => {
-                const { token, dataProfile } =  response.data
+                const { dataProfile } =  response.data
                 const profileData = JSON.stringify(dataProfile);
 
                 FireAuth.onAuthStateChanged(async user => {
                     if (user) {
-                        localStorage.setItem("token", token)
+                        localStorage.setItem("token", Cookies.get('xsrfToken'))
                         localStorage.setItem("profileData", profileData)
         
                         const res = { status: 'Success', code: 200, msg: 'Success SignIn' }
@@ -116,21 +133,21 @@ export class AuthContextProvider extends Component {
                         return resolve(res)
                     } else {
                     const err = { status: 'Error', code: 404, msg: 'User not SignIn' }
-                      return reject(err)
+                    return reject(err)
                     }
                 })
             })
             .catch(error => {
                 if(error.response) {
                     const res = error.response.data;
-                    const resMsg = { status: 'Error', code: res.code === '406' ? res.code : 400, msg: res.msg }  
+                    const resMsg = { status: 'Error', code: res.code === '406' ? res.code : (res.code === 404 ? 404 : 400), msg: res.msg }  
                     return reject(resMsg)
                 } else {
                     const resMsg = { status: 'Error', code: 500, msg: error}         
                     return reject(resMsg)
                 }
             })
-        ) 
+        }) 
     }
 
     sendEmailVerification = email => {
@@ -151,7 +168,7 @@ export class AuthContextProvider extends Component {
                 photoUrl: data.photoUrl
             }).then(() => {
                 this.sendEmailVerification(data.email)
-                axios.post(`${server_url}/api/signup`, { 
+                axiosReq.post(`${server_url}/api/signup`, { 
                     uid: data.uid,
                     fullName: data.fullName,
                     email: data.email,
@@ -176,10 +193,9 @@ export class AuthContextProvider extends Component {
                     isLoggedIn: false,
                     profileData: false
                 })
-        
-                localStorage.removeItem('token')
-                localStorage.removeItem('profileData')
-                localStorage.removeItem('timeZone')
+
+                Cookies.remove('xsrfToken')
+                localStorage.clear()
 
                 return true
             }).catch(err => {

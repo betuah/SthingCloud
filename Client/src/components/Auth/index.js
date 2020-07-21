@@ -14,7 +14,7 @@ class Auth extends Component {
         return( 
             <Layout className="app-layout">                                
                     <section className="w-100 h-100" style={{'backgroundColor': '#000', position: 'absolute'}}> 
-                        <div className="cover-bg-img" style={{backgroundImage: 'url(assets/flat-images/nature_flat_03.jpg)', opacity: '0.5'}}></div>
+                        <div className="cover-bg-img" style={{backgroundImage: 'url(assets/flat-images/nature_flat_03.jpg)', opacity: '0.3'}}></div>
                         <div className="container d-flex h-100">
                             <div className="row justify-content-center align-self-center mx-auto">
                                 <Switch>

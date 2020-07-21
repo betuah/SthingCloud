@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react' //React Library
 import { withAuth } from 'components/Auth/context/AuthContext' // AuthContext
 import MaterialIcon from 'components/MaterialIcon' // Icon Function
 import { TextField, Button } from '@material-ui/core' // Material UI library
-import Firebase, { FireAuth, FireGoogleAuthProvider } from 'config/Firebase' // Load firebase from config
+import Firebase, { FireAuth, FireGoogleAuthProvider, FireGithubAuthProvider } from 'config/Firebase' // Load firebase from config
 import notif from 'components/NotificationPopUp/notif' // Notification Function
 import { Modal } from 'antd' // Antd Library
 
@@ -105,19 +105,6 @@ class PasswordForm extends Component {
     }
     /* End Handle input function for change password form */ 
 
-    /* Start Handle input function for Sign In form */ 
-    handleSignInChange = e => {
-        const { name, value } = e.target // Init name and value from input target
-
-        this.setState({ // Set input value to state
-            modalForm: {
-                ...this.state.modalForm,
-                [name]: value
-            }
-        })
-    }
-    /* End Handle input function for Sign In form */ 
-
     /* Start close modal function*/
     handleCloseModal = () => {
         this.setState({ // Set state for reset sign in modal form and change password form
@@ -132,24 +119,56 @@ class PasswordForm extends Component {
                 password: ''
             }
         })
+
+        this.handleLoading('all', false)
     }
     /* End close modal function*/
+
+    /* Start Handle input function for Sign In form */ 
+    handleSignInChange = e => {
+        const { name, value } = e.target // Init name and value from input target
+
+        this.setState({ // Set input value to state
+            modalForm: {
+                ...this.state.modalForm,
+                [name]: value
+            }
+        })
+    }
+    /* End Handle input function for Sign In form */ 
 
     /* Start function for re authenticate with Google Account*/
     signInWithGoogle = () => {        
         this.handleLoading('googleLoading', true) // Set loading at google sign button
         const user = FireAuth.currentUser // Init Firebase current user and function
-
+        
         // Re-Authenticate with methode Google Account
         user.reauthenticateWithPopup(FireGoogleAuthProvider) // Show google sign in popup
         .then(res => { // If google account valid with existing signed account
             this.updatePassword() // Rungging update password function
         }).catch(err => { // If google account not valid with existing signed account
+            this.handleLoading('googleLoading', false)
             notif('error', 'Sign In Failed!' , `It's look like your google account doesn't match to your current user signed`) // Notification if credential not valid
         })
     }
     /* End function for re authenticate with Google Account*/
-
+    
+    /* Start function for re authenticate with github Account*/
+    signInWithGithub = () => {        
+        this.handleLoading('githubLoading', true) // Set loading at github sign button
+        const user = FireAuth.currentUser // Init Firebase current user and function
+        
+        // Re-Authenticate with methode github Account
+        user.reauthenticateWithPopup(FireGithubAuthProvider) // Show github sign in popup
+        .then(res => { // If github account valid with existing signed account
+            this.updatePassword() // Rungging update password function
+        }).catch(err => { // If github account not valid with existing signed account
+            this.handleLoading('githubLoading', false)
+            notif('error', 'Sign In Failed!' , `It's look like your github account doesn't match to your current user signed`) // Notification if credential not valid
+        })
+    }
+    /* End function for re authenticate with github Account*/
+    
     /* Start function for re authenticate with Email and Password methode*/
     signInWithEmailPassword = e => {
         e && e.preventDefault() // Hold Form for not refresh the page
@@ -228,7 +247,14 @@ class PasswordForm extends Component {
                     className="custom-modal-dialog"
                     footer={false}
                 >
-                    <SignInModal handleChange={this.handleSignInChange} handleOk={this.signInWithEmailPassword} signInWithGoogle={this.signInWithGoogle} {...this.state.loading} {...this.state.modalForm} />
+                    <SignInModal 
+                        handleChange={this.handleSignInChange} 
+                        handleOk={this.signInWithEmailPassword} 
+                        signInWithGoogle={this.signInWithGoogle} 
+                        signInWithGithub={this.signInWithGithub} 
+                        {...this.state.loading} 
+                        {...this.state.modalForm} 
+                    />
                 </Modal>
 
                 <div className="container">

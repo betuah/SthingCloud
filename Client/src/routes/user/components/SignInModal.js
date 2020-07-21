@@ -45,12 +45,13 @@ const SignInModal = (props) => {
                         {props.googleLoading ? <Loading /> : 'SignIn With Google'}
                     </Button>
                     <Button 
+                        onClick={props.signInWithGithub}
+                        disabled={props.githubLoading ? true : false} 
                         className="col-md-10 text-white" 
-                        variant="contained" 
-                        startIcon={<GithubOutlined />} 
-                        style={{backgroundColor: '#212121'}}
+                        variant="contained" startIcon={props.githubLoading ? false : <GithubOutlined />} 
+                        style={props.githubLoading ? {backgroundColor: '#404040'} : {backgroundColor: '#212121'}}
                     >
-                        SignIn With GitHub
+                        {props.githubLoading ? <Loading /> : 'SignIn With GitHub'}
                     </Button>
 
                     <div className="col-10 divider divider-with-content text-primary"><span className="divider-inner-content">OR</span></div>
