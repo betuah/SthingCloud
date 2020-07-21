@@ -85,15 +85,18 @@ export const USER = [
 export const RESOURCES = [
   {
     name: 'Documentation',
-    path: 'https://seamolec.org'
+    path: '/resource/documentation',
+    link: 'https://seamolec.org'
   },
   {
     name: 'Community',
-    path: '/resource/community'
+    path: '/resource/community',
+    link: 'https://discord.gg/q5hw4Ms'
   },
   {
     name: 'Github Libraries',
-    path: '/resource/git'
+    path: '/resource/git',
+    link: 'https://github.com/sthingcloud/library'
   }
 ]
 
