@@ -31,6 +31,7 @@ docker run --name mydb -v YOUR_LOCAL_DIR_PATH:/data/db -p 27017:27017 -d mongo:l
 #### Server .env file
 ```sh
 PORT=8000
+NODE_ENV=dev|prod
 DOMAIN=http://localhost
 TOKEN_SECRET=YOUR_SECRET_TOKEN_PASSWORD
 ENCRYPTION_KEY=YOUR_CUSTOM_KEY
@@ -141,6 +142,13 @@ $ npm run start
 - Add spinner for loading component
 - Add read notif feature in ShowAllNotif component
 - Add delete notif feature in ShowAllNotif compoent
+- Change token store from localstorage to cookie
+- Encrypt JWT token to client
+- Set CSRF with CSURF
+- Fix axios request header at Device,controller and graph list
+- Add link on resource sidenav menu
+- Add logo and fix layout in login component
+- Remove event on feature in widget controller component
 
 ## Version Change log (STHING_v07)
 - Add subscriptions in IoT Gateway controller
