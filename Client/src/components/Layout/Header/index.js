@@ -94,7 +94,7 @@ class AppHeader extends React.Component {
   render() {
     const { headerShadow, colorOption, showLogo, server_url } = this.props;
     const { anchorEl } = this.state
-    const profileData = JSON.parse(localStorage.getItem('profileData'))
+    const profileData = localStorage.getItem('profileData') ? JSON.parse(localStorage.getItem('profileData')) : false
 
     return (
       <Header className={classnames('app-header', {
