@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import axios from 'axios';
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
@@ -26,12 +25,6 @@ import {
     IconButton, 
     Tooltip
 } from '@material-ui/core';
-
-axios.interceptors.request.use((config)=>{
-  const token = localStorage.getItem('token')
-  config.headers.Authorization = `Bearer ${token}`
-  return config
-})
 
 function getSorting(order, orderBy) {
   return order === 'desc'
@@ -128,7 +121,7 @@ const toolbarStyles = theme => ({
 });
 
 let EnhancedTableToolbar = props => {
-  const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, server_url } = props;
+  const { numSelected, classes, updateData, resetSelected, searchState, handleSearch, axios, server_url } = props;
 
   const handleDelete = e => {
     deleteConfirm(confirm => {
@@ -290,7 +283,9 @@ class EnhancedTable extends React.Component {
   }
 
   updateData = () => {
-    const handleData = this.handleData;
+    const handleData = this.handleData
+    const { axios } = this.props
+
     axios.get(`${this.props.server_url}/api/controller`)
     .then((res) => {
         handleData(res.data)
@@ -384,6 +379,7 @@ class EnhancedTable extends React.Component {
           searchState={this.state.searchValue} 
           handleSearch={this.handleSearch}
           server_url={this.props.server_url}
+          axios={this.props.axios}
         />
         <div className={classes.tableWrapper}>
           <Table className={classes.table} aria-labelledby="tableTitle">
