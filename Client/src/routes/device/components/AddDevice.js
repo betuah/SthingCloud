@@ -1,17 +1,10 @@
 import React from 'react';
-import { withAuth } from 'components/Auth/context/AuthContext'
-import axios from 'axios';
+import { withAuth } from 'components/Auth/context/AuthContext';
 import { Modal } from 'antd';
 import notif from 'components/NotificationPopUp/notif';
 import MaterialIcon from 'components/MaterialIcon';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { TextField, Button, IconButton, Tooltip } from '@material-ui/core';
-
-axios.interceptors.request.use((config)=>{
-    const token = localStorage.getItem('token')
-    config.headers.Authorization = `Bearer ${token}`
-    return config
-})
 
 const Content = (props) => {
     return (
@@ -116,7 +109,7 @@ class AddDevice extends React.Component {
     }
 
     handleOk = () => {
-        const { updateData, server_url } = this.props;
+        const { updateData, server_url, axios } = this.props;
         
         axios.post(`${server_url}/api/device`, this.state.data)
         .then(res => {
