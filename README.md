@@ -1,7 +1,6 @@
 # SEA Cloud Platform - SThing (v0.8)
 
 ![GitHub Logo](logo.png)
-Format: ![Alt Text](url)
 
 > **Desc :** This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
 
