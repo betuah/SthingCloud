@@ -4,7 +4,7 @@ const serviceAccount = require("./serviceAccountKey.json")
 
 firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
-  databaseURL: "https://sthing-iot-cloud-platform.firebaseio.com"
+  databaseURL: "https://sthing-cloud.firebaseio.com"
 })
 
 module.exports = firebaseAdmin

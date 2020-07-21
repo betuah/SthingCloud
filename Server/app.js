@@ -1,13 +1,15 @@
 const express = require('express'),
     app         = express(),
-    cors        = require('cors'),
-    helmet      = require('helmet'),
     bodyParser  = require('body-parser'),
+    cors        = require('cors'),
+    csrf        = require('csurf')
+    helmet      = require('helmet'),
+    cookieParser = require('cookie-parser'),
     env         = require('./env'),
     port        = env.port || 8000
 
 app.use(helmet())
-
+app.disable("x-powered-by")
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
@@ -24,10 +26,26 @@ const options = {
             callback("CORS Not allowed by SEA Cloud Platform SERVER API'S", false)
             // console.log(callback(new Error("Not allowed by SEA Cloud Platform API'S")));
         }
-    }
+    },
+    credentials: true
 }
 app.use(cors(options))
 /* End Dynamic CORS */
+
+/* Start csrf protection */
+app.use(cookieParser())
+app.use(csrf({ cookie: {
+    key: '_sthing',
+    httpOnly: true,
+    // maxAge: 10,
+    secure: env.node_env === 'production' ? true : false
+}}))
+app.use(function (err, req, res, next) {
+    if (err.code !== 'EBADCSRFTOKEN') return next(err)
+    res.status(403)
+    res.send('Invalid CSRF Token request!')
+})
+/* Start csrf protection */
 
 /* Start of Routing Import */
 const authRoute        = require('./routes/auth_route')

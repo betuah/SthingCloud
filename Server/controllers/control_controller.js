@@ -63,8 +63,6 @@ exports.create = async (req, res) => {
                 controller_default  : 0
             }
 
-            console.log(dataBody._id)
-
             controlModel.create(dataBody)
                 .then(data => {
                     res.status(201).json({ status: 'Success', code: 200, 'msg': 'Success to saving data!', data: data})
@@ -213,17 +211,7 @@ exports.widget_create = async (req, res) => {
             resourceId : req.body.resourceId,
             widgetDisplay : req.body.widgetDisplay,
             dataId : req.body.dataId,
-            dataValue : 0,
-            eventOn: {
-                widget: req.body.eventOnWidgetTarget,
-                action: req.body.eventOnActionTarget,
-                activate: req.body.eventOnActive
-            },
-            eventOff: {
-                widget: req.body.eventOffWidgetTarget,
-                action: req.body.eventOffActionTarget,
-                activate: req.body.eventOffActive
-            }
+            dataValue : 0
         }
 
         controlModel.findOneAndUpdate({ _id: req.params.controllerId }, { 
@@ -254,17 +242,7 @@ exports.widget_update = async (req, res) => {
             'controller_widget.$.widgetTitle' : req.body.widgetTitle,
             'controller_widget.$.resourceId' : req.body.resourceId,
             'controller_widget.$.widgetDisplay' : req.body.widgetDisplay,
-            'controller_widget.$.dataId' : req.body.dataId,
-            'controller_widget.$.eventOn' : {
-                widget: req.body.eventOnWidgetTarget,
-                action: req.body.eventOnActionTarget,
-                activate: req.body.eventOnActive
-            },
-            'controller_widget.$.eventOff' : {
-                widget: req.body.eventOffWidgetTarget,
-                action: req.body.eventOffActionTarget,
-                activate: req.body.eventOffActive
-            }
+            'controller_widget.$.dataId' : req.body.dataId
         }
 
         controlModel.findOneAndUpdate({ _id: req.params.controllerId, 'controller_widget._id': req.params.widgetId  }, { 

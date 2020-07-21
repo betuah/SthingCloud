@@ -31,9 +31,7 @@ const WidgetSchema = new Schema({
     dataValue: {
         type: Number,
         trim: true,
-    },
-    eventOn: {},
-    eventOff: {}
+    }
 })
 
 const controllerDataSchema = new Schema({

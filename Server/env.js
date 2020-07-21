@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const env = {
     port: process.env.PORT,
+    node_env: process.env.NODE_ENV,
     domain: process.env.DOMAIN,
     client_domain: process.env.CLIENT_DOMAIN,
     token_secret: process.env.TOKEN_SECRET,
