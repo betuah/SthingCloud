@@ -70,7 +70,7 @@ class Settings extends Component {
             modalTestMail: false,
             data: {
                 sendToMail: '',
-                timeZone: '',
+                timeZone: 'Asia/Jakarta',
                 host: '',
                 port: '',
                 secure: 1,
@@ -90,7 +90,7 @@ class Settings extends Component {
         this.clearState     = this.clearState.bind(this)
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         this.props.checkToken()
         const { axios, server_url } = this.props
 
