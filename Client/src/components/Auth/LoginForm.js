@@ -261,7 +261,7 @@ class LoginForm extends React.Component {
                             disabled={this.state.githubLoading ? true : false} 
                             className="btn-cta btn-block text-white" 
                             variant="contained" startIcon={this.state.githubLoading ? false : <GithubOutlined />} 
-                            style={this.state.githubLoading ? {backgroundColor: '#404040'} : {backgroundColor: '#212121'}}
+                            style={this.state.githubLoading ? {backgroundColor: '#616161'} : {backgroundColor: '#212121'}}
                         >
                             {this.state.githubLoading ? <Loading /> : 'Sign In with GitHub'}
                         </Button>
