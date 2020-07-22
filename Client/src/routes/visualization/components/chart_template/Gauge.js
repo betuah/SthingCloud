@@ -21,7 +21,7 @@ class Chart extends Component {
         this.editWidget = this.editWidget.bind(this)
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this._isMounted = true;
     }
     

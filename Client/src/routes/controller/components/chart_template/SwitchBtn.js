@@ -20,7 +20,7 @@ class SwitchBtn extends Component {
         this.handleSwitch   = this.handleSwitch.bind(this)
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this._isMounted = true;
     }
     

@@ -592,7 +592,7 @@ class ModalEditWidget extends Component {
         this.handleChangeIndex  = this.handleChangeIndex.bind(this)
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this._isMounted = true;
     }
 
