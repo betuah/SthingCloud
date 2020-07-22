@@ -79,7 +79,7 @@ class AppMenu extends React.Component {
       }
       return null;
     } else {
-      return <Menu.Item key={item.path}><Button className="nav-item" href={item.link ? item.link : `#${item.path}`} target={item.link ? '_blank' : false}><MaterialIcon icon="arrow_right" style={{color: '#00C853'}} /><span>{item.menuName || item.name}</span></Button></Menu.Item>;
+      return <Menu.Item key={item.path}><Button className="nav-item" href={item.link ? item.link : `#${item.path}`} target={item.link ? '_blank' : null}><MaterialIcon icon="arrow_right" style={{color: '#00C853'}} /><span>{item.menuName || item.name}</span></Button></Menu.Item>;
     }
   };
 

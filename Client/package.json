@@ -33,7 +33,7 @@
     "moment-timezone": "^0.5.31",
     "notistack": "^0.9.9",
     "prop-types": "^15.6.2",
-    "rc-queue-anim": "^1.6.5",
+    "rc-queue-anim": "^1.8.5",
     "react": "^16.8.6",
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.8.6",

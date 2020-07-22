@@ -1,4 +1,4 @@
-# SEA Cloud Platform - SThing (v0.8)
+# SEA Cloud Platform - SThing (v0.9)
 
 <!-- <div style="text-align:center"><img src="logo.png" width="300"></div> -->
 
@@ -132,6 +132,9 @@ $ npm run start
 <hr>
 
 # Version Log
+## Version Change log (STHING_v08)
+- Fix bug and prepare for upgrade packages
+
 ## Version Change log (STHING_v08)
 - Change notif status iot_device controller in IoT Gateway
 - Add Notification component in client
