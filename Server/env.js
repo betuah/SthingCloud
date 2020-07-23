@@ -5,6 +5,7 @@ const env = {
     node_env: process.env.NODE_ENV,
     domain: process.env.DOMAIN,
     client_domain: process.env.CLIENT_DOMAIN,
+    client_domain_prod: process.env.CLIENT_DOMAIN_PROD,
     token_secret: process.env.TOKEN_SECRET,
     encryption_key: process.env.ENCRYPTION_KEY,
     db_mysql: {

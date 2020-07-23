@@ -16,7 +16,7 @@ app.use(bodyParser.json())
 app.use('/public', express.static(__dirname + '/public')) // Set public directory
 
 /* Dynamic CORS */
-const whitelist = [`${env.client_domain}`]
+const whitelist = [`${env.client_domain}`,`${env.client_domain_prod}`]
 
 const options = {
     origin: (origin, callback) => {

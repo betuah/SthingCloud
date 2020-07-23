@@ -54,14 +54,15 @@ class Chart_template extends Component {
         this.closeEditModal     = this.closeEditModal.bind(this)
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this._isMounted = true;
     }
 
     componentDidMount() {
         const { checkToken, data } = this.props
-        checkToken();
-        this._isMounted && this.setState({ ...data.layouts });
+        checkToken()
+        
+        this._isMounted && this.setState({ layouts: data.layouts })
     }
 
     showEditModal(id) {
@@ -72,11 +73,11 @@ class Chart_template extends Component {
     }
 
     onLayoutChange(layout, layouts) {
-        this._isMounted && this.setState({ layouts });
+        this._isMounted && this.setState({ layouts })
     }
 
     componentWillUnmount() {
-        const { server_url, axios, graphId } = this.props;
+        const { server_url, axios, graphId } = this.props
 
         const data = {
             layouts: {

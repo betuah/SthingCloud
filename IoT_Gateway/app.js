@@ -4,7 +4,7 @@ const express   = require('express'),
     helmet      = require('helmet'),
     bodyParser  = require('body-parser'),
     env         = require('./env'),
-    port        = env.port || 5000
+    port        = env.port || 7000
 
 app.use(helmet())
 
@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 /* Dynamic CORS */
-const whitelist = [`${env.client_domain}`,`${env.socket_domain}`,`${env.mqtt_broker_domain}`]
+const whitelist = [`${env.client_domain}`,`${env.client_domain_prod}`,`${env.socket_domain}`,`${env.mqtt_broker_domain}`]
 
 const options = {
     origin: (origin, callback) => {

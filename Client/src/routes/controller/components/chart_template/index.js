@@ -44,7 +44,7 @@ class Chart_template extends Component {
         this.closeEditModal     = this.closeEditModal.bind(this)
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this._isMounted = true;
     }
 

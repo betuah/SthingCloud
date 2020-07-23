@@ -11,7 +11,7 @@ const io        = socketIo(server)
 const port      = env.port || 4000 //Port from environment variable or default - 4000
 
 /* Socket IO */
-const whitelist = [`${env.iot_gateway_domain}`, `${env.client_domain}`,`${env.mqtt_broker_domain}`]
+const whitelist = [`${env.iot_gateway_domain}`,`${env.client_domain}`, `${env.client_domain_prod}`,`${env.mqtt_broker_domain}`]
 io.origins((origin, callback) => {
     if (whitelist.indexOf(origin) !== -1) {
         callback(null, true)

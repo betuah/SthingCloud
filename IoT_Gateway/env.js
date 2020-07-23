@@ -7,6 +7,7 @@ const env = {
     https_port: process.env.HTTPS_PORT,
     socket_domain: process.env.SOCKET_DOMAIN,
     client_domain: process.env.CLIENT_DOMAIN,
+    client_domain_prod: process.env.CLIENT_DOMAIN_PROD,
     token_secret: process.env.TOKEN_SECRET,
     encryption_key: process.env.ENCRYPTION_KEY,
     mqtt_broker_domain : process.env.MQTT_BROKER_domain,

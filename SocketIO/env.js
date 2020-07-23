@@ -4,6 +4,7 @@ const env = {
     port: process.env.PORT,
     domain: process.env.DOMAIN,
     client_domain: process.env.CLIENT_DOMAIN,
+    client_domain_prod: process.env.CLIENT_DOMAIN_PROD,
     server_domain: process.env.SERVER_DOMAIN,
     iot_gateway_domain: process.env.IOT_GATEWAY_DOMAIN,
     mqtt_broker_domain: process.env.MQTT_BROKER_DOMAIN,
