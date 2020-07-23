@@ -135,6 +135,10 @@ $ npm run start
 ## Version Change log (STHING_v09)
 - Fix bug and prepare for upgrade packages
 - Add animation in any main component with rc-queue-animate
+- Remove some index from graph and controller model
+- Save user profile to localdb (Mongodb)
+- Fix bug Authentication
+- Fix ShareContent component
 
 ## Version Change log (STHING_v08)
 - Change notif status iot_device controller in IoT Gateway
