@@ -132,8 +132,9 @@ $ npm run start
 <hr>
 
 # Version Log
-## Version Change log (STHING_v08)
+## Version Change log (STHING_v09)
 - Fix bug and prepare for upgrade packages
+- Add animation in any main component with rc-queue-animate
 
 ## Version Change log (STHING_v08)
 - Change notif status iot_device controller in IoT Gateway

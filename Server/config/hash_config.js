@@ -1,7 +1,6 @@
 // Nodejs encryption with CTR
 const crypto = require('crypto')
 const env = require('../env')
-
 const algorithm = 'aes-256-cbc'
 const key = env.encryption_key
 const iv = crypto.randomBytes(16)

@@ -8,25 +8,25 @@ var settings = {
     protocolVersion: 4,
     clientId: 'Publisher 1',
     clean: true, 
-    username:'C6AWnGJDq',
-    password:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkM2QVduR0pEcSIsImlkVXNlciI6Ik1ieFNHVXR5QWFQdWthOU54MEh4aWhWWVN5TDIiLCJpZERldmljZSI6IkM2QVduR0pEcSIsImRldmljZU5hbWUiOiJEZXZpY2UgVGVzdCAwMSIsImlhdCI6MTU5NDYxODc0Mn0.XjKatEqSjn5rF7LsXzo3fsy1Fpo5C3NGfFeJmEpkcEM'
+    username:'QQ2J8IiDF',
+    password:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlFRMko4SWlERiIsImlkVXNlciI6InRxZDZBUnBUWFRoNFQxZVZoOUJHSUNteHhQODIiLCJpZERldmljZSI6IlFRMko4SWlERiIsImRldmljZU5hbWUiOiJTZW5zb3IgQSIsImlhdCI6MTU5NTQ5NTk4NX0.h8vHaA6qYMt0o36X4qfI3li-0CUjOIT7oAAJxbLrcTM'
 }
 
 // client connection
 let mqttClient = mqtt.connect(`mqtt://${host}:${port}`, settings)
 
 const data = {
-    graphId: 'KKJ4QDpjW',
-    dataId: 'test',
-    value: '91'
+    graphId: 'd0Kphl9DI',
+    dataId: 'testa',
+    value: '31'
 }
 
-mqttClient.subscribe('C6AWnGJDq/controller', err => {
+mqttClient.subscribe('QQ2J8IiDF/controller', err => {
     if (!err) {
         setInterval(() => {
             console.log('push')
-            mqttClient.publish('C6AWnGJDq/device_data', JSON.stringify(data), { qos: 2 })
-        }, 200)
+            mqttClient.publish('QQ2J8IiDF/device_data', JSON.stringify(data), { qos: 2 })
+        }, 2000)
         
     }
 })

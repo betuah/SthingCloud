@@ -7,6 +7,7 @@ import Breadcrumb from 'components/Layout/Breadcrumb'
 import MaterialIcon from 'components/MaterialIcon'
 import ControllerList from './ControllerList'
 import Typography from '@material-ui/core/Typography'
+import QueueAnim from 'rc-queue-anim'
 
 let ControllerWidget = loadable({
     loader: () => import('./ControllerWidget'),
@@ -30,22 +31,22 @@ class Controller extends Component {
                     <Route exact path={`${match.url}/:controllerId`} component={ControllerWidget} />
                     <Route exact path={`${match.url}`}>
                         <div className="container-fluid mt-4">
-                            <div className="row">
-                                <div className="col-12 d-flex justify-content-center justify-content-md-between">
-                                    <div className="align-self-center">
+                            <QueueAnim className="row">
+                                <div key='1' className="col-12 d-flex justify-content-center justify-content-md-between">
+                                    <div key='2' className="align-self-center">
                                         <Typography variant="h5">
                                             <span className="ui-highlight font-weight-bold" style={{backgroundColor: '#FF5722'}}><MaterialIcon icon="bar_chart" style={{color: '#FFFFFF'}} /> Controller</span>
                                         </Typography>
                                     </div>
-                                    <div className="d-none d-sm-block align-self-center">
+                                    <div key='3' className="d-none d-sm-block align-self-center">
                                         <Breadcrumb />
                                     </div>     
                                 </div>
-                                <div className="col-12 divider divider-dotted"></div>
-                                <div className="col-xs-12 col-md-12">
+                                <div key='4' className="col-12 divider divider-dotted"></div>
+                                <div key='5' className="col-xs-12 col-md-12">
                                     <ControllerList {...this.props} />
                                 </div>
-                            </div>
+                            </QueueAnim>
                         </div>
                     </Route>
                 </Switch>

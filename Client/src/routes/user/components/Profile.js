@@ -4,6 +4,7 @@ import LoadingComponent from 'components/Loading'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import { Tabs, Tab } from '@material-ui/core'
 import SwipeableViews from 'react-swipeable-views'
+import QueueAnim from 'rc-queue-anim'
 
 let PersonalForm = loadable({
     loader: () => import('./PersonalForm'),
@@ -51,8 +52,8 @@ class Profile extends Component {
         return (
             <Fragment>
                 <div className="container-fluid mt-4 mb-3">
-                    <div className="row">
-                        <div className="col-lg-3 mb-3">
+                    <QueueAnim className="row">
+                        <div key='2' className="col-lg-3 mb-3">
                             <article className="profile-card-v2 border-0 mdc-elevation--z2 h-auto">
                                 <img 
                                     alt={profileData.fullName} 
@@ -63,8 +64,8 @@ class Profile extends Component {
                                 <p>{profileData.email ? profileData.email : ''} <br /> {profileData.organization ? profileData.organization : ''}</p>
                             </article>
                         </div>
-                        <div className="col-xs-12 col-sm-12 col-md-12 col-lg-9 ">
-                            <div className="box box-default mdc-elevation--z2 mb-3">
+                        <div key='3' className="col-xs-12 col-sm-12 col-md-12 col-lg-9 ">
+                            <div key='4' className="box box-default mdc-elevation--z2 mb-3">
                                 <div className="box-header">
                                     <Tabs value={tabIndexValues} onChange={this.handleChangeTabs} variant="fullWidth">
                                         <Tab label="Personal Information" />
@@ -72,7 +73,7 @@ class Profile extends Component {
                                         <Tab label="Password" />
                                     </Tabs>
                                 </div>
-                                <div className="box-body">
+                                <div key='5' className="box-body">
                                     <SwipeableViews
                                         index={tabIndexValues}
                                         onChangeIndex={this.handleChangeIndex}
@@ -84,7 +85,7 @@ class Profile extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </QueueAnim>
                 </div>
             </Fragment>
         )

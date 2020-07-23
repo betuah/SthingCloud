@@ -95,6 +95,7 @@ class PersonalForm extends Component {
 
         this.handleLoading(true)
 
+        const { server_url, axios } = this.props
         const { uid, data } = this.state
         const userDb = FireDatabase.ref(`users/${uid}/personalData`)
 
@@ -102,11 +103,18 @@ class PersonalForm extends Component {
             ...data
         }).then(res => {
             this.handleLoading(false)
-            notif('success', 'Success!' , 'Your data changes have been saved.')
+
+            axios.put(`${server_url}/api/user/profile`, data).then(res => {
+                notif('success', 'Success!' , 'Your data changes have been saved.')
+            }).catch(err => {
+                notif('error', 'Failed!' , 'Failed saving data.')
+            })
         }).catch(err => {
             this.handleLoading(false)
             notif('error', 'Failed!' , 'Failed saving data.')
         })
+
+        
     }
 
     render() {

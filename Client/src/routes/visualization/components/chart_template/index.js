@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import loadable from 'react-loadable'
 import LoadingComponent from 'components/Loading'
 import { withAuth } from 'components/Auth/context/AuthContext'
-import { Responsive, WidthProvider } from "react-grid-layout";
+import { Responsive, WidthProvider } from 'react-grid-layout'
 
 import './style.css'
 

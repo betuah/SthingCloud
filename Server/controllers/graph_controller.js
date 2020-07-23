@@ -91,7 +91,7 @@ exports.create = async (req, res) => {
                     res.status(201).json({ status: 'Success', code: 200, 'msg': 'Success saving data graph!', data: data})
                 })
                 .catch(err => {
-                    console.log(err)
+                    console.log(new Error(err))
                     res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed saving data graph!'})
                 })   
         }
@@ -273,9 +273,9 @@ exports.widget_create = async (req, res) => {
             }
         })
         .catch((err) => {
-            console.log(err)
+            console.log(new Error(err))
             res.status(500).json({ status: 'Error', code: 500, msg: 'Internal Server Error!'})
-        });
+        })
     } catch (error) {
         console.log(error)
         res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
@@ -327,11 +327,11 @@ exports.widget_update = async (req, res) => {
             }
         })
         .catch((err) => {
-            console.log(err)
+            console.log(new Error(err))
             res.status(500).json({ status: 'Error', code: 500, msg: 'Internal Server Error!'})
         });
     } catch (error) {
-        console.log(error)
+        console.log(new Error(error))
         res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Error'})
     }
 }

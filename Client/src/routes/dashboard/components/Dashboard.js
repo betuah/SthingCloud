@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import QueueAnim from 'rc-queue-anim';
 import Breadcrumb from 'components/Layout/Breadcrumb';
 import MaterialIcon from 'components/MaterialIcon';
 import { Redirect } from "react-router-dom";
@@ -16,20 +17,20 @@ class Dashboard extends Component {
 
         return (
             <div>
-                <div className="container-fluid mt-4">    
-                    <div className="row">
-                        <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start" style={{color: '#2196F3' }}>                            
+                <div className="container-fluid mt-4">  
+                    <QueueAnim className="row">
+                        <div key="1" className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start" style={{color: '#2196F3' }}>                            
                             <h5><b><span className="ui-highlight" style={{backgroundColor: '#4CAF50'}}><MaterialIcon icon="dashboard" style={{color: '#FFFFFF'}} />  Dashboard   </span></b></h5>
                         </div>
-                        <div className="col-xs-12 col-md-6 d-flex justify-content-md-end" >
+                        <div key="2" className="col-xs-12 col-md-6 d-flex justify-content-md-end" >
                             <div className="d-none d-sm-block">
                                 <Breadcrumb />
                             </div>
                         </div>
-                        <div className="col-xs-12 col-md-12 p-lg-3 p-3">
+                        <div key="3" className="col-xs-12 col-md-12 p-lg-3 p-3">
                             <MainDashboard />
                         </div>
-                    </div>                                       
+                    </QueueAnim>
                 </div>
             </div>
         )

@@ -9,7 +9,8 @@ const mongoConn = mongoose.connect(`mongodb://${env.db_mongoDB.host}:${env.db_mo
     useNewUrlParser: true,
     useUnifiedTopology: true, 
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    autoIndex: true
 }).then(() => {
     return true
 }).catch((e) => {

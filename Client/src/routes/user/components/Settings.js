@@ -5,6 +5,7 @@ import { TextField, Button, Radio, FormLabel, FormControlLabel } from '@material
 import timeZoneList from 'constants/timeZoneList'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import notif from 'components/NotificationPopUp/notif'
+import QueueAnim from 'rc-queue-anim'
 import {  Modal } from 'antd'
 
 import 'styles/loaders/loaders.scss'
@@ -98,7 +99,7 @@ class Settings extends Component {
             this.setState({
                 data: {
                     ...this.state.data,
-                    timeZone: res.data.timeZone,
+                    timeZone: res.data.timeZone ? res.data.timeZone : 'Asia/Jakarta',
                     host: res.data.smtp.host,
                     port: res.data.smtp.port,
                     secure: res.data.smtp.secure,
@@ -161,6 +162,11 @@ class Settings extends Component {
         this.setState({ 
             ...this.state,
             modalTestMail: false, 
+            loading: {
+                loadingBtnModal: false,
+                loadingBtnSave: false,
+                loadingBtnTestMail: false
+            },
             data: {
                 ...this.state.data,
                 sendToMail: ''
@@ -212,7 +218,7 @@ class Settings extends Component {
 
     render() {
         const { data, timeZoneList, modalTestMail, loading } = this.state
-
+        
         return (
             <Fragment>
                 <Modal
@@ -224,176 +230,177 @@ class Settings extends Component {
                 >
                     <ModalContent {...this.state} onSubmit={this.sendTestMail} onChange={this.handleChange} />
                 </Modal>
-
-                <div className="container-fluid mt-5 mb-5">
-                    <div className="row justify-content-center">
-                        <div className="box box-default pt-5 pb-3 mdc-elevation--z2 col-xs-12 col-md-8">
-                            <form onSubmit={this.handleOk} className="form-v1 row justify-content-center">
-                                <div className="col-xs-12 col-md-8">
-                                    <h6 className="text-grey">Time Zone Settings</h6>
-                                    <div className="col-12 divider divider-dotted"></div>
-                                    <div className="form-group">
-                                        <Autocomplete
-                                            options={timeZoneList.map((option) => option)}
-                                            value={data.timeZone}
-                                            name="timeZone"
-                                            onChange={this.handleTimeZone}
-                                            renderInput={(params) => 
-                                                <TextField 
-                                                    {...params}
-                                                    label="Time Zone"
-                                                />
-                                            }
-                                        />
-                                    </div>
-                                    <h6 className="text-grey mt-5">SMTP Settings</h6>
-                                    <div className="col-12 divider divider-dotted"></div>
-                                    <div className="form-group">
-                                        <div className="input-group-v1">
-                                            <div className="input-group-icon">
-                                                <MaterialIcon icon="local_post_office" style={{color: '#00BCD4'}} />
-                                            </div>
-                                            <TextField                                   
-                                                id="host"
-                                                name="host"
-                                                label="HOST"
-                                                type="text"
-                                                fullWidth
-                                                autoComplete="off"
-                                                onChange={this.handleChange}                                            
-                                                placeholder="ex: smtp.gmail.com"
-                                                value={data.host}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
+                <QueueAnim>
+                    <div key='1' className="container-fluid mt-5 mb-5">
+                        <div className="row justify-content-center">
+                            <div className="box box-default pt-5 pb-3 mdc-elevation--z2 col-xs-12 col-md-8">
+                                <form onSubmit={this.handleOk} className="form-v1 row justify-content-center">
+                                    <QueueAnim className="col-xs-12 col-md-8">
+                                        <h6 key='2' className="text-grey">Time Zone Settings</h6>
+                                        <div key='3' className="col-12 divider divider-dotted"></div>
+                                        <div key='4' className="form-group">
+                                            <Autocomplete
+                                                options={timeZoneList.map((option) => option)}
+                                                value={data.timeZone}
+                                                name="timeZone"
+                                                onChange={this.handleTimeZone}
+                                                renderInput={(params) => 
+                                                    <TextField 
+                                                        {...params}
+                                                        label="Time Zone"
+                                                    />
+                                                }
                                             />
                                         </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <div className="input-group-v1">
-                                            <div className="input-group-icon">
-                                                <MaterialIcon icon="cloud" style={{color: '#00BCD4'}} />
+                                        <h6 key='5' className="text-grey mt-5">SMTP Settings</h6>
+                                        <div key='6' className="col-12 divider divider-dotted"></div>
+                                        <div key='7' className="form-group">
+                                            <div className="input-group-v1">
+                                                <div className="input-group-icon">
+                                                    <MaterialIcon icon="local_post_office" style={{color: '#00BCD4'}} />
+                                                </div>
+                                                <TextField                                   
+                                                    id="host"
+                                                    name="host"
+                                                    label="HOST"
+                                                    type="text"
+                                                    fullWidth
+                                                    autoComplete="off"
+                                                    onChange={this.handleChange}                                            
+                                                    placeholder="ex: smtp.gmail.com"
+                                                    value={data.host}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                />
                                             </div>
-                                            <TextField                                   
-                                                id="port"
-                                                name="port"
-                                                label="PORT"
-                                                type="number"
-                                                fullWidth
-                                                autoComplete="off"
-                                                onChange={this.handleChange}                                            
-                                                placeholder="ex: 465"
-                                                value={data.port}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
                                         </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <div className="input-group-v1">
-                                            <FormLabel component="legend">Secure</FormLabel>
-                                            <FormControlLabel value={1} control={
-                                                <Radio
-                                                    checked={Number(data.secure) === 1}
-                                                    onChange={this.handleChange}
-                                                    value={'1'}
-                                                    name="secure"
-                                                    aria-label="secure"
-                                                    color="primary"
+                                        <div key='8' className="form-group">
+                                            <div className="input-group-v1">
+                                                <div className="input-group-icon">
+                                                    <MaterialIcon icon="cloud" style={{color: '#00BCD4'}} />
+                                                </div>
+                                                <TextField                                   
+                                                    id="port"
+                                                    name="port"
+                                                    label="PORT"
+                                                    type="number"
+                                                    fullWidth
+                                                    autoComplete="off"
+                                                    onChange={this.handleChange}                                            
+                                                    placeholder="ex: 465"
+                                                    value={data.port}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
                                                 />
-                                            } label="True" />
-                                            <FormControlLabel value={0} control={
-                                                <Radio
-                                                    checked={Number(data.secure) === 0}
-                                                    onChange={this.handleChange}
-                                                    value={'0'}
-                                                    name="secure"
-                                                    aria-label="secure"
-                                                    color="primary"
-                                                />
-                                            } label="False" />
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <div className="input-group-v1">
-                                            <FormLabel component="legend">TLS</FormLabel>
-                                            <FormControlLabel value={1} control={
-                                                <Radio
-                                                    checked={Number(data.tls) === 1}
-                                                    onChange={this.handleChange}
-                                                    value={1}
-                                                    name="tls"
-                                                    aria-label="tls"
-                                                    color="primary"
-                                                />
-                                            } label="True" />
-                                            <FormControlLabel value={0} control={
-                                                <Radio
-                                                    checked={Number(data.tls) === 0}
-                                                    onChange={this.handleChange}
-                                                    value={0}
-                                                    name="tls"
-                                                    aria-label="tls"
-                                                    color="primary"
-                                                />
-                                            } label="False" />
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <div className="input-group-v1">
-                                            <div className="input-group-icon">
-                                                <MaterialIcon icon="account_box" style={{color: '#00BCD4'}} />
                                             </div>
-                                            <TextField                                   
-                                                id="username"
-                                                name="username"
-                                                label="User Name"
-                                                type="email"
-                                                fullWidth
-                                                autoComplete="off"
-                                                onChange={this.handleChange}                                            
-                                                placeholder="ex: sthing@gmail.com"
-                                                value={data.username}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
                                         </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <div className="input-group-v1">
-                                            <div className="input-group-icon">
-                                                <MaterialIcon icon="lock" style={{color: '#00BCD4'}} />
+                                        <div key='9' className="form-group">
+                                            <div className="input-group-v1">
+                                                <FormLabel component="legend">Secure</FormLabel>
+                                                <FormControlLabel value={1} control={
+                                                    <Radio
+                                                        checked={Number(data.secure) === 1}
+                                                        onChange={this.handleChange}
+                                                        value={'1'}
+                                                        name="secure"
+                                                        aria-label="secure"
+                                                        color="primary"
+                                                    />
+                                                } label="True" />
+                                                <FormControlLabel value={0} control={
+                                                    <Radio
+                                                        checked={Number(data.secure) === 0}
+                                                        onChange={this.handleChange}
+                                                        value={'0'}
+                                                        name="secure"
+                                                        aria-label="secure"
+                                                        color="primary"
+                                                    />
+                                                } label="False" />
                                             </div>
-                                            <TextField                                   
-                                                id="password"
-                                                name="password"
-                                                label="Password"
-                                                type="password"
-                                                fullWidth
-                                                autoComplete="off"
-                                                onChange={this.handleChange}                                            
-                                                placeholder="Your password"
-                                                value={data.password}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                            />
                                         </div>
-                                    </div>
-                                    <div className="form-group d-flex justify-content-center">
-                                        <Button className="col-md-4" variant="contained" disabled={loading.loadingBtnTestMail} onClick={this.showModal}>{loading.loadingBtnTestMail ? <Loading /> : 'Send Test Mail'}</Button>
-                                    </div>
-                                    <div className="col-12 divider divider-dotted"></div>
-                                    <div className="form-group d-flex justify-content-center">
-                                        <Button className="col-md-4" variant="contained" color="primary" type="submit" disabled={loading.loadingBtnSave}> {loading.loadingBtnSave ? <Loading /> : 'Save'} </Button>
-                                    </div>
-                                </div>
-                            </form>
+                                        <div key='10' className="form-group">
+                                            <div className="input-group-v1">
+                                                <FormLabel component="legend">TLS</FormLabel>
+                                                <FormControlLabel value={1} control={
+                                                    <Radio
+                                                        checked={Number(data.tls) === 1}
+                                                        onChange={this.handleChange}
+                                                        value={1}
+                                                        name="tls"
+                                                        aria-label="tls"
+                                                        color="primary"
+                                                    />
+                                                } label="True" />
+                                                <FormControlLabel value={0} control={
+                                                    <Radio
+                                                        checked={Number(data.tls) === 0}
+                                                        onChange={this.handleChange}
+                                                        value={0}
+                                                        name="tls"
+                                                        aria-label="tls"
+                                                        color="primary"
+                                                    />
+                                                } label="False" />
+                                            </div>
+                                        </div>
+                                        <div key='11' className="form-group">
+                                            <div className="input-group-v1">
+                                                <div className="input-group-icon">
+                                                    <MaterialIcon icon="account_box" style={{color: '#00BCD4'}} />
+                                                </div>
+                                                <TextField                                   
+                                                    id="username"
+                                                    name="username"
+                                                    label="User Name"
+                                                    type="email"
+                                                    fullWidth
+                                                    autoComplete="off"
+                                                    onChange={this.handleChange}                                            
+                                                    placeholder="ex: sthing@gmail.com"
+                                                    value={data.username}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div key='12' className="form-group">
+                                            <div className="input-group-v1">
+                                                <div className="input-group-icon">
+                                                    <MaterialIcon icon="lock" style={{color: '#00BCD4'}} />
+                                                </div>
+                                                <TextField                                   
+                                                    id="password"
+                                                    name="password"
+                                                    label="Password"
+                                                    type="password"
+                                                    fullWidth
+                                                    autoComplete="off"
+                                                    onChange={this.handleChange}                                            
+                                                    placeholder="Your password"
+                                                    value={data.password}
+                                                    InputLabelProps={{
+                                                        shrink: true,
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div key='13' className="form-group d-flex justify-content-center">
+                                            <Button className="col-md-4" variant="contained" disabled={loading.loadingBtnTestMail} onClick={this.showModal}>{loading.loadingBtnTestMail ? <Loading /> : 'Send Test Mail'}</Button>
+                                        </div>
+                                        <div key='14' className="col-12 divider divider-dotted"></div>
+                                        <div key='15' className="form-group d-flex justify-content-center">
+                                            <Button className="col-md-4" variant="contained" color="primary" type="submit" disabled={loading.loadingBtnSave}> {loading.loadingBtnSave ? <Loading /> : 'Save'} </Button>
+                                        </div>
+                                    </QueueAnim>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </QueueAnim>
             </Fragment>
         )
     }

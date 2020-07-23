@@ -9,6 +9,8 @@ const userDataSchema = new Schema({
         required: true,
         unique: true
     },
+    personalData : {},
+    roles: {},
     timeZone : { 
         type: String, 
         trim: true,

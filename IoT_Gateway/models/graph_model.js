@@ -2,11 +2,9 @@ const mongoose  = require('mongoose');
 const Schema    = mongoose.Schema;
 
 const WidgetSchema = new Schema({
-    _id         : { 
+    _id : { 
         type: String, 
-        trim: true,
-        unique: true,
-        required: true
+        trim: true
     },
     widgetTitle: {
         type: String,
@@ -18,7 +16,6 @@ const WidgetSchema = new Schema({
     },
     resourceId: {
         type: String,
-        index: true,
         trim: true,
     },
     widgetChart: {
@@ -27,8 +24,6 @@ const WidgetSchema = new Schema({
     },
     dataId: {
         type: String,
-        index: true,
-        unique: true,
         trim: true,
     },
     dataValue: {

@@ -50,25 +50,21 @@ class CleanText extends Component {
     }
 
     componentWillUnmount() {
-        const { server_url, axios, graphId, _id } = this.props
-
-        this._isMounted && axios.put(`${server_url}/api/graph/widgetData/${graphId}/${_id}`, { value: this.state.dataValue })
-
         this._isMounted = false;
     }
 
     editWidget() {
-        const { _id, showEditModal } = this.props
+        const { widgetId, showEditModal } = this.props
 
-        showEditModal(_id)
+        showEditModal(widgetId)
     }
 
     deleteWidget() {
         deleteConfirm(confirm => {
-            const { server_url, axios, graphId, _id, updateData } = this.props
+            const { server_url, axios, graphId, widgetId, updateData } = this.props
             
             if (confirm)
-                axios.delete(`${server_url}/api/graph/widget/${graphId}/${_id}`)
+                axios.delete(`${server_url}/api/graph/widget/${graphId}/${widgetId}`)
                 .then(res => {
                     updateData()
                     notif('success', res.data.status , 'Delete widget is success.')   
@@ -90,12 +86,12 @@ class CleanText extends Component {
                                 <Typography noWrap>{this.state.widgetTitle}</Typography>
                             </div>
                             <div className="col-2 d-flex justify-content-end">
-                                <Tooltip title="Edit Widget" className={!this.props.Editable && 'd-none'}>
+                                <Tooltip title="Edit Widget" className={!this.props.Editable ? 'd-none' : ''}>
                                     <IconButton aria-label="edit" size="small" onClick={this.editWidget}>
                                         <MaterialIcon icon="edit" style={{color: '#FF9800'}}></MaterialIcon>
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Delete Widget" className={!this.props.Editable && 'd-none'}>                                
+                                <Tooltip title="Delete Widget" className={!this.props.Editable ? 'd-none' : ''}>                                
                                     <IconButton aria-label="delete" size="small" onClick={this.deleteWidget}>
                                         <MaterialIcon icon="delete" style={{color: '#F44336'}}></MaterialIcon>
                                     </IconButton>

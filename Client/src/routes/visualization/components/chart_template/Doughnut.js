@@ -136,12 +136,12 @@ class Doughnut extends Component {
                                 <Typography noWrap>{this.state.widgetTitle}</Typography>
                             </div>
                             <div className="col-2 d-flex justify-content-end">
-                                <Tooltip title="Edit Widget" className={!this.props.Editable && 'd-none'}>
+                                <Tooltip title="Edit Widget" className={!this.props.Editable ? 'd-none' : ''}>
                                     <IconButton aria-label="edit" size="small" onClick={this.editWidget}>
                                         <MaterialIcon icon="edit" style={{color: '#FF9800'}}></MaterialIcon>
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip title="Delete Widget" className={!this.props.Editable && 'd-none'}>                                
+                                <Tooltip title="Delete Widget" className={!this.props.Editable ? 'd-none' : ''}>                                
                                     <IconButton aria-label="delete" size="small" onClick={this.deleteWidget}>
                                         <MaterialIcon icon="delete" style={{color: '#F44336'}}></MaterialIcon>
                                     </IconButton>

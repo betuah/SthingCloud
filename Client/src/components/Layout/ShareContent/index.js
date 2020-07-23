@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import loadable from 'react-loadable'
 import LoadingComponent from 'components/Loading'
-import { SmileOutlined } from '@ant-design/icons';
-import APPCONFIG from 'constants/appConfig';
+import { SmileOutlined } from '@ant-design/icons'
 import { InitConfig } from 'components/Auth/context/ConfigContext'
 import { LinearProgress } from '@material-ui/core'
+import AppFooter from 'components/Layout/Footer'
 
 let ChartTemplate = loadable({
     loader: () => import('./chart_template'),
@@ -72,11 +72,8 @@ class ShareContent extends Component {
                         <div className="col-xs-12 col-md-12">
                             <ChartTemplate userId={data.userId} layouts={data.layouts} widgetData={data.graph_widget} graphId={match.params.graphId} updateData={this.updateData} />
                         </div>
-                        <div className="col-xs-12 col-md-12 pt-3">
-                            <div className="divider divider-solid"></div>
-                            <div className="h-100 d-flex justify-content-center align-items-center">
-                                <p className="text-primary font-weight-bolder">POWERED BY © <a className="brand link-animated-hover link-hover-v2" rel="_blank" href={'#/'}>{APPCONFIG.brand} {APPCONFIG.year}</a></p>
-                            </div>
+                        <div className="col-xs-12 col-md-12 pt-3 footer">
+                            <AppFooter />
                         </div>
                     </div>
                 </div>              

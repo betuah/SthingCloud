@@ -70,8 +70,7 @@ exports.signIn = async (req, res) => {
 exports.signUp = async (req, res) => {
     try {
         const fireDatabase = firebaseDatabaseAdmin.ref(`users/${req.body.uid}`)
-
-        fireDatabase.set({
+        const userDataBody = {
             personalData : {
                 fullName: req.body.fullName,
                 email: req.body.email,
@@ -85,13 +84,43 @@ exports.signUp = async (req, res) => {
                 id: 1,
                 title: "user"
             }
+        }
+
+        fireDatabase.set({
+            ...userDataBody
         }).then(() => {
-            const msg = {
-                status: "Success",
-                code: "200",
-                msg: "Success Saving Data!"
+            const userSetData = {
+                userId   : req.body.uid,
+                ...userDataBody,
+                timeZone : 'Asia/Jakarta',
+                smtp     : {
+                    host: '',
+                    port: '',
+                    secure: 1,
+                    tls: 1,
+                    username: '',
+                    password: ''
+                }
             }
-            res.status(200).json(msg)
+
+            userSettingModel.create(userSetData)
+            .then(result => {
+                const msg = {
+                    status: "Success",
+                    code: "200",
+                    msg: "Success Saving Data!"
+                }
+                res.status(200).json(msg)
+            })
+            .catch(err => {
+                console.log(new Error(err))
+                const msg = {
+                    status: "INTERNAL_SERVER_ERROR",
+                    code: 500,
+                    msg: "Internal Server Error! Something wrong in firebase backend!"
+                }
+                res.status(500).json(msg)
+            })
         }).catch(err => {
             console.log(new Error(err))
             const msg = {
@@ -101,27 +130,6 @@ exports.signUp = async (req, res) => {
             }
             res.status(500).json(msg)
         })
-
-        const userSetData = {
-            userId   : req.body.uid,
-            timeZone : null,
-            smtp     : {
-                host: '',
-                port: '',
-                secure: 1,
-                tls: 1,
-                username: '',
-                password: ''
-            }
-        }
-
-        userSettingModel.create(userSetData)
-        .then(res => {
-            resolve(res)
-        })
-        .catch(err => {
-            reject(err, true)
-        })  
     } catch (error) {
         console.log(new Error(error));
         const data = {

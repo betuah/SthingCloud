@@ -8,6 +8,9 @@ module.exports = (app) => {
 
     app.route('/api/user/settings')
         .post(authMiddleware, UserSetting.update)
+    
+    app.route('/api/user/profile')
+        .put(authMiddleware, UserSetting.updateProfile)
 
     app.route('/api/user/avatar/upload')
         .post(authMiddleware, UserSetting.avatarUpload)

@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import QueueAnim from 'rc-queue-anim'
 import loadable from 'react-loadable'
 import LoadingComponent from 'components/Loading'
 import MaterialIcon from 'components/MaterialIcon'
@@ -107,14 +108,14 @@ class Graph extends Component {
                 <ModalWidget {...this.state} updateData={this.updateData} closeWidgetModal={this.closeWidgetModal}/>  
                 
                 <div className="container-fluid">
-                    <div className="row align-items-center">
-                        <div className="col-12 d-flex mt-3 justify-content-between align-items-center">
-                            <div>
+                    <QueueAnim className="row align-items-center">
+                        <div key="1" className="col-12 d-flex mt-3 justify-content-between align-items-center">
+                            <div key="2">
                                 <Typography variant="h5">
                                     <span className="ui-highlight font-weight-bold" style={{backgroundColor: '#FF9800'}}><MaterialIcon icon="bubble_chart" style={{color: '#FFFFFF'}} /> {data.graph}</span>
                                 </Typography>
                             </div>
-                            <div>
+                            <div key="3">
                                 <Tooltip title="Add Widget">
                                     <IconButton aria-label="Add Widget" size="medium" onClick={this.showWidgetModal}>
                                         <MaterialIcon icon="add_circle" style={{color: '#00BCD4'}}></MaterialIcon>
@@ -134,11 +135,11 @@ class Graph extends Component {
                                 </Tooltip>
                             </div>
                         </div>
-                        <div className="col-12 divider divider-dotted"></div>
-                        <div className="col-12">
+                        <div key="4" className="col-12 divider divider-dotted"></div>
+                        <div key="5" className="col-12">
                             <ChartTemplate {...this.state} graphId={match.params.graphId} updateData={this.updateData} />
                         </div>
-                    </div>
+                    </QueueAnim>
                 </div>
             </Fragment>         
         )

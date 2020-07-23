@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import QueueAnim from 'rc-queue-anim'
 import { Redirect } from "react-router-dom"
 import { withAuth } from 'components/Auth/context/AuthContext'
 import DeviceList from './DeviceList'
@@ -22,22 +23,22 @@ class Device extends Component {
         return (
             <Fragment>
                 <div className="container-fluid mt-4">
-                    <div className="row">
-                        <div className="col-12 d-flex justify-content-center justify-content-md-between">
-                            <div className="align-self-center">
+                    <QueueAnim className="row">
+                        <div key="1" className="col-12 d-flex justify-content-center justify-content-md-between">
+                            <div key="2" className="align-self-center">
                                 <Typography variant="h5">
                                     <span className="ui-highlight font-weight-bold" style={{backgroundColor: '#2196F3'}}><MaterialIcon icon="developer_board" style={{color: '#FFFFFF'}} /> Devices</span>
                                 </Typography>
                             </div>
-                            <div className="d-none d-sm-block align-self-center">
+                            <div key="3" className="d-none d-sm-block align-self-center">
                                 <Breadcrumb />
                             </div>     
                         </div>
-                        <div className="col-12 divider divider-dotted"></div>
-                        <div className="col-xs-12 col-md-12">
+                        <div key="4" className="col-12 divider divider-dotted"></div>
+                        <div key="5" className="col-xs-12 col-md-12">
                             <DeviceList {...this.props} />
                         </div>
-                    </div>                                       
+                    </QueueAnim>                                       
                 </div>
             </Fragment>
         )

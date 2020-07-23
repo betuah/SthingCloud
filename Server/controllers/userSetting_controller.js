@@ -61,6 +61,32 @@ exports.update = async (req, res) => {
     }
 }
 
+exports.updateProfile = async (req, res) => {
+    try {
+        usersData.findOneAndUpdate({ userId: req.id_user },
+        { 
+            $set: { 
+                "personalData.fullName" : req.body.fullName,
+                "personalData.gender": req.body.gender,
+                "personalData.address": req.body.address,
+                "personalData.organization": req.body.organization,
+                "personalData.profession": req.body.profession,
+                "personalData.photoUrl": req.body.photoUrl
+            }
+        }, { upsert: true })
+        .then(data => {
+            res.status(201).json({ status: 'Success', code: 200, 'msg': 'Data is updated!', data: data})
+        })
+        .catch(err => {
+            console.log(new Error(err))
+            res.status(500).json({ status: 'Failed', code: 400, 'msg' : 'Failed update data!' + err})
+        })
+    } catch (error) {
+        console.log(new Error(error))
+        res.status(500).json({status: 'Error', code: '500', msg:'Internal Server Errorss'})
+    }
+}
+
 exports.avatarUpload = (req, res) => {
     const path = 'public/avatars'
 
@@ -133,6 +159,20 @@ exports.avatarUpload = (req, res) => {
                 }
 
                 return json
+            })
+
+            usersData.findOneAndUpdate({ userId: req.id_user },
+            { 
+                $set: { 
+                    "personalData.photoUrl" : {
+                        sourceId: 'api',
+                        url: fileData.filename
+                    }
+                }
+            }, { upsert: true })
+            .then(data => {})
+            .catch(err => {
+                console.log(new Error(err))
             })
             
             res.status(sendToFirebase.code).json(sendToFirebase)

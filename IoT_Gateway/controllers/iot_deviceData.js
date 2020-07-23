@@ -228,6 +228,7 @@ const setNotif = (data) => new Promise((resolve, reject) => {
 })
 
 const sendMail = (data) => new Promise((resolve, reject) => {
+    console.log('test')
     const mailSettings = {
         host: `${data.host}`,
         port: data.port,
