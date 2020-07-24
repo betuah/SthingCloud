@@ -4,6 +4,8 @@ const express   = require('express'),
     helmet      = require('helmet'),
     bodyParser  = require('body-parser'),
     env         = require('./env'),
+    fs          = require("fs"),
+    https       = require('https'),
     port        = env.port || 7000
 
 app.use(helmet())
@@ -41,7 +43,16 @@ iotRoute(app)
 const conn = require('./config/db_mongoDB')
 
 if(conn) {
-    app.listen(port, () => console.log(`IoT Gateway listen on ${env.domain}:${env.port}`));
+    if (env.node_env === 'production') {
+        const privateKey  = fs.readFileSync(`${env.httpsPrivateKey}`, 'utf8')
+        const certificate = fs.readFileSync(`${env.httpsCertificate}`, 'utf8')
+        const credentials = {key: privateKey, cert: certificate}
+        const httpsApps   = https.createServer(credentials, app)
+
+        httpsApps.listen(port, () => console.log(`IoT Gateway listen on ${env.domain}:${env.port}`))
+    } else {
+        app.listen(port, () => console.log(`IoT Gateway listen on ${env.domain}:${env.port}`))
+    }
 } else {
     console.log(new Error(`${env.domain}:${env.port} cannot connect to MongoDB!`))
 }

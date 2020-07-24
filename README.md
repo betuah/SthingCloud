@@ -142,6 +142,7 @@ $ npm run start
 - Change IoT_Gateway port from 5000 to 7000
 - Add client_domain_prod for build client to port 5000
 - Fix visualization widget layout bugs
+- Add https for production env
 
 ## Version Change log (STHING_v08)
 - Change notif status iot_device controller in IoT Gateway

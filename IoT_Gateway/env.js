@@ -2,6 +2,9 @@ require('dotenv').config();
 
 const env = {
     port: process.env.PORT,
+    node_env: process.env.NODE_ENV,
+    httpsPrivateKey: process.env.HTTPS_PRIVATE_KEY_PATH,
+    httpsCertificate: process.env.HTTPS_CERTIFICATE_PATH,
     domain: process.env.DOMAIN,
     http_port: process.env.HTTP_PORT, 
     https_port: process.env.HTTPS_PORT,

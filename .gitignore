@@ -11,6 +11,7 @@ Server/config/serviceAccountKey.json
 Server/*.env
 Server/public/avatars/*
 Server/package-lock.json
+ssl
 
 # SocketIO .gitignore
 SocketIO/*.env

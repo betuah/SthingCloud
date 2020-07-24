@@ -1,8 +1,5 @@
 const authMiddleware = require('../middlewares/auth_middleware')
 const Auth = require('../controllers/auth_controller')
-const csrf        = require('csurf')
-
-var csrfProtection = csrf({ cookie: true })
 
 module.exports = (app) => {
     

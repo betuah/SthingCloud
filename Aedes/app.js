@@ -1,10 +1,17 @@
 const Aedes     = require('aedes')()
-const server    = require('net').createServer(Aedes.handle)
+const fs        = require('fs')
 const env       = require('./env')
 const socket    = require('socket.io-client')(`${env.socket_domain}`, {extraHeaders: {origin: `${env.domain}:${env.port}`}})
 const auth      = require('./controllers/auth')
 const port      = env.port || 1883
 const admin_user = '@dm1n'
+
+const options = {
+    key: fs.readFileSync(`${env.httpsPrivateKey}`),
+    cert: fs.readFileSync(`${env.httpsCertificate}`)
+}
+
+const server = env.node_env === 'production' ? require('tls').createServer(options, Aedes.handle) : require('net').createServer(Aedes.handle)
 
 Aedes.on('clientReady', client => {
     console.log('Client connected :', client.id)

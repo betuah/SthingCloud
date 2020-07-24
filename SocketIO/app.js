@@ -2,13 +2,19 @@ const   express         = require("express"),
         http            = require("http"),
         socketIo        = require("socket.io"),
         env             = require('./env'),
-        iotDeviceModel  = require('./models/device_model')
+        iotDeviceModel  = require('./models/device_model'),
+        fs              = require("fs"),
+        https           = require('https')
 
 /* Setting up express and adding socketIo middleware */
-const app       = express()
-const server    = http.createServer(app)
-const io        = socketIo(server)
-const port      = env.port || 4000 //Port from environment variable or default - 4000
+const app           = express()
+const privateKey    = fs.readFileSync(`${env.httpsPrivateKey}`, 'utf8')
+const certificate   = fs.readFileSync(`${env.httpsCertificate}`, 'utf8')
+const credentials   = {key: privateKey, cert: certificate}
+const httpsApps     = https.createServer(credentials, app)
+const httpApps      = http.createServer(app)
+const io            = socketIo(env.node_env === 'production' ? httpsApps : httpApps)
+const port          = env.port || 4000 //Port from environment variable or default - 4000
 
 /* Socket IO */
 const whitelist = [`${env.iot_gateway_domain}`,`${env.client_domain}`, `${env.client_domain_prod}`,`${env.mqtt_broker_domain}`]
@@ -75,7 +81,11 @@ io.on("connection", socket => {
 const conn = require('./config/db_mongoDB')
 
 if(conn) {
-    server.listen(port, () => console.log(`Socket IO listen on ${env.domain}:${env.port}`))
+    if (env.node_env === 'production') {
+        httpsApps.listen(port, () => console.log(`Server IO listen on ${env.domain}:${env.port}`))
+    } else {
+        httpApps.listen(port, () => console.log(`Socket IO listen on ${env.domain}:${env.port}`))
+    }
 } else {
     console.log(`${env.domain}:${env.port} cannot connect to MongoDB!`)
 }
