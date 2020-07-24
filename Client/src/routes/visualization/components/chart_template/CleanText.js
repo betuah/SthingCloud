@@ -54,17 +54,18 @@ class CleanText extends Component {
     }
 
     editWidget() {
-        const { widgetId, showEditModal } = this.props
+        const { _id, showEditModal } = this.props
+        console.log(this.props)
 
-        showEditModal(widgetId)
+        showEditModal(_id)
     }
 
     deleteWidget() {
         deleteConfirm(confirm => {
-            const { server_url, axios, graphId, widgetId, updateData } = this.props
+            const { server_url, axios, graphId, _id, updateData } = this.props
             
             if (confirm)
-                axios.delete(`${server_url}/api/graph/widget/${graphId}/${widgetId}`)
+                axios.delete(`${server_url}/api/graph/widget/${graphId}/${_id}`)
                 .then(res => {
                     updateData()
                     notif('success', res.data.status , 'Delete widget is success.')   

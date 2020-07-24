@@ -10,8 +10,6 @@ const express = require('express'),
     https       = require('https'),
     port        = env.port || 8000
 
-   
-
 app.use(helmet())
 app.disable("x-powered-by")
 app.use(bodyParser.urlencoded({ extended: true }))
