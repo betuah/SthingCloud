@@ -4,7 +4,6 @@ import { Typography, IconButton, Tooltip } from '@material-ui/core'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
-import 'echarts/theme/macarons'
 
 class Chart extends Component {
     constructor(props) {
@@ -14,11 +13,16 @@ class Chart extends Component {
 
         this.state = {
             widgetTitle: '',
-            dataValue: 0
+            dataValue: 0,
+            display: {
+                min: 0,
+                max: 100
+            }
         }
 
         this.deleteWidget = this.deleteWidget.bind(this)
         this.editWidget = this.editWidget.bind(this)
+        this.normalise = this.normalise.bind(this)
     }
 
     UNSAFE_componentWillMount() {
@@ -26,10 +30,11 @@ class Chart extends Component {
     }
     
     componentDidMount() {
-        const { widgetTitle, resourceId, dataId, dataValue, socket } = this.props
+        const { widgetTitle, resourceId, dataId, dataValue, display, socket } = this.props
         this._isMounted && this.setState({
             widgetTitle: widgetTitle,
-            dataValue: dataValue
+            dataValue: dataValue,
+            display: display
         })
 
         socket.on(`${resourceId}-${dataId}`, resData => {
@@ -40,19 +45,23 @@ class Chart extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.widgetTitle === this.state.widgetTitle && this.state.dataValue === nextState.dataValue ? ( this.props.Editable === nextProps.Editable ? false : true ) : true
+        return nextProps.widgetTitle === this.state.widgetTitle && this.state.dataValue === nextState.dataValue ? ( this.props.Editable === nextProps.Editable ? (nextProps.display.min === this.state.display.min || nextProps.display.min === this.state.display.min ? false : true) : true ) : true
     }
 
     componentDidUpdate() {
-        const { widgetTitle } = this.props
+        const { widgetTitle, display } = this.props
         this._isMounted && this.setState({
-            widgetTitle: widgetTitle
+            ...this.state,
+            widgetTitle: widgetTitle,
+            display: display
         })
     }
 
     componentWillUnmount() {
         this._isMounted = false
     }
+
+    normalise = value => (value - this.state.display.min) * 100 / (this.state.display.max - this.state.display.min)
 
     editWidget() {
         const { _id, showEditModal } = this.props
@@ -104,7 +113,7 @@ class Chart extends Component {
                 "axisLine": {
                     "lineStyle": {
                         "width": 35,
-                        "color": [[`${this.state.dataValue / 100}`, "#2d99e2"], [1, "#dce3ec"]]
+                        "color": [[`${this.normalise(this.state.dataValue) / 100}`, "#2d99e2"], [1, "#dce3ec"]]
                     }
                 },
                 "axisTick": {

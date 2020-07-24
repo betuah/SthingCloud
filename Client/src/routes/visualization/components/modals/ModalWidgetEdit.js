@@ -119,6 +119,47 @@ const Content = props => {
                     />
                 </div>
             </div>
+            <div className={props.data.widgetChart === 0 || props.data.widgetChart === 'CL' ? "form-group d-none" : "form-group"}>
+                <div className="d-flex">
+                    <div className="input-group-v1 mr-2">
+                        <div className="input-group-icon">
+                            <MaterialIcon icon="trending_down" style={{color: '#00BCD4'}} />
+                        </div>
+                        <TextField
+                        className="row"
+                            id="display_min"
+                            name="display_min"
+                            label="Display Min Value"
+                            type="number"
+                            autoComplete="off"
+                            onChange={props.onChange}                                
+                            placeholder="Min range"
+                            value={props.data.display_min}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </div>
+                    <div className="input-group-v1 ml-2">
+                        <div className="input-group-icon">
+                            <MaterialIcon icon="trending_up" style={{color: '#00BCD4'}} />
+                        </div>
+                        <TextField
+                            id="display_max"
+                            name="display_max"
+                            label="Display Max Value"
+                            type="number"
+                            autoComplete="off"
+                            onChange={props.onChange}                                
+                            placeholder="Max range"
+                            value={props.data.display_max}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </div>
+                </div>
+            </div>
         </form>
     )
 }
@@ -554,6 +595,8 @@ class ModalEditWidget extends Component {
                 widgetChart: 0,
                 dataId: '',
                 dataValue: '',
+                display_max: 100,
+                display_min: 0,
                 notifMax: 0,
                 sendMailMax: 0,
                 mailListMax: '',
@@ -639,6 +682,8 @@ class ModalEditWidget extends Component {
                 widgetChart: n.widgetChart,
                 dataId: n.dataId,
                 dataValue: n.dataValue,
+                display_max: n.display ? n.display.max : 100,
+                display_min: n.display ? n.display.min : 0,
                 notifMax: n.settings.triggerMax.notif,
                 sendMailMax: n.settings.triggerMax.mail,
                 mailListMax: n.settings.triggerMax.mailList,
@@ -713,7 +758,6 @@ class ModalEditWidget extends Component {
 
         if (widgetTitle === '' || resourceType === 0 || resourceId === 0 || widgetChart === 0 || dataId === '') {
             notif('warning', 'Warning' , 'Please fill all required fields!')
-            console.log('tes')
         } else {
             axios.put(`${server_url}/api/graph/widget/${graphId}/${widgetId}`, this.state.data)
             .then(res => {
@@ -745,6 +789,8 @@ class ModalEditWidget extends Component {
                 widgetChart: 0,
                 dataId: '',
                 dataValue: '',
+                display_max: 100,
+                display_min: 0,
                 notifMax: '0',
                 sendMailMax: '0',
                 mailListMax: '',

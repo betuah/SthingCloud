@@ -122,7 +122,45 @@ const Content = props => {
                             />
                         </div>
                     </div>
-                </form>                  
+                    <div className={props.data.widgetChart === 0 || props.data.widgetChart === 'CL' ? "form-group d-none" : "form-group d-flex row d-blok"}>
+                        <div className="input-group-v1 col-6">
+                            <div className="input-group-icon col-1">
+                                <MaterialIcon icon="trending_down" style={{color: '#00BCD4'}} />
+                            </div>
+                            <TextField
+                                id="display_min"
+                                name="display_min"
+                                label="Display Min Value"
+                                type="number"
+                                autoComplete="off"
+                                onChange={props.onChange}                                
+                                placeholder="Min range"
+                                value={props.data.display_min}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </div>
+                        <div className="input-group-v1 col-6">
+                            <div className="input-group-icon col-1">
+                                <MaterialIcon icon="trending_up" style={{color: '#00BCD4'}} />
+                            </div>
+                            <TextField
+                                id="display_max"
+                                name="display_max"
+                                label="Display Max Value"
+                                type="number"
+                                autoComplete="off"
+                                onChange={props.onChange}                                
+                                placeholder="Max range"
+                                value={props.data.display_max}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                        </div>
+                    </div>
+                </form>
             </div>
             <div className="divider divider-dotted"></div>
         </div>
@@ -139,7 +177,9 @@ class ModalWidget extends Component {
                 resourceType: 0,
                 resourceId: 0,
                 widgetChart: 0,
-                dataId: ''
+                dataId: '',
+                display_max: 100,
+                display_min: 0
             },
             chart: [
                 { code: 'T', value: 'Tachometer' },
@@ -216,7 +256,9 @@ class ModalWidget extends Component {
                 resourceType: 0,
                 resourceId: 0,
                 widgetChart: 0,
-                dataId: ''
+                dataId: '',
+                display_max: 100,
+                display_min: 0
             },
             deviceList: [],
             bucketList: []

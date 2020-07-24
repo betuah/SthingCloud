@@ -238,6 +238,10 @@ exports.widget_create = async (req, res) => {
             widgetChart : req.body.widgetChart,
             dataId: req.body.dataId,
             dataValue: 0,
+            display: {
+                min: req.body.display_min,
+                max: req.body.display_max
+            },
             settings: {
                 triggerMax: {
                     active: '0',
@@ -291,6 +295,10 @@ exports.widget_update = async (req, res) => {
             widgetChart : req.body.widgetChart,
             dataId: req.body.dataId,
             dataValue: req.body.dataValue,
+            display: {
+                min: req.body.display_min,
+                max: req.body.display_max
+            },
             settings: {
                 triggerMax: {
                     active: req.body.triggerMaxActive,

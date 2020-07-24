@@ -13,16 +13,21 @@ class ProgressBar extends Component {
 
         this.state = {
             widgetTitle: '',
-            dataValue: 0
+            dataValue: 0,
+            display: {
+                min: 0,
+                max: 100
+            }
         }
 
         this.deleteWidget = this.deleteWidget.bind(this)
         this.editWidget = this.editWidget.bind(this)
+        this.normalise = this.normalise.bind(this)
     }
     
     componentDidMount() {
         this._isMounted = true
-        const { widgetTitle, resourceId, dataId, dataValue, socket } = this.props
+        const { widgetTitle, resourceId, dataId, dataValue, display, socket } = this.props
         this._isMounted && this.setState({
             widgetTitle: widgetTitle,
             dataValue: dataValue
@@ -30,25 +35,30 @@ class ProgressBar extends Component {
 
         socket.on(`${resourceId}-${dataId}`, resData => {
             this._isMounted && this.setState({
-                dataValue: resData.value
+                dataValue: resData.value,
+                display: display
             })
         });
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.widgetTitle === this.state.widgetTitle && this.state.dataValue === nextState.dataValue ? ( this.props.Editable === nextProps.Editable ? false : true ) : true
+        return nextProps.widgetTitle === this.state.widgetTitle && this.state.dataValue === nextState.dataValue ? ( this.props.Editable === nextProps.Editable ? (nextProps.display.min === this.state.display.min || nextProps.display.min === this.state.display.min ? false : true) : true ) : true
     }
 
     componentDidUpdate() {
-        const { widgetTitle } = this.props
+        const { widgetTitle, display } = this.props
         this._isMounted && this.setState({
-            widgetTitle: widgetTitle
+            ...this.state,
+            widgetTitle: widgetTitle,
+            display: display
         })
     }
 
     componentWillUnmount() {
         this._isMounted = false
     }
+
+    normalise = value => (value - this.state.display.min) * 100 / (this.state.display.max - this.state.display.min)
 
     editWidget() {
         const { _id, showEditModal } = this.props
@@ -96,8 +106,8 @@ class ProgressBar extends Component {
                             </div>
                             <div className="col-12 d-flex" style={{height: 50}}>
                                 <div className="w-100 align-self-center">
-                                    <div className="d-flex justify-content-center" style={{color: '#00BCD4'}}><b>{this.state.dataValue} %</b></div>
-                                    <div className=""><LinearProgress variant="determinate" value={parseInt(this.state.dataValue)} /></div>
+                                    <div className="d-flex justify-content-center" style={{color: '#00BCD4'}}><b>{this.state.dataValue > this.state.display.max ? `${this.state.dataValue} % (Out off Max Range)` : (this.state.dataValue < this.state.display.min ? `${this.state.dataValue} % (Out off Min Range)` : `${this.state.dataValue} %`)}</b></div>
+                                    <div className=""><LinearProgress variant="determinate" value={this.normalise(parseFloat(this.state.dataValue > this.state.display.max ? this.state.display.max : this.state.dataValue))} /></div>
                                 </div>
                             </div>
                         </div>

@@ -66,13 +66,7 @@ export class AuthContextProvider extends Component {
     checkToken () {
         return axiosReq.get(`${server_url}/api/tokenverify`)
             .catch(err => {
-                this.setState({
-                    isLoggedIn: false,
-                    profileData: false
-                })
-
-                Cookies.remove('xsrfToken')
-                localStorage.clear()
+                this.signOut()
             })
     }
 

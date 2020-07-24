@@ -30,6 +30,16 @@ const WidgetSchema = new Schema({
         type: Number,
         trim: true,
     },
+    display: {
+        min: {
+            type: Number,
+            trim: true,
+        },
+        max: {
+            type: Number,
+            trim: true,
+        }
+    },
     settings: {
         triggerMax: {
             active: {
