@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import QueueAnim from 'rc-queue-anim';
 import Breadcrumb from 'components/Layout/Breadcrumb';
 import MaterialIcon from 'components/MaterialIcon';
@@ -16,8 +16,8 @@ class Dashboard extends Component {
             return <Redirect push to='/user/signin' />
 
         return (
-            <div>
-                <div className="container-fluid mt-4">  
+            <Fragment>
+                <div className="container-fluid pt-4">  
                     <QueueAnim className="row">
                         <div key="1" className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start" style={{color: '#2196F3' }}>                            
                             <h5><b><span className="ui-highlight" style={{backgroundColor: '#4CAF50'}}><MaterialIcon icon="dashboard" style={{color: '#FFFFFF'}} />  Dashboard   </span></b></h5>
@@ -32,7 +32,7 @@ class Dashboard extends Component {
                         </div>
                     </QueueAnim>
                 </div>
-            </div>
+            </Fragment>
         )
     }
 }

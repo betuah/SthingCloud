@@ -1,5 +1,16 @@
 #app-content {
-  background-color: $page-bg;
+  background-color: rgba(245, 245, 245, 0.85);
+  width: 100%;
+  height: 100%;
+}
+
+.bg-cover-img {
+  background:url('../../assets/images/flat-images/iot_01.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .container-fluid {

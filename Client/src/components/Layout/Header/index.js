@@ -45,9 +45,11 @@ class AppHeader extends React.Component {
   }
 
   handleSignOut() {
-    const { signOut } = this.props
+    const { signOut, setIsLoggin } = this.props
 
-    signOut()
+    signOut().catch(err => {
+      setIsLoggin(false)
+    })
   }
 
   async componentDidMount() {

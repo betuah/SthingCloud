@@ -30,7 +30,7 @@ class Main extends Component {
                 <Switch>
                     <Route exact path={`${match.url}/:graphId`} component={Graph} />
                     <Route exact path={`${match.url}`}>
-                        <div className="container-fluid mt-4">
+                        <div className="container-fluid pt-4">
                             <QueueAnim className="row">
                                 <div key="1" className="col-12 d-flex justify-content-center justify-content-md-between">
                                     <div key="2" className="align-self-center">

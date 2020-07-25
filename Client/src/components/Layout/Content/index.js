@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router'
 import loadable from 'react-loadable';
@@ -46,17 +46,21 @@ class AppContent extends React.Component {
     const { match } = this.props;
 
     return (
-      <Content id='app-content'>
-        <Switch>
-          <Route path={`${match.url}/dashboard`} component={Dashboard} />
-          <Route path={`${match.url}/device`} component={Device} />
-          <Route path={`${match.url}/visualization`} component={Visualization} />
-          <Route path={`${match.url}/controller`} component={Controller} />
-          <Route path={`${match.url}/databucket`} component={Databucket} />
-          <Route path={`${match.url}/user`} component={User} />
-          <Route path="*" component={Exception} />
-        </Switch>
-      </Content>
+      <Fragment>
+        <div className='bg-cover-img'>
+          <Content id='app-content'>
+            <Switch>
+              <Route path={`${match.url}/dashboard`} component={Dashboard} />
+              <Route path={`${match.url}/device`} component={Device} />
+              <Route path={`${match.url}/visualization`} component={Visualization} />
+              <Route path={`${match.url}/controller`} component={Controller} />
+              <Route path={`${match.url}/databucket`} component={Databucket} />
+              <Route path={`${match.url}/user`} component={User} />
+              <Route path="*" component={Exception} />
+            </Switch>
+          </Content>
+        </div>
+      </Fragment>
     );
   }
 }

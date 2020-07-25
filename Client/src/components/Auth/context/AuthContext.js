@@ -63,10 +63,18 @@ export class AuthContextProvider extends Component {
             this.initUser               = this.initUser.bind(this)
     }
 
-    checkToken () {
+    async checkToken () {
         return axiosReq.get(`${server_url}/api/tokenverify`)
             .catch(err => {
-                this.signOut()
+                this.signOut().catch(err => {
+                    this.setState({
+                        isLoggedIn: false,
+                        profileData: false
+                    })
+
+                    Cookies.remove('xsrfToken')
+                    localStorage.clear()
+                })
             })
     }
 
@@ -107,6 +115,11 @@ export class AuthContextProvider extends Component {
         this.setState({
             isLoggedIn: stats,
         })
+
+        if (!stats) {
+            Cookies.remove('xsrfToken')
+            localStorage.clear()
+        }
     }
 
     //login
@@ -180,23 +193,25 @@ export class AuthContextProvider extends Component {
 
     //logout
     signOut() {
-        FireAuth.signOut().then(() => {
-            axiosReq.post(`${server_url}/api/signout`)
-            .then(res => {
-                this.setState({
-                    isLoggedIn: false,
-                    profileData: false
+        return new Promise((resolve, reject) => {
+            FireAuth.signOut().then(() => {
+                axiosReq.post(`${server_url}/api/signout`)
+                .then(res => {
+                    this.setState({
+                        isLoggedIn: false,
+                        profileData: false
+                    })
+
+                    Cookies.remove('xsrfToken')
+                    localStorage.clear()
+
+                    return resolve(res)
+                }).catch(err => {
+                    return reject(err)
                 })
-
-                Cookies.remove('xsrfToken')
-                localStorage.clear()
-
-                return true
             }).catch(err => {
-                return false
+                return reject(err)
             })
-        }).catch(err => {
-            return false
         })
     }
 

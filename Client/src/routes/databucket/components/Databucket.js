@@ -15,7 +15,7 @@ class Databucket extends Component {
 
         return (
             <div>
-                <div className="container-fluid mt-4">    
+                <div className="container-fluid pt-4">    
                     <div className="row">
                         <div className="col-xs-12 col-md-6 d-flex justify-content-center justify-content-md-start" style={{color: '#2196F3' }}>                            
                             <h5><b><span className="ui-highlight" style={{backgroundColor: '#9C27B0'}}><MaterialIcon icon="storage" style={{color: '#FFFFFF'}} />  Data Bucket   </span></b></h5>

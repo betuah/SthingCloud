@@ -23,7 +23,7 @@ $state-default-bg:              rgba(0,0,0, .1) !default; // also: pagination bg
 $state-default-border:          darken(adjust-hue($state-default-bg, -10), 5%) !default; 
 
 //== Typography
-$font-family-condensed:       "Roboto Condensed", "Roboto", "Helvetica Neue", Arial, sans-serif !default
+$font-family-condensed:       "Roboto Condensed", "Roboto", "Helvetica Neue", Arial, sans-serif !default;
 
 $font-weight-200:             300 !default; // no 200 for Roboto 
 $font-weight-300:             300 !default;
