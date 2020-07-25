@@ -416,7 +416,7 @@ class EnhancedTable extends React.Component {
                       <TableCell width="15%" style={{ maxWidth: '15px', whiteSpace: 'normal', wordWrap: 'break-word'}}>{n._id}</TableCell>
                       <TableCell width="25%" style={{ maxWidth: '50px', whiteSpace: 'normal', wordWrap: 'break-word'}}>
                         <Tooltip title={`Click to access graph`}>
-                          <Link className="link-animated-hover link-hover-v3" to={`/app/controller/${n._id}`}>{<b style={{color: '#FF9800'}}>
+                          <Link className="link-animated-hover link-hover-v3" to={`/app/controller/${n._id}`}>{<b style={{color: '#FF5722'}}>
                             {n.controller}</b>}
                           </Link>                          
                         </Tooltip>&nbsp;&nbsp;&nbsp;

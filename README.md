@@ -144,6 +144,7 @@ $ npm run start
 - Fix visualization widget layout bugs
 - Add https for production env
 - Add settings display min max value in widget graph and change graph model (add display object)
+- Add background image for content in client
 - Add loading component to content and signout
 
 ## Version Change log (STHING_v08)
