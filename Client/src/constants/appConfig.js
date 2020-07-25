@@ -19,7 +19,7 @@ const APPCONFIG = {
     gray: '#EDF0F1'
   },
   settings: {
-    layout: '5',                      // String: 1, 2, 3, 4 and add your own
+    layout: '1',                      // String: 1, 2, 3, 4 and add your own
     boxedLayout: false,               // Boolean: true, false
     fixedSidenav: false,               // Boolean: true, false
     fixedHeader: false,                // Boolean: true, false

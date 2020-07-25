@@ -50,7 +50,7 @@ class AppSidenav extends React.Component {
         </div>
 
         <div className="sidenav-footer">
-          <a rel="_blank" href={'#/'}>
+          <a rel="noopener noreferrer" href={'https://discord.gg/zPQfNHC'} target="_blank">
             <MaterialIcon icon="help" className="nav-icon" />
             <span className="nav-text"><span>Help</span> & <span>Support</span></span>
           </a>

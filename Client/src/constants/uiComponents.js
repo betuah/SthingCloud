@@ -91,7 +91,7 @@ export const RESOURCES = [
   {
     name: 'Community',
     path: '/resource/community',
-    link: 'https://discord.gg/q5hw4Ms'
+    link: 'https://discord.gg/UxSHjJY'
   },
   {
     name: 'Github Libraries',
