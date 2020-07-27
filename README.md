@@ -30,6 +30,9 @@ $ npm install
 #### Mongo database installation
 docker run --name mydb -v YOUR_LOCAL_DIR_PATH:/data/db -p 27017:27017 -d mongo:latest
 
+#### Upgrade Outdated Packages
+npm update --save/--save-dev -f
+
 #### Server .env file
 ```sh
 PORT=8000

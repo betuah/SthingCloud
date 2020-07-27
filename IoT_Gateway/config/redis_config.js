@@ -11,6 +11,7 @@ const config = {
     //   key  : stringValueOfKeyFile,  
     //   cert : stringValueOfCertFile,
     //   ca   : [ stringValueOfCaCertFile ]
+    // }
 }
 
 const redisClient = redis.createClient(config)
