@@ -1,6 +1,4 @@
-# SEA Cloud Platform - SThing (v0.9)
-
-<!-- <div style="text-align:center"><img src="logo.png" width="300"></div> -->
+# SEA Cloud Platform - SThing (STHING_v1_BETA)
 
 > **Desc :** This platform use for cloud platform was needs in SEAMEO SEAMOLEC. For this version we'll focus to build for IoT cloud platfom
 
@@ -10,28 +8,32 @@
 - **Github :** [My Github Libraries](https://github.com/betuah/)
 <hr>
 
-## Installation
+## Dev Installation
 ```sh
-$ npm install && npm run install
+$ ## Mongo database installation
+$ docker run --name mydb -v YOUR_VOLUME_OR_DIR:/data/db -p 27017:27017 -d mongo:latest
+$ ## Redis Installation
+$ docker pull redis:alpine
+$ docker run --name myredis -p 6379:6379 -d redis:alpine
+$ ## Packages Installation
+$ npm install
+$ npm run start
 ```
-##### OR
+#### For Upgrade Outdated Packages
+npm update --save/--save-dev -f
+
+<hr>
+
+## Quick Installation (Monolithic or Single Server Deployment)
 ```sh
-$ cd Server
-$ npm install
-$ cd ..
-$ cd Client
-$ npm install
+$ docker-compose up -d
 ```
+> **Notes :** You can separately create and deploy images in each service. We have provided dockerfile and docker-compose in each service
+
 <hr>
 
 ## Environment Setup
 > Create .env file in every subfolder like API, Client, Socket and Server
-
-#### Mongo database installation
-docker run --name mydb -v YOUR_LOCAL_DIR_PATH:/data/db -p 27017:27017 -d mongo:latest
-
-#### Upgrade Outdated Packages
-npm update --save/--save-dev -f
 
 #### Server .env file
 ```sh
@@ -41,11 +43,14 @@ HOST=http://YOUR_LOCAL_HOST
 TOKEN_SECRET=YOUR_SECRET_TOKEN_PASSWORD
 ENCRYPTION_KEY=YOUR_CUSTOM_KEY
 CLIENT_HOST=http://CLIENT_HOST:CLIENT_PORT
+FIREBASE_URL=https://YOUR_FIREBASE_URL
 MONGO_DB=db_cloud_platform
 MONGO_USERNAME=YOUR_MONGODB_USERNAME
 MONGO_PASSWORD=YOUR_MONGODB_PASSWORD
 MONGO_HOST=YOUR_MONGODB_HOST
 MONGO_PORT=YOUR_MONGODB_PORT
+HTTPS_PRIVATE_KEY_PATH=./ssl/YOUR_PRIVATE.key
+HTTPS_CERTIFICATE_PATH=./ssl/YOUR_CERTIFICATE.cert
 ```
 ##### Server serviceAccountKey (For Firebase Admin Config)
 Create json file with name serviceAccountKey.json in 'Server/config' directory and add as bellow
@@ -86,6 +91,7 @@ REACT_APP_FIREBASE_MEASUREMENT_ID='YOUR_FIREBASE_MEASUREMENT_ID'
 #### IoT Gateway .env file
 ```sh
 PORT=5000
+NODE_ENV=development|production
 HOST=http://YOUR_LOCAL_HOST
 MQTT_BROKER_DOMAIN=mqtt://MQTT_HOST:MQTT_PORT
 MQTT_ADMIN_SECRET=YOUR_MQTT_ADMIN_SECRET
@@ -101,40 +107,51 @@ REDIS_PORT=YOUR_REDIS_PORT
 REDIS_PASSWORD=YOUR_REDIS_PASSWORD
 SOCKET_HOST=http://WEB_SOCKET_HOST:WEB_SOCKET_PORT
 CLIENT_HOST=http://CLIENT_HOST:CLIENT_PORT
-```
-IoT Gateway also need redis for store temporary data from device, here is we pull and run redis from docker
-```sh
-docker pull redis:alpine
-docker run --name myredis -p 6379:6379 -d redis:alpine
+HTTPS_PRIVATE_KEY_PATH=./ssl/YOUR_PRIVATE.key
+HTTPS_CERTIFICATE_PATH=./ssl/YOUR_CERTIFICATE.cert
 ```
 
 #### SocketIO .env file
 ```sh
 PORT=4000
+NODE_ENV=development|production
 HOST=http://YOUR_LOCAL_HOST
 TOKEN_SECRET=YOUR_SECRET_TOKEN_PASSWORD
 CLIENT_HOST=http://CLIENT_HOST:CLIENT_PORT
 SERVER_HOST=http://SERVER_HOST:SERVER_PORT
-API_HOST=http://API_HOST:API_PORT
-URL_HOST=http://localhost
+IOT_GATEWAY_HOST=http://IOT_GATEWAY_HOST:IOT_GATEWAY_PORT
+MQTT_BROKER_HOST=http://MQTT_BROKER_HOST:MQTT_BROKER_PORT
 MONGO_DB=db_cloud_platform
 MONGO_USERNAME=YOUR_MONGODB_USERNAME
 MONGO_PASSWORD=YOUR_MONGODB_PASSWORD
 MONGO_HOST=YOUR_MONGODB_HOST
 MONGO_PORT=YOUR_MONGODB_PORT
+HTTPS_PRIVATE_KEY_PATH=./ssl/YOUR_PRIVATE.key
+HTTPS_CERTIFICATE_PATH=./ssl/YOUR_CERTIFICATE.cert
 ```
-<hr>
-
-## Running APP
-> **Note:** Firstly make sure your mysql server is running well!
-
+#### Aedes MQTT Broker .env file
 ```sh
-$ npm run start 
+PORT=6000
+NODE_ENV=development|production
+HTTPS_PRIVATE_KEY_PATH=./ssl/YOUR_PRIVATE.key
+HTTPS_CERTIFICATE_PATH=./ssl/YOUR_CERTIFICATE.cert
+HOST=http://AEDES_HOST
+TOKEN_SECRET=YOUR_TOKEN_SECRET
+MQTT_ADMIN_SECRET=YOUR_MQTT_ADMIN_SECRET
+MONGO_DB=db_cloud_platform
+MONGO_USERNAME=YOUR_MONGODB_USERNAME
+MONGO_PASSWORD=YOUR_MONGODB_PASSWORD
+MONGO_HOST=YOUR_MONGODB_HOST
+MONGO_PORT=YOUR_MONGODB_PORT
+SOCKET_HOST=http://WEBSOCKET_HOST:WEBSOCKET_PORT
 ```
-
 <hr>
 
 # Version Log
+## Version Change log (STHING_v1_BETA)
+- Dockerfile and docker-compose.yml in every service
+- Quick installation support with docker-compose
+
 ## Version Change log (STHING_v09)
 - Fix bug and prepare for upgrade packages
 - Add animation in any main component with rc-queue-animate

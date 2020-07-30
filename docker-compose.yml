@@ -59,11 +59,11 @@ services:
             - redis
     websocket:
         build: 
-            context: ./SocketIO
+            context: ./Websocket
             dockerfile: Dockerfile
         image: betuah/sthing_websocket:release
         container_name: sthing_websocket
-        env_file: ./SocketIO/.env
+        env_file: ./Websocket/.env
         volumes: 
             - ./ssl:/usr/src/app/ssl
         ports:

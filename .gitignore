@@ -1,3 +1,5 @@
+ssl/*
+
 # Logs
 logs
 *.log
@@ -11,18 +13,21 @@ Server/config/serviceAccountKey.json
 Server/*.env
 Server/public/avatars/*
 Server/package-lock.json
-ssl
+Server/ssl/*
 
-# SocketIO .gitignore
-SocketIO/*.env
-SocketIO/package-lock.json
+# Websocket .gitignore
+Websocket/*.env
+Websocket/package-lock.json
+Websocket/ssl/*
 
-# API .gitignore
-API/*.env
-API/package-lock.json
+# Iot Gateway .gitignore
+IoT_Gateway/ssl/*
 
 # Mongodb init
 db/init_mongo.js
+
+# Aedes
+Aedes/ssl/*
 
 # Client .gitignore
 Client/*.env
