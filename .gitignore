@@ -22,7 +22,7 @@ API/*.env
 API/package-lock.json
 
 # Mongodb init
-db/*
+db/init_mongo.js
 
 # Client .gitignore
 Client/*.env
