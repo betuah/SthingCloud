@@ -7,6 +7,14 @@
   margin-bottom: .625rem;
 }
 
+.divider-custom {
+  border-width: 3px 0 0 0;
+  border-style: solid;
+  border-color: transparent;
+  margin-top: .625rem; // 10px
+  margin-bottom: .625rem;
+}
+
 .divider-solid {
   border-style: solid;
   border-color: $divider-color;

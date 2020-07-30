@@ -1,3 +1,3 @@
-import dashboard from './components/Dashboard';
+import dashboard from './components/Welcome';
 
 export default dashboard;
