@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+    aedes:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        image: betuah/sthing_aedes_mqtt:release
+        container_name: sthing_aedes_mqtt
+        env_file: dev.env
+        volumes: 
+            - ./ssl:/usr/src/app/ssl
+        ports:
+            - 6000:6000
+        command: npm run start

@@ -6,7 +6,7 @@ const mqttClient    = require('../config/mqtt_client')
 const redisClient   = require('../config/redis_config')
 const hash          = require('../config/hash_config')
 const env           = require('../env')
-const socket        = require('socket.io-client')(`${env.socket_domain}`, {extraHeaders: {origin: `${env.domain}:${env.port}`}})
+const socket        = require('socket.io-client')(`${env.socket_host}`, {extraHeaders: {origin: `${env.host}:${env.port}`}})
 
 redisClient.on("connect", () => {
     redisClient.flushdb((err, succeeded) => {

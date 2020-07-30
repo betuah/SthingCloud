@@ -5,8 +5,8 @@ const env = {
     node_env: process.env.NODE_ENV,
     httpsPrivateKey: process.env.HTTPS_PRIVATE_KEY_PATH,
     httpsCertificate: process.env.HTTPS_CERTIFICATE_PATH,
-    domain: process.env.DOMAIN,
-    socket_domain: process.env.SOCKET_DOMAIN,
+    host: process.env.HOST,
+    socket_host: process.env.SOCKET_HOST,
     token_secret: process.env.TOKEN_SECRET,
     mqtt_admin_secret: process.env.ADMIN_SECRET,
     db_mongoDB: {

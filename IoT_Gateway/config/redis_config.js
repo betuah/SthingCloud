@@ -1,19 +1,20 @@
 const redis = require("redis")
-const env = require('../env')
+const env   = require('../env')
+const fs    = require("fs")
 
 const config = {
-    port      : env.redis.port,               // Set custom port
-    host      : `${env.redis.host}`,        // Set hostanme or IP address
-    // password  : `${env.redis.password}`,    // If using password set it here
-    
-    /* If using SSL */
-    // tls       : {
-    //   key  : stringValueOfKeyFile,  
-    //   cert : stringValueOfCertFile,
-    //   ca   : [ stringValueOfCaCertFile ]
-    // }
+    port      : env.redis.port,             
+    host      : `${env.redis.host}`,        
+    password  : `${env.redis.password}`,    
 }
 
-const redisClient = redis.createClient(config)
+const ssl = {
+    tls       : {
+        key  : fs.readFileSync(`${env.httpsPrivateKey}`, 'utf8'),  
+        cert : fs.readFileSync(`${env.httpsCertificate}`, 'utf8')
+    }
+}
+
+const redisClient = redis.createClient(env.node_env === 'production' ? {...config,...ssl} : config)
 
 module.exports = redisClient

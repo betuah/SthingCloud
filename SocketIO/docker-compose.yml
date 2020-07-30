@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+    websocket:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        image: betuah/sthing_websocket:release
+        container_name: sthing_websocket
+        env_file: dev.env
+        volumes: 
+            - ./ssl:/usr/src/app/ssl
+        ports:
+            - 4000:4000
+        command: npm run start

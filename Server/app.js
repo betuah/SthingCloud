@@ -18,7 +18,7 @@ app.use(bodyParser.json())
 app.use('/public', express.static(__dirname + '/public')) // Set public directory
 
 /* Dynamic CORS */
-const whitelist = [`${env.client_domain}`,`${env.client_domain_prod}`]
+const whitelist = [`${env.client_host}`,`${env.client_host_prod}`]
 
 const options = {
     origin: (origin, callback) => {
@@ -68,16 +68,20 @@ const conn = require('./config/db_mongoDB')
 
 if(conn) {
     if (env.node_env === 'production') {
-        const privateKey  = fs.readFileSync(`${env.httpsPrivateKey}`, 'utf8')
-        const certificate = fs.readFileSync(`${env.httpsCertificate}`, 'utf8')
-        const credentials = {key: privateKey, cert: certificate}
-        const httpsApps   = https.createServer(credentials, app)
-
-        httpsApps.listen(port, () => console.log(`Server API listen on ${env.domain}:${env.port}`))
+        try {
+            const privateKey  = fs.readFileSync(`${env.httpsPrivateKey}`, 'utf8')
+            const certificate = fs.readFileSync(`${env.httpsCertificate}`, 'utf8')
+            const credentials = {key: privateKey, cert: certificate}
+            const httpsApps   = https.createServer(credentials, app)
+    
+            httpsApps.listen(port, () => console.log(`Production Server API listen on ${env.host}:${env.port}`))
+        } catch (error) {
+            console.log(new Error(error))
+        }
     } else {
-        app.listen(port, () => console.log(`Server API listen on ${env.domain}:${env.port}`))
+        app.listen(port, () => console.log(`Development Server API listen on ${env.host}:${env.port}`))
     }
 } else {
-    console.log(`${env.domain}:${env.port} cannot connect to MongoDB!`)
+    console.log(`${env.host}:${env.port} cannot connect to MongoDB!`)
 }
 /* End MongoDB Connection Check */

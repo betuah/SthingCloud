@@ -1,0 +1,121 @@
+version: '3.8'
+
+services:
+    mongo_db:
+        image: mongo:latest
+        container_name: sthing_db
+        environment: 
+            - MONGO_INITDB_ROOT_USERNAME=betuah
+            - MONGO_INITDB_ROOT_PASSWORD=H3r0es!@#
+        volumes: 
+            # - ./db/init_mongo.js:/docker-entrypoint-initdb.d/init_mongo.js:ro
+            - mongo_data:/data/db
+        ports:
+            - 27017:27017
+        networks: 
+            - sthing_network
+    redis:
+        image: redis:alpine
+        container_name: sthing_redis
+        ports:
+            - 6379:6379
+        networks: 
+            - sthing_network
+        command: redis-server --requirepass br4v0Sth!ingS!@#
+    client:
+        build: 
+            context: ./Client
+            dockerfile: Dockerfile
+        image: betuah/sthing_client:release
+        container_name: sthing_client
+        ports:
+            - 5000:8080
+        networks: 
+            - sthing_network
+        depends_on: 
+            - mongo_db
+            - redis
+            - server
+            - websocket
+            - iot_gateway
+            - mqtt_broker
+    server:
+        build: 
+            context: ./Server
+            dockerfile: Dockerfile
+        image: betuah/sthing_server:release
+        container_name: sthing_server
+        env_file: ./Server/.env
+        volumes: 
+            - ./Server/public:/usr/src/app/public
+            - ./ssl:/usr/src/app/ssl
+        ports:
+            - 8000:8000
+        networks: 
+            - sthing_network
+        command: npm run start
+        depends_on: 
+            - mongo_db
+            - redis
+    websocket:
+        build: 
+            context: ./SocketIO
+            dockerfile: Dockerfile
+        image: betuah/sthing_websocket:release
+        container_name: sthing_websocket
+        env_file: ./SocketIO/.env
+        volumes: 
+            - ./ssl:/usr/src/app/ssl
+        ports:
+            - 4000:4000
+        networks: 
+            - sthing_network
+        command: npm run start
+        depends_on: 
+            - mongo_db
+            - redis
+    iot_gateway:
+        build: 
+            context: ./IoT_Gateway
+            dockerfile: Dockerfile
+        image: betuah/sthing_iotgateway:release
+        container_name: sthing_iotgateway
+        env_file: ./IoT_Gateway/.env
+        volumes: 
+            - ./ssl:/usr/src/app/ssl
+        ports:
+            - 7000:7000
+        networks: 
+            - sthing_network
+        command: npm run start
+        depends_on: 
+            - mongo_db
+            - redis
+            - websocket
+            - mqtt_broker
+    mqtt_broker:
+        build: 
+            context: ./Aedes
+            dockerfile: Dockerfile
+        image: betuah/sthing_aedes_mqtt:release
+        container_name: sthing_aedes_mqtt
+        env_file: ./Aedes/.env
+        volumes: 
+            - ./ssl:/usr/src/app/ssl
+        ports:
+            - 6000:6000
+        networks: 
+            - sthing_network
+        command: npm run start
+        depends_on: 
+            - mongo_db
+            - redis
+            - websocket
+
+volumes: 
+    mongo_data:
+        name: sthing_mongo_data
+
+networks: 
+    sthing_network:
+        name: sthing_network

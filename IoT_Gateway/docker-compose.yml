@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+    iot_gateway:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        image: betuah/sthing_iotgateway:release
+        container_name: sthing_iotgateway
+        env_file: dev.env
+        volumes: 
+            - ./ssl:/usr/src/app/ssl
+        ports:
+            - 7000:7000
+        command: npm run start

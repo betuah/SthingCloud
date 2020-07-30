@@ -21,9 +21,13 @@ SocketIO/package-lock.json
 API/*.env
 API/package-lock.json
 
+# Mongodb init
+db/*
+
 # Client .gitignore
 Client/*.env
 Client/package-lock.json
+Client/build
 
 # Node Modules
 .node_modules/

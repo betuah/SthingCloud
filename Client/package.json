@@ -6,6 +6,7 @@
   "homepage": "",
   "scripts": {
     "start": "react-app-rewired start",
+    "start:prod": "serve -s build",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-scripts eject",
@@ -51,6 +52,7 @@
     "redux": "^4.0.0",
     "redux-immutable-state-invariant": "^2.1.0",
     "redux-thunk": "^2.3.0",
+    "serve": "^11.3.2",
     "socket.io-client": "^2.3.0"
   },
   "browserslist": {

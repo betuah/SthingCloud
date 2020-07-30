@@ -1,7 +1,7 @@
 const Aedes     = require('aedes')()
 const fs        = require('fs')
 const env       = require('./env')
-const socket    = require('socket.io-client')(`${env.socket_domain}`, {extraHeaders: {origin: `${env.domain}:${env.port}`}})
+const socket    = require('socket.io-client')(`${env.socket_host}`, {extraHeaders: {origin: `${env.host}:${env.port}`}})
 const auth      = require('./controllers/auth')
 const port      = env.port || 1883
 const admin_user = '@dm1n'
@@ -62,7 +62,7 @@ const setup = () => {
     Aedes.authorizePublish   = auth.authorizePublish
     Aedes.authorizeSubscribe = auth.authorizeSubscribe
 
-    console.log(`MQTT Broker (AEDES) server is running up on port ${env.port}`)
+    console.log(`${env.node_env} MQTT Broker (AEDES) server is running up on port ${env.port}`)
 }
 
 server.listen(port, setup)
