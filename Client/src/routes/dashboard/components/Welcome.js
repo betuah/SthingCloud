@@ -23,7 +23,7 @@ class Welcome extends Component {
                                 <div key='1'><h2>Welcome</h2></div>
                                 <div key='2'><h6>Automate your devices</h6></div>
                                 <div key='3' className="col-12 divider-custom divider-dotted"></div>
-                                <div key='4'><p>Access The <a className="brand link-animated-hover link-hover-v2 text-primary" rel="_blank" href={'#/'}>Documentation</a> And Join Our <a className="brand link-animated-hover link-hover-v2 text-primary" rel="_blank" href={'#/'}>Community</a></p></div>
+                                <div key='4'><p>Access The <a className="brand link-animated-hover link-hover-v2 text-primary" rel="_blank" href={'#/'}>Documentation</a> And Join Our <a className="brand link-animated-hover link-hover-v2 text-primary" rel="_blank" href={'https://discord.gg/UxSHjJY'}>Community</a></p></div>
                             </QueueAnim>
                         </div>
                     </div>
