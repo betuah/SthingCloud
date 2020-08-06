@@ -11,7 +11,7 @@ const AppFooter = () => (
       © {APPCONFIG.year} <a className="brand link-animated-hover link-hover-v2 text-primary" rel="_blank" href={'#/'}>{APPCONFIG.brand}</a> All Rights Reserved.
       </span>
       <span className="small">
-        Version: STHING 1.0 | Built with Love <SmileOutlined />
+        Version: {APPCONFIG.version} | Built with Love <SmileOutlined />
       </span>
     </div>
   </Footer>
