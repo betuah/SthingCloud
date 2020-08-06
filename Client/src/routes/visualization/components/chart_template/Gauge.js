@@ -4,7 +4,7 @@ import { Typography, IconButton, Tooltip } from '@material-ui/core'
 import MaterialIcon from 'components/MaterialIcon'
 import { withAuth } from 'components/Auth/context/AuthContext'
 import notif, { deleteConfirm } from 'components/NotificationPopUp/notif'
-
+import 'echarts/theme/macarons';
 class Chart extends Component {
     constructor(props) {
         super(props)

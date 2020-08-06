@@ -39,7 +39,7 @@ export const deleteConfirm = (callback) => {
     const btn = (
         <div>
         <Button color="primary" onClick={btnCencel}>
-            Cencel
+            Cancel
         </Button>
         <Button color="default" onClick={btnConfirm}>
             Confirm
