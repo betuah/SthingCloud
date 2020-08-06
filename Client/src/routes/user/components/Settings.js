@@ -77,7 +77,7 @@ class Settings extends Component {
                 secure: 1,
                 tls: 1,
                 username: '',
-                password: 0,
+                password: '',
                 oldPassword: ''
             },
             timeZoneList: [...timeZoneList]
