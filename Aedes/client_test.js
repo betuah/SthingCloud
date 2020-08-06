@@ -1,5 +1,5 @@
 var mqtt = require('mqtt'),
-    host = 'sthing.seamolec.org',
+    host = '192.168.40.61',
     port = 6000
 
 var settings = {
@@ -8,11 +8,11 @@ var settings = {
     protocolVersion: 4,
     clientId: 'Publisher 1',
     clean: true, 
-    username:'OC4gnEfZf',
-    password:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ik9DNGduRWZaZiIsImlkVXNlciI6ImFyMXdFalR6WUNVdTJjV2V0NWpkQmhjNUdxSjMiLCJpZERldmljZSI6Ik9DNGduRWZaZiIsImRldmljZU5hbWUiOiJ3ZHF3ZCIsImlhdCI6MTU5NjY4ODczMn0.Zevsa3xFN9JcyiNkEwWMRloj5pKhzzH-zNT3gXopbRI'
+    username:'XTIn70jU0',
+    password:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlhUSW43MGpVMCIsImlkVXNlciI6ImlKQVVjS0c2amxOUGd3QTRKTHhmMGYxZWZsSjIiLCJpZERldmljZSI6IlhUSW43MGpVMCIsImRldmljZU5hbWUiOiJpb3QiLCJpYXQiOjE1OTY2ODg2MTh9.ZI7r7tx04n54vCum4595dnZ2baPCpSsLlLIphcwofPg'
 }
 
-var node_env = 'production'
+var node_env = 'dev'
 
 // client connection
 let mqttClient = mqtt.connect(`${node_env === 'production' ? 'mqtts' : 'mqtt'}://${host}:${port}`, settings)
@@ -23,11 +23,11 @@ const data = {
     value: '31'
 }
 
-mqttClient.subscribe('OC4gnEfZf/controller', err => {
+mqttClient.subscribe('XTIn70jU0/controller', err => {
     if (!err) {
         setInterval(() => {
             console.log('push')
-            mqttClient.publish('OC4gnEfZf/device_data', JSON.stringify(data), { qos: 2 })
+            mqttClient.publish('XTIn70jU0/device_data', JSON.stringify(data), { qos: 2 })
         }, 2000)
         
     } else {
