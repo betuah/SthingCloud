@@ -16,8 +16,9 @@ const settings = {
     password:`${mqttTokenAdmin}`
 }
 
-const mqttClient = mqtt.connect(`{${env.node_env === 'production' ? 'mqtts': 'mqtt'}}://${env.mqtt_broker_host}`, settings)
+const mqttClient = mqtt.connect(env.node_env === 'production' ? `mqtts://${env.mqtt_broker_host}:${env.mqtt_broker_port}` : `mqtt://${env.mqtt_broker_host}:${env.mqtt_broker_port}`, settings)
 
+console.log(env.node_env === 'production' ? `mqtts://${env.mqtt_broker_host}` : `mqtt://${env.mqtt_broker_host}`)
 // mqttClient.subscribe('device_data')
 
 module.exports = mqttClient
