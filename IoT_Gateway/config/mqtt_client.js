@@ -1,5 +1,5 @@
 const mqtt           = require('mqtt')
-const bcrypt         = require('bcrypt')
+const bcrypt         = require('bcryptjs')
 const env            = require('../env')
 
 const saltRounds     = 10
