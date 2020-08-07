@@ -1,6 +1,6 @@
 const jwt           = require('jsonwebtoken')
 const env           = require('../env')
-const bcrypt        = require('bcrypt')
+const bcrypt        = require('bcryptjs')
 const hash          = require('../config/hash_config')
 const secret        = env.token_secret
 
