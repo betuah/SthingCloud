@@ -1,5 +1,5 @@
 var mqtt = require('mqtt'),
-    host = '192.168.40.61',
+    host = 'sthing.seamolec.org',
     port = 6000
 
 var settings = {
@@ -12,7 +12,7 @@ var settings = {
     password:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlhUSW43MGpVMCIsImlkVXNlciI6ImlKQVVjS0c2amxOUGd3QTRKTHhmMGYxZWZsSjIiLCJpZERldmljZSI6IlhUSW43MGpVMCIsImRldmljZU5hbWUiOiJpb3QiLCJpYXQiOjE1OTY2ODg2MTh9.ZI7r7tx04n54vCum4595dnZ2baPCpSsLlLIphcwofPg'
 }
 
-var node_env = 'dev'
+var node_env = 'production'
 
 // client connection
 let mqttClient = mqtt.connect(`${node_env === 'production' ? 'mqtts' : 'mqtt'}://${host}:${port}`, settings)
