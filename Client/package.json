@@ -24,6 +24,7 @@
     "classnames": "^2.2.6",
     "core-js": "^3.6.4",
     "date-fns": "^2.15.0",
+    "dotenv": "^8.2.0",
     "downshift": "^6.0.2",
     "echarts": "^4.1.0",
     "echarts-for-react": "^2.0.14",
