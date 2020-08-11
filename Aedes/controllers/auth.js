@@ -13,6 +13,7 @@ exports.authenticate = (client, username, token, callback) => {
             client.id  = `${username}.${uuid()}`
             callback(null, true)
         } else {
+            console.log(new Error('Admin trying to reconnect!'))
             callback(null, false)
         }
     } else {
@@ -31,6 +32,7 @@ exports.authenticate = (client, username, token, callback) => {
             callback(null, true) // Return true
         } catch (error) {
             /* Handle error if token not valid */
+            console.log(new Error(error))
             callback(null, false) // Return false
         }
     }
